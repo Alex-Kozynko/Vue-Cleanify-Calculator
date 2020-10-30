@@ -7,7 +7,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    subtotal: 99,
     addons: [],
     pets: [],
     date: [],
@@ -144,9 +143,14 @@ export default new Vuex.Store({
           abridgment: '1 Bath'
         },
        typecleaning: {
-          text: 'Standard',
-          abridgment: 'Standard',
-          duration: 2
+         abridgment: "Standard",
+         dependencies: {
+           bathroom: "20",
+           bedroom: "7"
+         },
+         duration: "2",
+         text: "Standard",
+         price: '72'
         },
       },
       addons: [],
@@ -158,7 +162,8 @@ export default new Vuex.Store({
         month: $moment().add(1, 'days').format('MM'),
         year:  $moment().add(1, 'days').format('YYYY'),
         time: {
-          text: "Please select time"
+          text: "Please select time",
+          sale: 0
         }
       },
     }

@@ -15,34 +15,6 @@
             :options="select"
             :value.sync="data.selected[key]"
         ></v-select>
-        <!--<v-select
-            class="item"
-            label="abridgment"
-            label-option="text"
-            :options="selects.industry"
-            :value.sync="data.selected[0]"
-        ></v-select>
-        <v-select
-            class="item"
-            label="abridgment"
-            label-option="text"
-            :options="selects.bedroom"
-            :value.sync="data.selected[1]"
-        ></v-select>
-        <v-select
-            class="item"
-            label="abridgment"
-            label-option="text"
-            :options="selects.bathroom"
-            :value.sync="data.selected[2]"
-        ></v-select>
-        <v-select
-            class="item"
-            label="abridgment"
-            label-option="text"
-            :options="selects.typecleaning"
-            :value.sync="data.selected[3]"
-        ></v-select>-->
       </div>
       <nav>
         <router-link
@@ -57,6 +29,13 @@
         >
           {{ data.date.month + '-' + data.date.day + '-' + data.date.year }}
           <span class="subText" v-if="data.date.time.sale >= 0">{{data.date.time.text.slice(0, 9) }} <span v-if="+data.date.time.sale">{{'- $' + data.date.time.sale + '.00'}}</span></span>
+        </router-link>
+        <router-link
+            to="/booking-2"
+            class="item link"
+        >
+          {{ data.date.month + '-' + data.date.day + '-' + data.date.year }}
+          <span class="subText">{{data.frequent.text}}</span>
         </router-link>
       </nav>
       <p class="fullCost">
@@ -88,7 +67,13 @@ export default {
   },
   computed: {
     subtotal() {
-      return (this.$store.state.subtotal - (this.data.date.time.sale ? this.data.date.time.sale : 0) + this.selects.typecleaning) * ((100 - this.data.frequent.sale) / 100);
+      let timeSale = this.data.date.time.sale ? this.data.date.time.sale : 0
+      let frequentSale = (100 - this.data.frequent.sale) / 100
+      let bedroomSelected = this.data.selected.bedroom
+      let bathroomSelected = this.data.selected.bathroom
+      let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
+      let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice ) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;
@@ -96,6 +81,9 @@ export default {
     selects() {
       return this.$store.state.selects;
     },
+    addonsPrice() {
+      return this.data.addons.length > 0 ? this.data.addons.map(addon => +addon.price).reduce((a, b) => a + b) : 0
+    }
   },
   methods: {
     formatToPrice(value) {
@@ -107,7 +95,7 @@ export default {
     this.$store.dispatch('getData')
   },
   updated() {
-    console.log(this.subtotal);
+
   }
 }
 </script>
@@ -160,6 +148,12 @@ h2 {
   font-size: $a35;
   width: 100%;
   text-align: center;
+}
+
+h3 {
+  font-size: $a25;
+  font-weight: 600;
+  opacity: .8;
 }
 
 h4 {

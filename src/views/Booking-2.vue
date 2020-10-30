@@ -36,7 +36,7 @@
         < Back
       </router-link>
       <router-link
-          to="/booking"
+          to="/checkout"
           class="button active"
       >
         Next

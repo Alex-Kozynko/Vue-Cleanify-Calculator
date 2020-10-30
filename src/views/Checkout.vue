@@ -1,0 +1,462 @@
+<template>
+  <div id="checkout">
+    <h2>Checkout</h2>
+    <div class="firstClean">Get 50% OFF for your first clean</div>
+    <div class="form-info">
+      <form class="left">
+        <h3>Almost there !</h3>
+        <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
+        <input type="text" class="button item" placeholder="First name*" required>
+        <input type="text" class="button item" placeholder="Last name*" required>
+        <input type="email" class="button item" placeholder="Email address*" required>
+        <input type="text" class="button item" placeholder="Company name">
+        <input type="tel" class="button item" placeholder="Phone number*" required v-mask="'###-###-####'">
+        <div class="cupon">
+          <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here.">
+          <div class="button active">Apply</div>
+        </div>
+      </form>
+      <div class="right">
+        <p class="title">Receipt</p>
+        <div class="item">
+          <p class="name">Industry</p>
+          <p class="value">{{ data.selected.industry.text }}</p>
+        </div>
+        <div class="item">
+          <p class="name">Clean Type</p>
+          <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }} hours)</p>
+        </div>
+        <div class="item">
+          <p class="name">Bedroom</p>
+          <p class="value">{{ data.selected.bedroom.text }}</p>
+        </div>
+        <div class="item">
+          <p class="name">Bathroom</p>
+          <p class="value">{{ data.selected.bathroom.text }}</p>
+        </div>
+        <div class="item">
+          <p class="name">Date</p>
+          <p class="value">{{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }}</p>
+        </div>
+        <div class="item">
+          <p class="name">Time</p>
+          <p class="value">{{ data.date.time.text }}</p>
+        </div>
+        <div class="item">
+          <p class="name">Address</p>
+          <p class="value">-</p>
+        </div>
+        <div class="item small">
+          <p class="name">Addons</p>
+          <div class="value" v-if="data.addons.length > 0">
+            <animated-number
+                class="number"
+                :value="addonsPrice"
+                :formatValue="formatToPrice"
+                :duration="500"
+            />
+            <div class="details-holder">
+              ?
+              <div class="detail">
+                <p v-for="addon in data.addons">{{ addon.text }}   <span> ${{addon.price}}</span></p>
+              </div>
+            </div>
+          </div>
+          <p class="value" v-else>-</p>
+        </div>
+        <div class="item">
+          <p class="name">Clean</p>
+          <p class="value">
+            <animated-number
+                class="number"
+                :value="clean"
+                :formatValue="formatToPrice"
+                :duration="500"
+            />
+          </p>
+        </div>
+        <div class="item">
+          <p class="name">Recurring</p>
+          <p class="value">{{ data.frequent.text }}</p>
+        </div>
+        <div class="item small">
+          <p class="name">Discounts</p>
+          <div class="value">
+            <animated-number
+                class="number"
+                :value="-data.date.time.sale - (clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)"
+                :formatValue="formatToPrice"
+                :duration="500"
+            />
+            <div class="details-holder">
+              ?
+              <div class="detail">
+                <p>First Cleaning 50% OFF <span> $75</span></p>
+                <p v-if="+data.date.time.sale > 0">Time sale   <span> ${{data.date.time.sale}}</span></p>
+                <p v-if="+data.frequent.sale > 0">Recurring {{data.frequent.sale}}% off   <span> ${{((clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)).toFixed(0)}}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <p class="name">Promo</p>
+          <p class="value">-</p>
+        </div>
+        <div class="item total">
+          <p class="name">Total</p>
+          <p class="value">
+            <animated-number
+              class="number"
+              :value="subtotal"
+              :formatValue="formatToPrice"
+              :duration="500"
+            />
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Your personal data will be used to process your order,
+        support your experience throughout this website, and
+        for other purposes described in our privacy policy.</p>
+      <label class="checkbox-holder">
+        <span class="checkbox">
+          <input type="checkbox">
+          <span></span>
+        </span>
+        I AGREE TO THE WEBSITE TERMS AND CONDITIONS
+      </label>
+      <div class="buttons-holder">
+        <div class="button" @click="cardPay = !cardPay" :class="{active: cardPay}">Pay with Card</div>
+        <div class="button">PayPal</div>
+        <div class="button">Submit Request</div>
+      </div>
+      <div class="creditCard" v-show="cardPay">
+        <div class="item">
+          <div class="button active">Credit cart</div>
+          <img src="~@/assets/img/cardType.png" alt="" />
+        </div>
+        <div class="item">
+          <input type="text" class="button cardNumber" placeholder="Card number">
+        </div>
+        <div class="item">
+          <input type="text" class="button" placeholder="MM/YY">
+          <input type="text" class="button" placeholder="CVC">
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import AnimatedNumber from "animated-number-vue";
+import {mask} from 'vue-the-mask'
+export default {
+  name: "Checkout",
+  components: {
+    AnimatedNumber
+  },
+  directives: {
+    mask
+  },
+  data() {
+    return {
+      cardPay: false
+    }
+  },
+  computed: {
+    data() {
+      return this.$store.state.dataToSend;
+    },
+    selects() {
+      return this.$store.state.selects;
+    },
+    subtotal() {
+      let timeSale = this.data.date.time.sale ? this.data.date.time.sale : 0
+      let frequentSale = (100 - this.data.frequent.sale) / 100
+      let bedroomSelected = this.data.selected.bedroom
+      let bathroomSelected = this.data.selected.bathroom
+      let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
+      let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice ) * frequentSale;
+    },
+    addonsPrice() {
+      return this.data.addons.length > 0 ? this.data.addons.map(addon => +addon.price).reduce((a, b) => a + b) : 0
+    },
+    clean() {
+      let bedroomSelected = this.data.selected.bedroom
+      let bathroomSelected = this.data.selected.bathroom
+      let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
+      let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
+      return (+this.data.selected.typecleaning.price + bedroomPrice + bathroomPrice );
+    },
+  },
+  methods: {
+    formatToPrice(value) {
+      return value < 0 ? '-$' + value.toFixed(0) * -1 : '$' + value.toFixed(0);
+    }
+  },
+}
+</script>
+
+<style lang="scss">
+  #checkout {
+    flex-direction: column;
+    padding: $a55 $a460 !important;
+    height: calc(100vh - #{$a87});
+    h2 {
+      margin-bottom: $a35;
+    }
+    .firstClean {
+      width: 100%;
+      height: $a76;
+      background: $primary;
+      border-radius: $a16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: $a30;
+      color: #ffffff;
+      margin-bottom: $a40;
+    }
+    .form-info {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: $a45;
+      .left {
+        width: $a515;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: auto;
+        .subtitle {
+          margin-top: $a10;
+          margin-bottom: $a20;
+          opacity: .3;
+          font-size: $a15;
+        }
+        .item {
+          padding: 0 $a25;
+          width: 100%;
+          margin-bottom: $a30;
+          cursor: auto;
+          &:hover {
+            background: none;
+          }
+        }
+        .cupon {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          margin-top: $a10;
+          .item {
+            margin-bottom: 0;
+          }
+          .button.active {
+            margin-left: $a36;
+            min-width: $a108;
+          }
+        }
+      }
+      .right {
+        width: $a360;
+        background: transparentize($color, .97);
+        padding: $a25 $a15 $a15 $a15;
+        border-radius: max(1px, #{$a2});
+        .title {
+          width: 100%;
+          text-align: center;
+          font-size: $a25;
+          margin-bottom: $a20;
+        }
+        .item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid #EAEAF0;
+          padding: $a10 0;
+          &.small {
+            padding: $a6 0;
+          }
+          p.name, p.value {
+            opacity: .7;
+            font-weight: 500;
+            width: 50%;
+            overflow: hidden;
+            span {
+              white-space: nowrap;
+              width: 100%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: block;
+            }
+          }
+          div.value {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            span {
+              opacity: .7;
+              font-weight: 500;
+            }
+          }
+          &.total {
+            border-bottom: 0;
+            p {
+              font-size: $a23;
+              font-weight: bold;
+              span {
+                font-size: $a23;
+                font-weight: bold;
+              }
+            }
+          }
+          .details-holder {
+            width: $a25;
+            height: $a25;
+            border-radius: $a8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid $primary;
+            background: transparentize($primary, .8);
+            font-weight: bold;
+            font-size: $a10;
+            position: relative;
+            cursor: help;
+            .detail {
+              border: 1px solid $primary;
+              background: linear-gradient(0deg, transparentize($primary, .8), transparentize($primary, .8)), #fff;
+              top: calc(100% + #{$a16});
+              left: 50%;
+              padding: $a15 $a20;
+              border-radius: 0 $a16 $a16 $a16;
+              z-index: -1;
+              opacity: 0;
+              visibility: hidden;
+              transition: all 0.5s;
+              position: absolute;
+              p {
+                font-weight: 500;
+                opacity: .7;
+                white-space: nowrap;
+                display: flex;
+                justify-content: space-between;
+                span {
+                  margin-left: $a25;
+                }
+                &:not(:last-of-type) {
+                  margin-bottom: $a10;
+                }
+              }
+            }
+            &:hover {
+              .detail {
+                visibility: visible;
+                opacity: 1;
+                z-index: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+    .footer {
+      width: 80%;
+      border-top: 1px solid rgba(102, 108, 121, 0.2);
+      margin: 0 auto;
+      padding-top: $a30;
+      p {
+        white-space: pre-line;
+        width: $a410;
+        margin: 0 auto;
+        opacity: .7;
+        margin-bottom: $a25;
+      }
+      .checkbox-holder {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: transparentize($color, .3);
+        justify-content: center;
+        margin-bottom: $a40;
+        .checkbox {
+          width: $a25;
+          height: $a25;
+          border-radius: $a4;
+          border: 1px solid $primary;
+          box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1);
+          background: transparentize($primary, .8);
+          cursor: pointer;
+          margin-right: $a15;
+          position: relative;
+          input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            &:checked~ {
+              span {
+                position: absolute;
+                top: 0;
+                bottom: $a5;
+                left: 0;
+                right: 0;
+                margin: auto;
+                transform: rotate(-45deg);
+                width: $a15;
+                height: $a8;
+                border-left: 2px solid $color;
+                border-bottom: 2px solid $color;
+              }
+            }
+          }
+        }
+      }
+      .buttons-holder {
+        display: flex;
+        justify-content: center;
+        .button {
+          width: $a200;
+          margin: 0 $a15;
+        }
+      }
+      .creditCard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: $a25;
+        &:before {
+          content: '';
+          width: $a200;
+          height: 1px;
+          background: rgba(102, 108, 121, 0.2);
+          margin-bottom: $a25;
+        }
+        .item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: $a30;
+          width: $a410;
+          input {
+            padding: 0 $a25;
+            width: calc(50% - #{$a20});
+          }
+          .button.active {
+            width: $a200;
+            margin-right: $a35;
+          }
+          .cardNumber {
+            width: $a410;
+          }
+        }
+      }
+    }
+  }
+</style>

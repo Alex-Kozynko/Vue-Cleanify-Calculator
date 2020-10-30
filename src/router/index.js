@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Extra from '@/views/Extra.vue'
 import Booking from "@/views/Booking";
+import Booking2 from "@/views/Booking-2";
+import Checkout from "@/views/Checkout";
 
 Vue.use(VueRouter)
 
@@ -19,7 +21,12 @@ const routes = [
   {
     path: '/booking-2',
     name: 'Booking-2',
-    component: () => import('@/views/Booking-2')
+    component: Booking2
+  },
+  {
+    path: '/checkout',
+    name: 'cheout',
+    component: Checkout
   },
   /*{
     path: '/about',

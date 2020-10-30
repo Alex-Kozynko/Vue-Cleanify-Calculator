@@ -69,10 +69,8 @@ export default {
     selectedAddons(item) {
       if (this.data.addons.map(addon => addon.text).includes(item.text)) {
         this.$store.commit('dataToSend', {key: 'addons', payload: this.data.addons.filter(addon => addon.text !== item.text)})
-        this.$store.commit('subtotal', this.subtotal - +item.price)
       } else {
         this.$store.commit('dataToSend', {key: 'addons', payload: [...this.data.addons, item]})
-        this.$store.commit('subtotal', this.subtotal + +item.price)
       }
       this.$store.dispatch('setCache')
     }
