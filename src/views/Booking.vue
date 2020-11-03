@@ -1,7 +1,7 @@
 <template>
   <div id="booking">
     <div class="date">
-      <h2>Extra options</h2>
+      <h2>Select the date of cleaning</h2>
       <VueSlickCarousel
           ref="c1"
           class="months"
@@ -140,6 +140,7 @@ export default {
       flex-direction: column;
       align-items: center;
       margin: 0 auto;
+      padding: 0 $a50;
       .months {
         width: 70%;
         margin-top: $a20;
@@ -148,7 +149,7 @@ export default {
           height: $a13;
           background: url('~@/assets/img/icons/arrowRight.svg') no-repeat 0 0 / contain;
           transform: none;
-          right: 41.5%;
+          right: 40%;
           left: auto;
           top: 0;
           bottom: 0;
@@ -163,7 +164,7 @@ export default {
         }
         .slick-prev {
           transform: rotate(180deg);
-          left: 41.5%;
+          left: 40%;
           right: auto;
         }
         .slick-track {
@@ -209,6 +210,7 @@ export default {
       .daysOfTheMonth {
         width: 100%;
         margin-top: $a14;
+        overflow: hidden;
         .month {
           display: grid !important;
           grid-template-columns: repeat(7, 1fr);
@@ -240,6 +242,90 @@ export default {
       }
       .button {
         width: $a110;
+      }
+    }
+  }
+  @media screen and (max-width: $mobileOn) {
+    #booking {
+      .date {
+        padding: 0;
+        .months {
+          width: 100%;
+          padding: $m20 $m15;
+          border: 1px solid $primary;
+          border-bottom: 0;
+          border-radius: $m16 $m16 0 0;
+          .item {
+            font-size: $m22;
+          }
+          .slick-slide {
+            opacity: 0;
+          }
+          .slick-prev {
+            width: $m15;
+            height: $m15;
+            left: 22%;
+          }
+          .slick-next {
+            width: $m15;
+            height: $m15;
+            right: 22%;
+          }
+        }
+        .dayOfWeek {
+          margin-top: 0;
+          padding: 0 $m15 $m15 $m15;
+          border: 1px solid $primary;
+          border-top: 0;
+          border-bottom: 0;
+          .item {
+            .day {
+              font-size: $m13;
+            }
+            .sale {
+              font-size: $m10;
+              text-align: center;
+              margin-top: $m10;
+            }
+          }
+        }
+        .daysOfTheMonth {
+          margin-top: 0;
+          padding-bottom: $m20;
+          border: 1px solid $primary;
+          border-radius: 0 0 $m16 $m16;
+          border-top: 0;
+          .month {
+            grid-column-gap: $m13;
+            grid-row-gap: $m10;
+            padding: 0 $m15;
+          }
+          .button {
+            padding: 0;
+            border-radius: $m5;
+            width: $m25;
+            height: $m25;
+            font-size: $m12;
+          }
+        }
+      }
+      .time {
+        h2 {
+          margin-bottom: $m20;
+        }
+        .v-select {
+          width: 100%;
+        }
+      }
+      .buttons {
+        margin-top: $m30;
+        padding-bottom: $m50;
+        .button {
+          width: auto;
+        }
+        .back {
+          margin-right: $m15;
+        }
       }
     }
   }

@@ -2,9 +2,14 @@
   <div id="booking-2">
     <h2>Where are we coming to clean?</h2>
     <h4>Add on extras for a cleaning upgrade.</h4>
-    <input class="item button address" placeholder="Address">
+    <gmap-autocomplete
+        class="item button address"
+        :class="{success: data.address, error: data.address === 'Address is not valid'}"
+        @place_changed="getAddressData($event)"
+    >
+    </gmap-autocomplete>
     <input class="item button apt" placeholder="APT">
-    <input class="item button zip" placeholder="ZIP">
+    <input class="item button zip" placeholder="ZIP" readonly v-model="zip">
     <div class="entrancesHolder">
       <v-select
           class="item button"
@@ -38,6 +43,8 @@
       <router-link
           to="/checkout"
           class="button active"
+          tag="button"
+          :disabled="data.address === 'Address is not valid' || !data.address"
       >
         Next
       </router-link>
@@ -47,11 +54,23 @@
 
 <script>
 import VSelect from "@/components/VSelect";
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
+import {mask} from 'vue-the-mask'
+import {gmapApi} from 'vue2-google-maps'
 
 export default {
   name: "Booking-2",
   components: {
-    VSelect
+    VSelect,
+    VueGoogleAutocomplete
+  },
+  directives: {
+    mask
+  },
+  data() {
+    return {
+      zip: ''
+    }
   },
   computed: {
     data() {
@@ -62,7 +81,28 @@ export default {
     },
     frequents() {
       return this.$store.state.frequents;
+    },
+    location() {
+      return this.$store.state.location;
+    },
+    google: gmapApi
+  },
+  methods: {
+    getAddressData(e) {
+      console.log(e);
+      let th = this
+      new google.maps.Geocoder().geocode({'address': th.location.centeraddress}, (results, status) => {
+        if (status === 'OK' && th.google.maps.geometry.spherical.computeDistanceBetween(e.geometry.location, results[0].geometry.location) < th.location.radius) {
+          th.zip = e.address_components.filter(item => item.types[0] === 'postal_code')[0].long_name
+          let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name
+          th.$set(th.data, 'address', address)
+        } else {
+          th.$set(th.data, 'address', 'Address is not valid')
+        }
+      })
     }
+  },
+  mounted() {
   }
 }
 </script>
@@ -100,9 +140,18 @@ export default {
       &:hover {
         background: none;
       }
+      &[readonly] {
+        background: #F0F0F0;
+      }
     }
     .address {
       width: calc(50% - #{$a20 * 2 / 3});
+      &.success {
+        border-color: #00ff00;
+      }
+      &.error {
+        border-color: red;
+      }
     }
     .apt, .zip {
       width: calc(25% - #{$a20 * 2 / 3});
@@ -126,6 +175,47 @@ export default {
       }
       .button {
         width: $a110;
+        &[disabled] {
+          background: #9CE1E0;
+          color: $color;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: $mobileOn) {
+    #booking-2 {
+      h4 {
+        margin-bottom: $m15;
+      }
+      h5.title {
+        margin-bottom: $m12;
+      }
+      .item {
+        padding: 0 $m25;
+        margin-bottom: $m10;
+      }
+      .address, .apt, .zip, .entrancesHolder {
+        width: 100%;
+      }
+      .frequent {
+        width: 100%;
+        justify-content: space-between;
+        .sale {
+          position: static;
+          font-size: $m14;
+          margin-right: 0;
+          color: currentColor;
+        }
+      }
+      .buttons {
+        margin-top: $m30;
+        padding-bottom: $m50;
+        .button {
+          width: auto;
+        }
+        .back {
+          margin-right: $m15;
+        }
       }
     }
   }

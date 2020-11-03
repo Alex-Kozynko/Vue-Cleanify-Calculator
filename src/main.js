@@ -10,7 +10,8 @@ Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyB4xzybV9g7EGUUWVNREfVxt5yCBvoNiIQ',
     region: 'US',
-    language: 'us'
+    language: 'us',
+    libraries: ['places', 'geometry']
   }
 })
 

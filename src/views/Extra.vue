@@ -158,4 +158,52 @@ export default {
     }
   }
 }
+
+@media screen and (max-width: $mobileOn) {
+  #extra {
+    .item {
+      width: 100%;
+      margin-bottom: $m10;
+      padding: 0 $m20 0 $m10;
+      .icon {
+        width: $m40;
+        height: $m40;
+        border-radius: $m10;
+        margin-right: $m15;
+      }
+      .name {
+        font-size: $m18;
+        white-space: nowrap;
+        width: 60%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .price {
+        font-size: $m16;
+      }
+    }
+    .petsHolder {
+      margin-top: $m10;
+      .detail {
+        display: none;
+      }
+    }
+    textarea.button {
+      border-radius: $m16;
+      height: $m130;
+      padding: $m20 $m25;
+      margin-top: $m16;
+    }
+    .buttons {
+      margin-top: $m30;
+      padding-bottom: $m50;
+      .button {
+        width: auto;
+      }
+      .back {
+        margin-right: $m15;
+      }
+    }
+  }
+}
 </style>

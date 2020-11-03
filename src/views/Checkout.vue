@@ -16,8 +16,8 @@
           <div class="button active">Apply</div>
         </div>
       </form>
-      <div class="right">
-        <p class="title">Receipt</p>
+      <div class="right" :class="{open: receiptVisible}">
+        <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
         <div class="item">
           <p class="name">Industry</p>
           <p class="value">{{ data.selected.industry.text }}</p>
@@ -132,6 +132,7 @@
         <div class="button">Submit Request</div>
       </div>
       <div class="creditCard" v-show="cardPay">
+        <div class="close" @click="cardPay = false"></div>
         <div class="item">
           <div class="button active">Credit cart</div>
           <img src="~@/assets/img/cardType.png" alt="" />
@@ -143,6 +144,7 @@
           <input type="text" class="button" placeholder="MM/YY">
           <input type="text" class="button" placeholder="CVC">
         </div>
+        <input type="button" class="button active" value="Place order">
       </div>
     </div>
   </div>
@@ -161,7 +163,8 @@ export default {
   },
   data() {
     return {
-      cardPay: false
+      cardPay: false,
+      receiptVisible: false
     }
   },
   computed: {
@@ -264,12 +267,15 @@ export default {
         width: $a360;
         background: transparentize($color, .97);
         padding: $a25 $a15 $a15 $a15;
-        border-radius: max(1px, #{$a2});
+        border-radius: 1px;
         .title {
           width: 100%;
           text-align: center;
           font-size: $a25;
           margin-bottom: $a20;
+          .arrow {
+            display: none;
+          }
         }
         .item {
           display: flex;
@@ -309,8 +315,8 @@ export default {
               font-size: $a23;
               font-weight: bold;
               span {
-                font-size: $a23;
-                font-weight: bold;
+                font-size: inherit;
+                font-weight: inherit;
               }
             }
           }
@@ -431,6 +437,9 @@ export default {
         flex-direction: column;
         align-items: center;
         margin-top: $a25;
+        .close {
+          display: none;
+        }
         &:before {
           content: '';
           width: $a200;
@@ -444,6 +453,9 @@ export default {
           justify-content: space-between;
           margin-bottom: $a30;
           width: $a410;
+          img {
+            width: $a180;
+          }
           input {
             padding: 0 $a25;
             width: calc(50% - #{$a20});
@@ -454,6 +466,217 @@ export default {
           }
           .cardNumber {
             width: $a410;
+          }
+        }
+        .button.active {
+          padding: 0 $a35;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: $mobileOn) {
+    #checkout {
+      h2 {
+        margin-bottom: $m20;
+      }
+      .firstClean {
+        font-size: $m16;
+        height: $m56;
+        border-radius: $m16;
+        margin-bottom: $m16;
+      }
+      .form-info {
+        flex-direction: column;
+        .left, .right {
+          width: 100%;
+        }
+        .left {
+          h3, .subtitle {
+            display: none;
+          }
+          .item {
+            padding: 0 $m25;
+            margin-bottom: $m10;
+          }
+        }
+        .right {
+          padding: $m15;
+          margin-top: $m15;
+          .title {
+            font-size: $m24;
+            text-align: left;
+            margin-bottom: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .arrow {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: $m32;
+              height: $m32;
+              border-radius: $m8;
+              background: $primary;
+              padding-bottom: $m4;
+              &:before {
+                content: '';
+                border-right: $m3 solid $color;
+                border-bottom: $m3 solid $color;
+                width: $m6;
+                height: $m6;
+                transform: rotate(45deg);
+              }
+            }
+          }
+          .item {
+            padding: $m10 0 !important;
+            display: none;
+            p {
+              font-size: $m13;
+            }
+            .value {
+              font-size: $m13;
+              span {
+                font-size: inherit;
+                font-weight: inherit;
+              }
+            }
+            .details-holder {
+              width: $m20;
+              height: $m20;
+              border-radius: $m6;
+              font-size: $m10;
+              .detail {
+                top: 0;
+                left: auto;
+                right: calc(100% + #{$m10});
+                border-radius: $m8;
+                padding: $m10;
+                p {
+                  span {
+                    font-size: $m12;
+                    margin-left: $m10;
+                  }
+                }
+              }
+            }
+            &.total {
+              p {
+                font-size: $m20;
+              }
+            }
+          }
+          &.open {
+            .title {
+              margin-bottom: $m15;
+              .arrow {
+                padding-bottom: 0;
+                padding-top: $m4;
+                &:before {
+                  transform: rotate(225deg);
+                }
+              }
+            }
+            .item {
+              display: flex;
+            }
+          }
+        }
+      }
+      .footer {
+        border-top: 0;
+        width: 100%;
+        p {
+          width: 100%;
+        }
+        .checkbox-holder {
+          align-items: flex-start;
+          margin-top: $m15;
+          .checkbox {
+            min-width: $m20;
+            height: $m20;
+            border-radius: $m6;
+            margin-right: $m10;
+            margin-top: $m2;
+            input:checked~ {
+              span {
+                width: $m10;
+                height: $m6;
+                bottom: $m3;
+              }
+            }
+          }
+        }
+        .buttons-holder {
+          justify-content: space-between;
+          flex-direction: column-reverse;
+          margin-top: $m20;
+          padding-bottom: $m30;
+          .button {
+            width: 100%;
+            margin: 0;
+            &:not(:first-of-type) {
+              margin: 0 0 $m10 0;
+            }
+          }
+        }
+        .creditCard {
+          margin-top: 0;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          padding: $m20;
+          background: transparentize($color, .5);
+          justify-content: center;
+          .close {
+
+          }
+          &:before {
+            width: 95%;
+            height: $m300;
+            background: #ffffff;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            z-index: -1;
+            border-radius: $m16;
+          }
+          .item {
+            width: 100%;
+            flex-flow: row wrap;
+            margin-bottom: 0;
+            &:nth-of-type(2) {
+              display: none;
+            }
+            input {
+              width: 100% !important;
+              margin-bottom: $m10;
+              padding: 0 $m25;
+            }
+          }
+          .button.active {
+            width: 100%;
+            margin-top: $m10;
+          }
+          .close {
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: $m290;
+            width: $m25;
+            height: $m25;
+            background: linear-gradient(0deg, $color, $color) no-repeat center center / 2px 70%, linear-gradient(0deg, $color, $color) no-repeat center center / 70% 2px, #fff;
+            border-radius: 50%;
+            transform: rotate(45deg);
+            margin: auto;
+            right: 1%;
+            box-shadow: 0 0 $m3 0 rgba(0, 0, 0, 0.3);
           }
         }
       }

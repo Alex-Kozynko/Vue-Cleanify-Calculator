@@ -4,7 +4,7 @@
       <a href="/" class="logo">
         <img src="@/assets/img/icons/logo.svg" alt=""/>
       </a>
-      <div class="progressbar">
+      <slide-up-down :active="active" :duration="500" class="progressbar">
         <v-select
             class="item"
             label="abridgment"
@@ -15,29 +15,39 @@
             :options="select"
             :value.sync="data.selected[key]"
         ></v-select>
+        <nav>
+          <router-link
+              to="/"
+              class="item link"
+          >
+            Extra
+          </router-link>
+          <router-link
+              to="/booking"
+              class="item link"
+              v-if="$route.name !== 'Extra'"
+          >
+            {{ data.date.month + '-' + data.date.day + '-' + data.date.year }}
+            <span class="subText" v-if="data.date.time.sale >= 0">{{ data.date.time.text.slice(0, 9) }} <span
+                v-if="+data.date.time.sale">{{ '- $' + data.date.time.sale + '.00 off' }}</span></span>
+          </router-link>
+          <router-link
+              to="/booking-2"
+              class="item link"
+              v-if="$route.name !== 'Booking' && $route.name !== 'Extra'"
+          >
+            {{ data.address || 'Location' }}
+            <span class="subText">{{ data.frequent.text }} <span v-if="+data.frequent.sale">- {{data.frequent.sale +'% off'}}</span></span>
+          </router-link>
+        </nav>
+      </slide-up-down>
+      <div
+          @click="active = !active"
+          :class="{up: active}"
+          class="mobileTrigger"
+      >
+        <img src="@/assets/img/icons/arrowDown.svg" alt=""/>
       </div>
-      <nav>
-        <router-link
-            to="/"
-            class="item link"
-        >
-          Extra
-        </router-link>
-        <router-link
-            to="/booking"
-            class="item link"
-        >
-          {{ data.date.month + '-' + data.date.day + '-' + data.date.year }}
-          <span class="subText" v-if="data.date.time.sale >= 0">{{data.date.time.text.slice(0, 9) }} <span v-if="+data.date.time.sale">{{'- $' + data.date.time.sale + '.00'}}</span></span>
-        </router-link>
-        <router-link
-            to="/booking-2"
-            class="item link"
-        >
-          {{ data.date.month + '-' + data.date.day + '-' + data.date.year }}
-          <span class="subText">{{data.frequent.text}}</span>
-        </router-link>
-      </nav>
       <p class="fullCost">
         <animated-number
             class="number"
@@ -45,7 +55,7 @@
             :formatValue="formatToPrice"
             :duration="500"
         />
-        <span class="sub">SUBTOTAL</span>
+        <span class="sub">TOTAL</span>
       </p>
     </header>
     <router-view class="main"/>
@@ -54,15 +64,18 @@
 
 <script>
 import VSelect from '@/components/VSelect'
-import AnimatedNumber from "animated-number-vue";
+import AnimatedNumber from "animated-number-vue"
+import SlideUpDown from 'vue-slide-up-down'
 
 export default {
   components: {
     VSelect,
-    AnimatedNumber
+    AnimatedNumber,
+    SlideUpDown
   },
   data() {
     return {
+      active: true
     }
   },
   computed: {
@@ -73,7 +86,7 @@ export default {
       let bathroomSelected = this.data.selected.bathroom
       let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
       let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice ) * frequentSale;
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;
@@ -88,11 +101,18 @@ export default {
   methods: {
     formatToPrice(value) {
       return '$' + value.toFixed(0);
+    },
+    currentHeight(e) {
+
     }
   },
   created() {
     this.$store.dispatch('getCache')
     this.$store.dispatch('getData')
+    console.log(this.$route);
+    if (window.innerWidth < 1023) {
+      this.active = false
+    }
   },
   updated() {
 
@@ -103,25 +123,23 @@ export default {
 <style lang="scss">
 @import "~@/scss/fonts";
 
-::-webkit-scrollbar {
-  width: 10px;
-}
+@media screen and (min-width: $mobileOn) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
 
-::-webkit-scrollbar-track {
-  background: none;
-}
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
 
-::-webkit-scrollbar-track {
-  background: none;
-}
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
 
-::-webkit-scrollbar-thumb,
-::-webkit-scrollbar-thumb:window-inactive {
-  background: $secondary;
-}
-
-html {
-  overflow: hidden;
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-thumb:window-inactive {
+    background: $secondary;
+  }
 }
 
 body {
@@ -172,19 +190,22 @@ h5 {
 
 .button {
   height: $a55;
-  border: max(1px, #{$a1}) solid $primary;
+  border: 1px solid $primary;
   border-radius: $a16;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
   &:hover {
     background: transparentize($primary, .85);
   }
+
   &.active {
     background: $primary;
     color: #ffffff;
   }
+
   &.disabled {
     border-color: #E5E5E5;
     opacity: .6;
@@ -199,13 +220,17 @@ h5 {
     display: flex;
     background: #FBFBFB;
 
+    .mobileTrigger {
+      display: none;
+    }
+
     .logo {
       width: $a200;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-right: max(1px, #{$a1}) solid #F0F0F0;
+      border-right: 1px solid #F0F0F0;
 
       img {
         width: $a120;
@@ -214,7 +239,7 @@ h5 {
 
     .item {
       padding: 0 $a20 0 $a25;
-      border-bottom: max(1px, #{$a10}) solid $primary;
+      border-bottom: 10px solid $primary;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -223,7 +248,7 @@ h5 {
 
       &:before {
         content: '';
-        width: max(1px, #{$a1});
+        width: 1px;
         background: #F0F0F0;
         height: 100%;
         right: 0;
@@ -245,6 +270,7 @@ h5 {
         display: flex;
         align-items: center;
         justify-content: center;
+
         span {
           font-size: $a12;
           font-weight: 600;
@@ -278,11 +304,13 @@ h5 {
       margin-left: auto;
       font-weight: 700;
       font-size: $a40;
-      border-left: max(1px, #{$a1}) solid #F0F0F0;
+      border-left: 1px solid #F0F0F0;
+
       .number {
         font-weight: 700;
         font-size: $a40;
       }
+
       .sub {
         text-transform: uppercase;
         font-size: $a10;
@@ -300,6 +328,168 @@ h5 {
     justify-content: space-between;
     flex-flow: row wrap;
     overflow: auto;
+  }
+}
+
+@media screen and (max-width: $mobileOn) {
+  body {
+
+  }
+  body,
+  body * {
+    font-size: $m16;
+  }
+  h2 {
+    font-size: $m26;
+    text-align: left;
+    margin: $m20 0;
+  }
+  h5 {
+    font-size: $m13;
+    margin-bottom: $m12;
+  }
+
+  .button {
+    height: $m56;
+    border-radius: $m16;
+    padding: 0 $m35;
+    border-width: $m1;
+  }
+
+  #app {
+    header {
+      height: auto;
+      padding: 0 $m16;
+      align-items: center;
+      filter: drop-shadow(0 $m5 $m10 rgba(0, 0, 0, 0.1));
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      border-bottom: $m1 solid rgba(0, 0, 0, 0.1);
+      flex-flow: row wrap;
+
+      .mobileTrigger {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: $m25;
+        height: $m25;
+        background: inherit;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin: auto;
+        border-radius: 50%;
+        transform: translate(0, -50%);
+        padding-bottom: $m5;
+        transition: all .5s;
+
+        &.up {
+          img {
+            transform: rotate(180deg);
+          }
+        }
+
+        img {
+          width: 40%;
+        }
+      }
+
+      .logo {
+        width: auto;
+        border-right: 0;
+        padding: $m10 0;
+
+        img {
+          width: $m100;
+        }
+      }
+
+      .item {
+        border-width: $m1;
+
+        &:before {
+          display: none;
+        }
+      }
+
+      .progressbar {
+        display: block;
+        width: 100%;
+        background: inherit;
+        transition: all 0.5s;
+        order: 2;
+        position: relative;
+        &:before {
+          content: '';
+          position: absolute;
+          bottom: 100%;
+          left: -$m16;
+          width: calc(100% + #{$m32});
+          height: $m1;
+          background: rgba(0,0,0,0.1);
+        }
+
+        &>.item:first-of-type {
+          margin-top: $m16;
+        }
+
+        .item {
+          height: $m44 !important;
+          margin-bottom: $m10;
+          font-weight: bold;
+
+          p {
+            font-weight: bold !important;
+          }
+        }
+      }
+
+      nav {
+        flex-direction: column;
+        padding-bottom: $m16;
+
+        .item {
+          font-size: $m16;
+          border-radius: $m16;
+          border: $m1 solid $primary;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 0 $m25 !important;
+          color: transparentize($color, .3);
+
+          .subText {
+            position: static;
+            font-size: $m14;
+          }
+        }
+      }
+
+      .fullCost {
+        width: auto;
+        padding: 0 0 0 $m15;
+        border-left: 0;
+
+        .number {
+          font-size: $m26;
+        }
+
+        .sub {
+          font-size: $m10;
+          display: none;
+        }
+      }
+    }
+
+    .main {
+      width: 100%;
+      height: auto !important;
+      padding: 0 $m16 !important;
+      padding-top: $m60 !important;
+    }
   }
 }
 </style>

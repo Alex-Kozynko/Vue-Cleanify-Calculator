@@ -13,6 +13,7 @@ export default new Vuex.Store({
     times: [],
     entrances: [],
     frequents: [],
+    location: {},
     selects: {
       /*industry: [
         {
@@ -163,9 +164,10 @@ export default new Vuex.Store({
         year:  $moment().add(1, 'days').format('YYYY'),
         time: {
           text: "Please select time",
-          sale: 0
+          sale: -1
         }
       },
+      address: ''
     }
   },
   mutations: {
@@ -177,6 +179,7 @@ export default new Vuex.Store({
       state.entrances = payload['entrance']
       state.frequents = payload['frequent']
       state.selects = payload['stepone']
+      state.location = payload['location']
     },
     subtotal(state, payload) {
       state.subtotal = payload
