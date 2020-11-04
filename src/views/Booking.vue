@@ -73,6 +73,8 @@
       <router-link
           to="/booking-2"
           class="button active"
+          tag="button"
+          :disabled="data.date.time.hidden"
       >
         Next
       </router-link>
@@ -231,19 +233,6 @@ export default {
         width: $a450;
       }
     }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      margin-top: $a60;
-      .back {
-        margin-right: $a35;
-      }
-      .button {
-        width: $a110;
-      }
-    }
   }
   @media screen and (max-width: $mobileOn) {
     #booking {
@@ -315,16 +304,6 @@ export default {
         }
         .v-select {
           width: 100%;
-        }
-      }
-      .buttons {
-        margin-top: $m30;
-        padding-bottom: $m50;
-        .button {
-          width: auto;
-        }
-        .back {
-          margin-right: $m15;
         }
       }
     }

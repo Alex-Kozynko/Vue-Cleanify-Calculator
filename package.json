@@ -15,6 +15,7 @@
     "vue": "^2.6.11",
     "vue-google-autocomplete": "^1.1.0",
     "vue-number-animation": "^1.0.5",
+    "vue-paypal-checkout": "^3.2.0",
     "vue-router": "^3.2.0",
     "vue-select": "^3.10.8",
     "vue-slick-carousel": "^1.0.6",

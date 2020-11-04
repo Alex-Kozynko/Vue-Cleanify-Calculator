@@ -153,6 +153,7 @@
 <script>
 import AnimatedNumber from "animated-number-vue";
 import {mask} from 'vue-the-mask'
+
 export default {
   name: "Checkout",
   components: {

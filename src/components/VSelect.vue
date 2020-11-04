@@ -221,7 +221,7 @@ export default {
     .v-list-dropdown {
       border: 1px solid $secondary;
       border-top-color: $primary;
-      left: 1px;
+      left: -1px;
       width: calc(100% + 2px);
       background: #fff;
     }

@@ -28,7 +28,7 @@
               v-if="$route.name !== 'Extra'"
           >
             {{ data.date.month + '-' + data.date.day + '-' + data.date.year }}
-            <span class="subText" v-if="data.date.time.sale >= 0">{{ data.date.time.text.slice(0, 9) }} <span
+            <span class="subText" v-if="!data.date.time.hidden">{{ data.date.time.text.slice(0, 9) }} <span
                 v-if="+data.date.time.sale">{{ '- $' + data.date.time.sale + '.00 off' }}</span></span>
           </router-link>
           <router-link
@@ -86,6 +86,7 @@ export default {
       let bathroomSelected = this.data.selected.bathroom
       let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
       let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
+      console.log((+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice) * frequentSale);
       return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice) * frequentSale;
     },
     data() {
@@ -329,6 +330,25 @@ h5 {
     flex-flow: row wrap;
     overflow: auto;
   }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: $a86;
+    .back {
+      margin-right: $a35;
+      color: $color;
+    }
+    .button {
+      width: $a110;
+      &[disabled] {
+        background: #9CE1E0;
+        color: $color;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: $mobileOn) {
@@ -489,6 +509,17 @@ h5 {
       height: auto !important;
       padding: 0 $m16 !important;
       padding-top: $m60 !important;
+    }
+
+    .buttons {
+      margin-top: $m30;
+      padding-bottom: $m50;
+      .button {
+        width: auto;
+      }
+      .back {
+        margin-right: $m15;
+      }
     }
   }
 }

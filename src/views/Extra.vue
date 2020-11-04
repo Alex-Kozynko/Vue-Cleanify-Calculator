@@ -144,19 +144,6 @@ export default {
       background: none;
     }
   }
-  .buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: $a60;
-    .back {
-      margin-right: $a35;
-    }
-    .button {
-      width: $a110;
-    }
-  }
 }
 
 @media screen and (max-width: $mobileOn) {
@@ -193,16 +180,6 @@ export default {
       height: $m130;
       padding: $m20 $m25;
       margin-top: $m16;
-    }
-    .buttons {
-      margin-top: $m30;
-      padding-bottom: $m50;
-      .button {
-        width: auto;
-      }
-      .back {
-        margin-right: $m15;
-      }
     }
   }
 }

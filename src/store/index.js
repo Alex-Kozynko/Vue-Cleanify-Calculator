@@ -164,7 +164,8 @@ export default new Vuex.Store({
         year:  $moment().add(1, 'days').format('YYYY'),
         time: {
           text: "Please select time",
-          sale: -1
+          sale: 0,
+          hidden: true
         }
       },
       address: ''
@@ -180,9 +181,6 @@ export default new Vuex.Store({
       state.frequents = payload['frequent']
       state.selects = payload['stepone']
       state.location = payload['location']
-    },
-    subtotal(state, payload) {
-      state.subtotal = payload
     },
     cache(state, payload) {
       for (let key in payload) {

@@ -93,9 +93,14 @@ export default {
       let th = this
       new google.maps.Geocoder().geocode({'address': th.location.centeraddress}, (results, status) => {
         if (status === 'OK' && th.google.maps.geometry.spherical.computeDistanceBetween(e.geometry.location, results[0].geometry.location) < th.location.radius) {
-          th.zip = e.address_components.filter(item => item.types[0] === 'postal_code')[0].long_name
-          let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name
-          th.$set(th.data, 'address', address)
+          let zip = e.address_components.filter(item => item.types[0] === 'postal_code')[0]
+          if (zip) {
+            th.zip = zip.long_name
+            let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name
+            th.$set(th.data, 'address', address)
+          } else {
+            th.$set(th.data, 'address', 'Address is not valid')
+          }
         } else {
           th.$set(th.data, 'address', 'Address is not valid')
         }
@@ -164,23 +169,6 @@ export default {
       margin-top: $a40;
       margin-bottom: $a15;
     }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      margin-top: $a86;
-      .back {
-        margin-right: $a35;
-      }
-      .button {
-        width: $a110;
-        &[disabled] {
-          background: #9CE1E0;
-          color: $color;
-        }
-      }
-    }
   }
   @media screen and (max-width: $mobileOn) {
     #booking-2 {
@@ -205,16 +193,6 @@ export default {
           font-size: $m14;
           margin-right: 0;
           color: currentColor;
-        }
-      }
-      .buttons {
-        margin-top: $m30;
-        padding-bottom: $m50;
-        .button {
-          width: auto;
-        }
-        .back {
-          margin-right: $m15;
         }
       }
     }
