@@ -6,8 +6,9 @@ module.exports = {
 			},
             scss: {
 				"sourceMap": true,
-				prependData: '@import "~@/scss/pxTOvw";@import "~@/scss/variables";'
+				prependData: '@import "~@/scss/variables";'
 			}
 		}
-	}
+	},
+	publicPath: '/'
 }

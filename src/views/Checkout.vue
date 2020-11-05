@@ -2,20 +2,21 @@
   <div id="checkout">
     <h2>Checkout</h2>
     <div class="firstClean">Get 50% OFF for your first clean</div>
+    <form name="checkout" method="post" class="checkout woocommerce-checkout" action="/checkout" enctype="multipart/form-data">
     <div class="form-info">
-      <form class="left">
+      <div class="left">
         <h3>Almost there !</h3>
         <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
-        <input type="text" class="button item" placeholder="First name*" required>
-        <input type="text" class="button item" placeholder="Last name*" required>
-        <input type="email" class="button item" placeholder="Email address*" required>
-        <input type="text" class="button item" placeholder="Company name">
-        <input type="tel" class="button item" placeholder="Phone number*" required v-mask="'###-###-####'">
+        <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
+        <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
+        <input type="email" class="button item" placeholder="Email address*" required name="billing_email">
+        <input type="text" class="button item" placeholder="Company name" name="billing_company">
+        <input type="tel" class="button item" placeholder="Phone number*" required v-mask="'###-###-####'" name="billing_phone">
         <div class="cupon">
           <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here.">
           <div class="button active">Apply</div>
         </div>
-      </form>
+      </div>
       <div class="right" :class="{open: receiptVisible}">
         <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
         <div class="item">
@@ -115,6 +116,26 @@
         </div>
       </div>
     </div>
+ <!-- Скрыть -->
+      <template v-show="false">
+        <label class="" for="payment_method_paypal">
+          PayPal
+        </label>
+        <input id="payment_method_paypal" type="radio" class="input-radio" name="payment_method" value="paypal"
+               data-order_button_text="Дальше на PayPal"/>
+        <label class="" for="payment_method_paypal">
+          Authnet
+        </label>
+        <input id="payment_method_authnet" type="radio" class="input-radio" name="payment_method" value="authnet"
+               checked='checked' data-order_button_text=""/>
+      </template>
+<!--// Скрыть -->
+
+  <div v-html="wp_nonce_field"></div>
+
+  <input type="hidden" name="_vue_order_data"  v-model="data" value="">
+   <input type="hidden" name="_vue_order_total_price" v-model="subtotal"  value="">
+
     <div class="footer">
       <p>Your personal data will be used to process your order,
         support your experience throughout this website, and
@@ -138,15 +159,16 @@
           <img src="~@/assets/img/cardType.png" alt="" />
         </div>
         <div class="item">
-          <input type="text" class="button cardNumber" placeholder="Card number">
+          <input type="text" class="button cardNumber" placeholder="Card number" name="authnet-card-number">
         </div>
         <div class="item">
-          <input type="text" class="button" placeholder="MM/YY">
-          <input type="text" class="button" placeholder="CVC">
+          <input type="text" class="button" placeholder="MM/YY" name="authnet-card-expiry">
+          <input type="text" class="button" placeholder="CVC" name="authnet-card-cvc">
         </div>
-        <input type="button" class="button active" value="Place order">
+        <input type="submit" class="button active" value="Place order" name="woocommerce_checkout_place_order" id="place_order" >
       </div>
     </div>
+  </form>
   </div>
 </template>
 
@@ -165,10 +187,15 @@ export default {
   data() {
     return {
       cardPay: false,
-      receiptVisible: false
+      receiptVisible: false,
+
     }
   },
   computed: {
+    wp_nonce_field(){
+      return global_wp_nonce_field;
+    },
+
     data() {
       return this.$store.state.dataToSend;
     },
@@ -199,6 +226,12 @@ export default {
     formatToPrice(value) {
       return value < 0 ? '-$' + value.toFixed(0) * -1 : '$' + value.toFixed(0);
     }
+  },
+  beforeCreate: function () {
+    console.log(this.$parent.atest);
+    console.log(global_wp_nonce_field);
+     this.data.wp_nonce_field = global_wp_nonce_field;
+
   },
 }
 </script>

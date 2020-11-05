@@ -25,7 +25,7 @@ const routes = [
   },
   {
     path: '/checkout',
-    name: 'cheout',
+    name: 'checkout',
     component: Checkout
   },
   /*{
