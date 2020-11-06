@@ -18,43 +18,51 @@
         </div>
       </div>
       <div id="id_receipt" class="right" :class="{open: receiptVisible}">
-     
         <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
         <div class="item">
           <p class="name">Industry</p>
           <p class="value">{{ data.selected.industry.text }}</p>
         </div>
- 
-         <div class="item">
+        <input type="hidden" name="_vue_order_industry" :value="data.selected.industry.text" >
+           
+        <div class="item">
           <p class="name">Clean Type</p>
           <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }} hours)</p>
         </div>
+        <input type="hidden" name="_vue_order_typecleaning" :value="data.selected.typecleaning.text +' (~'+data.selected.typecleaning.duration + ' hours)'" >   
 
-        
-        <div class="item">
+         <div class="item">
           <p class="name">Bedroom</p>
           <p class="value">{{ data.selected.bedroom.text }}</p>
         </div>
-       
-
+       <input type="hidden" name="_vue_order_bedroom" :value="data.selected.bedroom.text" > 
+ 
         <div class="item">
           <p class="name">Bathroom</p>
           <p class="value">{{ data.selected.bathroom.text }}</p>
         </div>
-     
+        <input type="hidden" name="_vue_order_bathroom" :value="data.selected.bathroom.text" > 
 
         <div class="item">
           <p class="name">Date</p>
           <p class="value">{{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }}</p>
         </div>
+        <input type="hidden" name="_vue_order_date" :value="$moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY')" > 
+
         <div class="item">
           <p class="name">Time</p>
           <p class="value">{{ data.date.time.text }}</p>
         </div>
+        <input type="hidden" name="_vue_order_date_time" :value="data.date.time.text" > 
+
+
         <div class="item">
           <p class="name">Address</p>
           <p class="value">-</p>
         </div>
+          
+          <input type="hidden" name="_vue_order_address" value="" > 
+
         <div class="item small">
           <p class="name">Addons</p>
           <div class="value" v-if="data.addons.length > 0">
@@ -73,6 +81,9 @@
           </div>
           <p class="value" v-else>-</p>
         </div>
+        <!-- Вставить   значение -->
+        <input type="hidden" name="_vue_order_addons" value="" > 
+
         <div class="item">
           <p class="name">Clean</p>
           <p class="value">
@@ -84,10 +95,14 @@
             />
           </p>
         </div>
+        <input type="hidden" name="_vue_order_сlean" v-model="clean" > 
+
         <div class="item">
           <p class="name">Recurring</p>
           <p class="value">{{ data.frequent.text }}</p>
         </div>
+        <input type="hidden" name="_vue_order_recurring" :value="data.frequent.text" > 
+
         <div class="item small">
           <p class="name">Discounts</p>
           <div class="value">
@@ -107,10 +122,20 @@
             </div>
           </div>
         </div>
+      
+         <!-- Вставить   значение -->    
+        <input type="hidden" name="_vue_order_discounts" value="" >   
+
+
         <div class="item">
           <p class="name">Promo</p>
           <p class="value">-</p>
         </div>
+
+        <!-- Вставить   значение -->    
+        <input type="hidden" name="_vue_order_promo" value="" >  
+
+
         <div class="item total">
           <p class="name">Total</p>
           <p class="value">
@@ -122,29 +147,15 @@
             />
           </p>
         </div>
+        <input type="hidden" name="_vue_order_total_price" v-model="subtotal">  
+            
       </div>
     </div>
 
   <input type="hidden"  name="payment_method"  v-model="payment_method"/>
  
   <div v-html="wp_nonce_field"></div>
-  <input type="hidden" name="_vue_order_data"  v-model="data" value="">
-  <input type="hidden" name="_vue_order_total_price" v-model="subtotal"  value="">
-  
-  <!-- Сюда нужно поместить HTML перед сабмитом формы. Создал sendData() она должна заполнить модель  send_data.  
-      Наверное хорошо передать каждое поле отдельно.
-      <input type="hidden" name="_vue_order_industry"  >
-      <input type="hidden" name="_vue_order_ typecleaning"  >
-       ....  
-
-    В отдельном input. Но у тебя смешана логика и отображение.
-    {{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }} 
-    а input как прочитал работает через  v-model  -->
-    <input type="hidden" name="_vue_order_send_data" v-model="send_data"  >
- <!--// Сюда -->    
-
-
-    <div class="footer">
+     <div class="footer">
       <p>Your personal data will be used to process your order,
         support your experience throughout this website, and
         for other purposes described in our privacy policy.</p>
@@ -157,11 +168,9 @@
       </label>
       <div class="buttons-holder">
         <div class="button" @click="cardPay = !cardPay,payment_method = 'authnet'" :class="{active: cardPay}">Pay with Card</div>
-        <div class="button" @click="payment_method = 'paypal'" :class="{active: cardPay}">PayPal</div>
+       <button class="button active" type="submit" @click="payment_method = 'paypal'">PayPal</button> 
+       <button class="button active" type="submit" @click="payment_method = 'cod'">Submit Request</button> 
        
-        <!-- 'cod' - шлюз оплата при получении. Просто создаст ордер как я понял зчем эта кнопка -->  
-         <div class="button" @click="payment_method = 'cod'">Submit Request</div>
-         <!--//-->
        </div>
       <div class="creditCard" v-show="cardPay">
         <div class="close" @click="cardPay = false"></div>
@@ -176,7 +185,9 @@
           <input type="text" class="button" placeholder="MM/YY" name="authnet-card-expiry">
           <input type="text" class="button" placeholder="CVC" name="authnet-card-cvc">
         </div>
-        <input type="submit" class="button active" value="Place order" name="woocommerce_checkout_place_order" id="place_order" >
+        <button class="button active " name="woocommerce_checkout_place_order" type="submit" @click="payment_method = 'authnet'">Place order</button> 
+
+
       </div>
     </div>
   </form>
@@ -204,8 +215,8 @@ export default {
     return {
       cardPay: false,
       receiptVisible: false,
-      payment_method: '',
-      send_data:''
+      payment_method: 'cod',
+     
     }
   },
   computed: {
@@ -249,19 +260,7 @@ export default {
     formatToPrice(value) {
       return value < 0 ? '-$' + value.toFixed(0) * -1 : '$' + value.toFixed(0);
     },
-    sendData(){
-
-         let el = document.getElementById('id_receipt'); 
-         console.log ( el.innerHTML);
-         return el.innerHTML;
-
-    }
-  },
-  beforeCreate: function () {
-    console.log(this.$parent.atest);
-    console.log(global_wp_nonce_field);
-     this.data.wp_nonce_field = global_wp_nonce_field;
-
+  
   },
 }
 </script>
