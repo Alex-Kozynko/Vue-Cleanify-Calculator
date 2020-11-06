@@ -131,9 +131,17 @@
   <input type="hidden" name="_vue_order_data"  v-model="data" value="">
   <input type="hidden" name="_vue_order_total_price" v-model="subtotal"  value="">
   
- <!-- Сюда нужно поместить HTML перед сабмитом формы. Создал sendData() она должна заполнить модель  send_data.  Наверное хорошо передать каждое поле отдельно.В отдельном input. Но у тебя смешана логика и отображение.  {{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }} а input как прочитал работает через  v-model  -->
-  <input type="hidden" name="_vue_order_senddata" v-model="send_data"  >
- <!--// Сюда -->   
+  <!-- Сюда нужно поместить HTML перед сабмитом формы. Создал sendData() она должна заполнить модель  send_data.  
+      Наверное хорошо передать каждое поле отдельно.
+      <input type="hidden" name="_vue_order_industry"  >
+      <input type="hidden" name="_vue_order_ typecleaning"  >
+       ....  
+
+    В отдельном input. Но у тебя смешана логика и отображение.
+    {{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }} 
+    а input как прочитал работает через  v-model  -->
+    <input type="hidden" name="_vue_order_send_data" v-model="send_data"  >
+ <!--// Сюда -->    
 
 
     <div class="footer">
