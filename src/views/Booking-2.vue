@@ -5,11 +5,12 @@
     <gmap-autocomplete
         class="item button address"
         :class="{success: data.address, error: data.address === 'Address is not valid'}"
+        :value="data.address"
         @place_changed="getAddressData($event)"
     >
     </gmap-autocomplete>
     <input class="item button apt" placeholder="APT">
-    <input class="item button zip" placeholder="ZIP" readonly v-model="zip">
+    <input class="item button zip" placeholder="ZIP" readonly :value="data.zip">
     <div class="entrancesHolder">
       <v-select
           class="item button"
@@ -69,7 +70,7 @@ export default {
   },
   data() {
     return {
-      zip: ''
+
     }
   },
   computed: {
@@ -95,14 +96,14 @@ export default {
         if (status === 'OK' && th.google.maps.geometry.spherical.computeDistanceBetween(e.geometry.location, results[0].geometry.location) < th.location.radius) {
           let zip = e.address_components.filter(item => item.types[0] === 'postal_code')[0]
           if (zip) {
-            th.zip = zip.long_name
-            let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name
-            th.$set(th.data, 'address', address)
+            let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name;
+            th.$store.commit('dataToSend', {key: 'address', payload: address})
+            th.$store.commit('dataToSend', {key: 'zip', payload: zip.long_name})
           } else {
-            th.$set(th.data, 'address', 'Address is not valid')
+            th.$store.commit('dataToSend', {key: 'address', payload: 'Address is not valid'})
           }
         } else {
-          th.$set(th.data, 'address', 'Address is not valid')
+          th.$store.commit('dataToSend', {key: 'address', payload: 'Address is not valid'})
         }
       })
     }

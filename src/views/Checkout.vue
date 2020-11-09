@@ -18,29 +18,22 @@
         </div>
       </div>
       <div id="id_receipt" class="right" :class="{open: receiptVisible}">
-<<<<<<< HEAD
 
-=======
->>>>>>> 05bd03cb8eb8d1ca9ac8107e748c54b7676c3a25
         <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
         <div class="item">
           <p class="name">Industry</p>
           <p class="value">{{ data.selected.industry.text }}</p>
         </div>
-<<<<<<< HEAD
 
-         <div class="item">
-=======
         <input type="hidden" name="_vue_order_industry" :value="data.selected.industry.text" >
 
         <div class="item">
->>>>>>> 05bd03cb8eb8d1ca9ac8107e748c54b7676c3a25
+
           <p class="name">Clean Type</p>
           <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }} hours)</p>
         </div>
         <input type="hidden" name="_vue_order_typecleaning" :value="data.selected.typecleaning.text +' (~'+data.selected.typecleaning.duration + ' hours)'" >
 
-<<<<<<< HEAD
 
         <div class="item">
           <p class="name">Bedroom</p>
@@ -48,23 +41,18 @@
         </div>
 
 
-=======
          <div class="item">
           <p class="name">Bedroom</p>
           <p class="value">{{ data.selected.bedroom.text }}</p>
         </div>
        <input type="hidden" name="_vue_order_bedroom" :value="data.selected.bedroom.text" >
 
->>>>>>> 05bd03cb8eb8d1ca9ac8107e748c54b7676c3a25
         <div class="item">
           <p class="name">Bathroom</p>
           <p class="value">{{ data.selected.bathroom.text }}</p>
         </div>
-<<<<<<< HEAD
 
-=======
         <input type="hidden" name="_vue_order_bathroom" :value="data.selected.bathroom.text" >
->>>>>>> 05bd03cb8eb8d1ca9ac8107e748c54b7676c3a25
 
         <div class="item">
           <p class="name">Date</p>
@@ -178,7 +166,7 @@
   <input type="hidden"  name="payment_method"  v-model="payment_method"/>
 
   <div v-html="wp_nonce_field"></div>
-<<<<<<< HEAD
+
   <input type="hidden" name="_vue_order_data"  v-model="data" value="">
   <input type="hidden" name="_vue_order_total_price" v-model="subtotal"  value="">
 
@@ -196,9 +184,6 @@
 
 
     <div class="footer">
-=======
-     <div class="footer">
->>>>>>> 05bd03cb8eb8d1ca9ac8107e748c54b7676c3a25
       <p>Your personal data will be used to process your order,
         support your experience throughout this website, and
         for other purposes described in our privacy policy.</p>
@@ -211,17 +196,14 @@
       </label>
       <div class="buttons-holder">
         <div class="button" @click="cardPay = !cardPay,payment_method = 'authnet'" :class="{active: cardPay}">Pay with Card</div>
-<<<<<<< HEAD
         <div class="button" @click="payment_method = 'paypal'" :class="{active: cardPay}">PayPal</div>
 
         <!-- 'cod' - шлюз оплата при получении. Просто создаст ордер как я понял зчем эта кнопка -->
          <div class="button" @click="payment_method = 'cod'">Submit Request</div>
          <!--//-->
-=======
        <button class="button active" type="submit" @click="payment_method = 'paypal'">PayPal</button>
        <button class="button active" type="submit" @click="payment_method = 'cod'">Submit Request</button>
 
->>>>>>> 05bd03cb8eb8d1ca9ac8107e748c54b7676c3a25
        </div>
       <div class="creditCard" v-show="cardPay">
         <div class="close" @click="cardPay = false"></div>
@@ -275,7 +257,7 @@ export default {
 
       if ( typeof global_wp_nonce_field  !== 'undefined'){
          return global_wp_nonce_field;
-      }else {
+      } else {
         return false;
       }
 
@@ -326,9 +308,6 @@ export default {
      this.data.wp_nonce_field = global_wp_nonce_field;
   },
 }
-function Nikita() {
-
-}
 </script>
 
 <style lang="scss">
@@ -351,6 +330,9 @@ function Nikita() {
       font-size: $a30;
       color: #ffffff;
       margin-bottom: $a40;
+    }
+    .checkout {
+      width: 100%;
     }
     .form-info {
       display: flex;

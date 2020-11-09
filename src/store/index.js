@@ -168,7 +168,8 @@ export default new Vuex.Store({
           hidden: true
         }
       },
-      address: ''
+      address: '',
+      zip: ''
     }
   },
   mutations: {

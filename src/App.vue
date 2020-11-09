@@ -36,7 +36,7 @@
               class="item link"
               v-if="$route.name !== 'Booking' && $route.name !== 'Extra'"
           >
-            {{ data.address || 'Location' }}
+            {{ data.address + ', ' + data.zip || 'Location' }}
             <span class="subText">{{ data.frequent.text }} <span v-if="+data.frequent.sale">- {{data.frequent.sale +'% off'}}</span></span>
           </router-link>
         </nav>
