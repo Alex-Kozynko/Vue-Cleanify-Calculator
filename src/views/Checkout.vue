@@ -18,30 +18,30 @@
         </div>
       </div>
       <div id="id_receipt" class="right" :class="{open: receiptVisible}">
-     
+
         <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
         <div class="item">
           <p class="name">Industry</p>
           <p class="value">{{ data.selected.industry.text }}</p>
         </div>
- 
+
          <div class="item">
           <p class="name">Clean Type</p>
           <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }} hours)</p>
         </div>
 
-        
+
         <div class="item">
           <p class="name">Bedroom</p>
           <p class="value">{{ data.selected.bedroom.text }}</p>
         </div>
-       
+
 
         <div class="item">
           <p class="name">Bathroom</p>
           <p class="value">{{ data.selected.bathroom.text }}</p>
         </div>
-     
+
 
         <div class="item">
           <p class="name">Date</p>
@@ -126,22 +126,22 @@
     </div>
 
   <input type="hidden"  name="payment_method"  v-model="payment_method"/>
- 
+
   <div v-html="wp_nonce_field"></div>
   <input type="hidden" name="_vue_order_data"  v-model="data" value="">
   <input type="hidden" name="_vue_order_total_price" v-model="subtotal"  value="">
-  
-  <!-- Сюда нужно поместить HTML перед сабмитом формы. Создал sendData() она должна заполнить модель  send_data.  
+
+  <!-- Сюда нужно поместить HTML перед сабмитом формы. Создал sendData() она должна заполнить модель  send_data.
       Наверное хорошо передать каждое поле отдельно.
       <input type="hidden" name="_vue_order_industry"  >
       <input type="hidden" name="_vue_order_ typecleaning"  >
-       ....  
+       ....
 
     В отдельном input. Но у тебя смешана логика и отображение.
-    {{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }} 
+    {{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }}
     а input как прочитал работает через  v-model  -->
     <input type="hidden" name="_vue_order_send_data" v-model="send_data"  >
- <!--// Сюда -->    
+ <!--// Сюда -->
 
 
     <div class="footer">
@@ -158,8 +158,8 @@
       <div class="buttons-holder">
         <div class="button" @click="cardPay = !cardPay,payment_method = 'authnet'" :class="{active: cardPay}">Pay with Card</div>
         <div class="button" @click="payment_method = 'paypal'" :class="{active: cardPay}">PayPal</div>
-       
-        <!-- 'cod' - шлюз оплата при получении. Просто создаст ордер как я понял зчем эта кнопка -->  
+
+        <!-- 'cod' - шлюз оплата при получении. Просто создаст ордер как я понял зчем эта кнопка -->
          <div class="button" @click="payment_method = 'cod'">Submit Request</div>
          <!--//-->
        </div>
@@ -194,7 +194,7 @@ export default {
   },
   directives: {
     mask
-  }, 
+  },
    mounted() {
       let checkoutScript = document.createElement('script')
       checkoutScript.setAttribute('src', '/wp-content/plugins/woocommerce/assets/js/frontend/checkout.min.js')
@@ -210,13 +210,13 @@ export default {
   },
   computed: {
     wp_nonce_field(){
-       
-      if ( typeof global_wp_nonce_field  !== 'undefined'){ 
+
+      if ( typeof global_wp_nonce_field  !== 'undefined'){
          return global_wp_nonce_field;
       }else {
         return false;
       }
-       
+
     },
 
     data() {
@@ -251,18 +251,22 @@ export default {
     },
     sendData(){
 
-         let el = document.getElementById('id_receipt'); 
+         let el = document.getElementById('id_receipt');
          console.log ( el.innerHTML);
          return el.innerHTML;
 
     }
   },
-  beforeCreate: function () {
+  beforeCreate() {
+    console.log(this.$store.state.dataToSend);
     console.log(this.$parent.atest);
     console.log(global_wp_nonce_field);
      this.data.wp_nonce_field = global_wp_nonce_field;
 
   },
+}
+function Nikita() {
+
 }
 </script>
 
