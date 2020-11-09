@@ -13,39 +13,32 @@
         <input type="text" class="button item" placeholder="Company name" name="billing_company">
         <input type="tel" class="button item" placeholder="Phone number*" required v-mask="'###-###-####'" name="billing_phone">
         <div class="cupon">
-          <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here.">
-          <div class="button active">Apply</div>
+          <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon" >
+          <div class="button active" @click="chCoupon()">Apply</div>
         </div>
       </div>
-      <div id="id_receipt" class="right" :class="{open: receiptVisible}">
 
+      <input type="hidden" name="_vue_order_coupon" v-model="apply_coupon" >
+
+      <div id="id_receipt" class="right" :class="{open: receiptVisible}">
         <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
         <div class="item">
           <p class="name">Industry</p>
           <p class="value">{{ data.selected.industry.text }}</p>
         </div>
-
         <input type="hidden" name="_vue_order_industry" :value="data.selected.industry.text" >
 
         <div class="item">
-
           <p class="name">Clean Type</p>
           <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }} hours)</p>
         </div>
         <input type="hidden" name="_vue_order_typecleaning" :value="data.selected.typecleaning.text +' (~'+data.selected.typecleaning.duration + ' hours)'" >
 
-
         <div class="item">
           <p class="name">Bedroom</p>
           <p class="value">{{ data.selected.bedroom.text }}</p>
         </div>
-
-
-         <div class="item">
-          <p class="name">Bedroom</p>
-          <p class="value">{{ data.selected.bedroom.text }}</p>
-        </div>
-       <input type="hidden" name="_vue_order_bedroom" :value="data.selected.bedroom.text" >
+        <input type="hidden" name="_vue_order_bedroom" :value="data.selected.bedroom.text" >
 
         <div class="item">
           <p class="name">Bathroom</p>
@@ -167,22 +160,6 @@
 
   <div v-html="wp_nonce_field"></div>
 
-  <input type="hidden" name="_vue_order_data"  v-model="data" value="">
-  <input type="hidden" name="_vue_order_total_price" v-model="subtotal"  value="">
-
-  <!-- Сюда нужно поместить HTML перед сабмитом формы. Создал sendData() она должна заполнить модель  send_data.
-      Наверное хорошо передать каждое поле отдельно.
-      <input type="hidden" name="_vue_order_industry"  >
-      <input type="hidden" name="_vue_order_ typecleaning"  >
-       ....
-
-    В отдельном input. Но у тебя смешана логика и отображение.
-    {{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }}
-    а input как прочитал работает через  v-model  -->
-    <input type="hidden" name="_vue_order_send_data" v-model="send_data"  >
- <!--// Сюда -->
-
-
     <div class="footer">
       <p>Your personal data will be used to process your order,
         support your experience throughout this website, and
@@ -195,17 +172,12 @@
         I AGREE TO THE WEBSITE TERMS AND CONDITIONS
       </label>
       <div class="buttons-holder">
-        <div class="button" @click="cardPay = !cardPay,payment_method = 'authnet'" :class="{active: cardPay}">Pay with Card</div>
-        <div class="button" @click="payment_method = 'paypal'" :class="{active: cardPay}">PayPal</div>
-
-        <!-- 'cod' - шлюз оплата при получении. Просто создаст ордер как я понял зчем эта кнопка -->
-         <div class="button" @click="payment_method = 'cod'">Submit Request</div>
-         <!--//-->
-       <button class="button active" type="submit" @click="payment_method = 'paypal'">PayPal</button>
-       <button class="button active" type="submit" @click="payment_method = 'cod'">Submit Request</button>
+        <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet'}">Pay with Card</div>
+        <button class="button" type="submit" @click="payment_method = 'paypal'" :class="{active: payment_method === 'paypal'}">PayPal</button>
+        <button class="button" type="submit" @click="payment_method = 'cod'">Submit Request</button>
 
        </div>
-      <div class="creditCard" v-show="cardPay">
+      <div class="creditCard" v-show="payment_method === 'authnet'">
         <div class="close" @click="cardPay = false"></div>
         <div class="item">
           <div class="button active">Credit cart</div>
@@ -220,7 +192,6 @@
         </div>
         <button class="button active " name="woocommerce_checkout_place_order" type="submit" @click="payment_method = 'authnet'">Place order</button>
 
-
       </div>
     </div>
   </form>
@@ -230,7 +201,7 @@
 <script>
 import AnimatedNumber from "animated-number-vue";
 import {mask} from 'vue-the-mask'
-
+import axios from "axios";
 export default {
   name: "Checkout",
   components: {
@@ -249,7 +220,8 @@ export default {
       cardPay: false,
       receiptVisible: false,
       payment_method: 'cod',
-
+      coupon:'',
+      apply_coupon:''
     }
   },
   computed: {
@@ -293,19 +265,25 @@ export default {
     formatToPrice(value) {
       return value < 0 ? '-$' + value.toFixed(0) * -1 : '$' + value.toFixed(0);
     },
-    sendData(){
+    chCoupon() {
+      axios({
+        method: 'get',
+        url: '/wp-json/api/v2/coupon/'+this.coupon
+      })
+          .then((response) => {
+            console.log(response.data);
+            this.apply_coupon = '';
+            if (response.data) {
+              this.apply_coupon  =  this.coupon;
+            }
+          })
+          .catch((error) => {
+            his.apply_coupon = '';
+            console.error(error)}
 
-         let el = document.getElementById('id_receipt');
-         console.log ( el.innerHTML);
-         return el.innerHTML;
 
-    }
-  },
-  beforeCreate() {
-    console.log(this.$store.state.dataToSend);
-    console.log(this.$parent.atest);
-    console.log(global_wp_nonce_field);
-     this.data.wp_nonce_field = global_wp_nonce_field;
+          )
+    },
   },
 }
 </script>

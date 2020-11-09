@@ -36,7 +36,7 @@
               class="item link"
               v-if="$route.name !== 'Booking' && $route.name !== 'Extra'"
           >
-            {{ data.address + ', ' + data.zip || 'Location' }}
+            {{ data.address ? (data.address + ', ' + data.zip) : 'Location' }}
             <span class="subText">{{ data.frequent.text }} <span v-if="+data.frequent.sale">- {{data.frequent.sale +'% off'}}</span></span>
           </router-link>
         </nav>
@@ -238,6 +238,7 @@ h5 {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  background: none;
 
   &:hover {
     background: transparentize($primary, .85);
