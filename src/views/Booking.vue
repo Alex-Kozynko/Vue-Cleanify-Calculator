@@ -74,7 +74,7 @@
           :to="{name: 'Booking-2'}"
           class="button active"
           tag="button"
-          :disabled="data.date.time.hidden || !$moment(data.date.day + '-' + data.date.month + '-' + data.date.year).isSameOrAfter($moment().format('DD-MM-YYYY'))"
+          :disabled="data.date.time.hidden || !$moment(data.date.year + '-' + data.date.month + '-' + data.date.day).isSameOrAfter($moment().format('YYYY-MM-DD'))"
       >
         Next
       </router-link>
