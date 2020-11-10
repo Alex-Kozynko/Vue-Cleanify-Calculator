@@ -9,22 +9,22 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/calc',
     name: 'Extra',
     component: Extra
   },
   {
-    path: '/booking',
+    path: '/calc-booking',
     name: 'Booking',
     component: Booking
   },
   {
-    path: '/booking-2',
+    path: '/calc-booking-2',
     name: 'Booking-2',
     component: Booking2
   },
   {
-    path: '/checkout',
+    path: '/calc-checkout',
     name: 'checkout',
     component: Checkout
   },

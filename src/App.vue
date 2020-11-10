@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header>
+    <header v-if="$router.path !== 'calc-checkout'">
       <a href="/" class="logo">
         <img src="@/assets/img/icons/logo.svg" alt=""/>
       </a>
@@ -17,13 +17,13 @@
         ></v-select>
         <nav>
           <router-link
-              to="/"
+              to="/calc"
               class="item link"
           >
             Extra
           </router-link>
           <router-link
-              to="/booking"
+              to="/calc-booking"
               class="item link"
               v-if="$route.name !== 'Extra'"
           >
@@ -32,7 +32,7 @@
                 v-if="+data.date.time.sale">{{ '- $' + data.date.time.sale + '.00 off' }}</span></span>
           </router-link>
           <router-link
-              to="/booking-2"
+              to="/calc-booking-2"
               class="item link"
               v-if="$route.name !== 'Booking' && $route.name !== 'Extra'"
           >
@@ -382,6 +382,7 @@ h5 {
     .back {
       margin-right: $a35;
       color: $color;
+      cursor: pointer;
     }
     .button {
       width: $a110;

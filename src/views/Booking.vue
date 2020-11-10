@@ -64,14 +64,14 @@
       ></v-select>
     </div>
     <div class="buttons">
+      <a
+           @click="$router.go(-1)"
+           class="back"
+       >
+         < Back
+       </a>
       <router-link
-          to="/"
-          class="back"
-      >
-        < Back
-      </router-link>
-      <router-link
-          to="/booking-2"
+          to="/calc-booking-2"
           class="button active"
           tag="button"
           :disabled="data.date.time.hidden || !$moment(data.date.day + '-' + data.date.month + '-' + data.date.year).isSameOrAfter($moment().format('DD-MM-YYYY'))"

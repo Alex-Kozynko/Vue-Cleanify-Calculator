@@ -28,14 +28,14 @@
     </div>
     <textarea class="button" placeholder="Special instructions? (Optional)"></textarea>
     <div class="buttons">
-      <a
+<!--      <a
           href="/"
           class="back"
       >
         < Back
-      </a>
+      </a>-->
       <router-link
-          to="/booking"
+          to="/calc-booking"
           class="button active"
       >
         Next

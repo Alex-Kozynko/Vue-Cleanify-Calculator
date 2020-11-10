@@ -1,7 +1,7 @@
 <template>
   <div id="checkout">
     <h2>Checkout</h2>
-    <div class="firstClean">Get 50% OFF for your first clean</div>
+<!--    <div class="firstClean">Get 50% OFF for your first clean</div>-->
     <form name="checkout" method="post" class="checkout woocommerce-checkout" action="/checkout" enctype="multipart/form-data">
     <div class="form-info">
       <div class="left">
@@ -119,7 +119,7 @@
             <div class="details-holder">
               ?
               <div class="detail">
-                <p>First Cleaning 50% OFF <span> $75</span></p>
+<!--                <p>First Cleaning 50% OFF <span> $75</span></p>-->
                 <p v-if="+data.date.time.sale > 0">Time sale   <span> ${{data.date.time.sale}}</span></p>
                 <p v-if="+data.frequent.sale > 0">Recurring {{data.frequent.sale}}% off   <span> ${{((clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)).toFixed(0)}}</span></p>
               </div>
@@ -158,7 +158,7 @@
 
   <input type="hidden"  name="payment_method"  v-model="payment_method"/>
 
-  <div v-html="wp_nonce_field"></div>
+  <div v-html="wp_nonce_field" v-show="false"></div>
 
     <div class="footer">
       <p>Your personal data will be used to process your order,

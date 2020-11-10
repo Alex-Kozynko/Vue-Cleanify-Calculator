@@ -35,14 +35,14 @@
       <p class="sale" v-if="item.sale > 0">{{item.sale}}% off</p>
     </div>
     <div class="buttons">
-      <router-link
-          to="/booking"
+      <a
+          @click="$router.go(-1)"
           class="back"
       >
         < Back
-      </router-link>
+      </a>
       <router-link
-          to="/checkout"
+          to="/calc-checkout"
           class="button active"
           tag="button"
           :disabled="data.address === 'Address is not valid' || !data.address"
