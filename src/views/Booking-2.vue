@@ -42,7 +42,7 @@
         < Back
       </a>
       <router-link
-          to="/calc-checkout"
+          :to="{name: 'Checkout'}"
           class="button active"
           tag="button"
           :disabled="data.address === 'Address is not valid' || !data.address"

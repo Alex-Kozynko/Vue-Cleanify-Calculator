@@ -35,7 +35,7 @@
         < Back
       </a>-->
       <router-link
-          to="/calc-booking"
+          :to="{name: 'Booking'}"
           class="button active"
       >
         Next
