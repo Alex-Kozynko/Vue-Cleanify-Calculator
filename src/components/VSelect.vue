@@ -3,19 +3,19 @@
     <div class="text">
       <p class="title">
         {{ value[label] }}
-        <span v-if="details && +detailsValue(value) > 0">{{ details.replace(/[{].*/, '') + detailsValue(value) + details.replace(/.*[{}]/, '') }}</span>
+        <span v-if="value.duration">~ {{ +value.duration + details }} hour</span>
       </p>
       <img src="@/assets/img/icons/arrowDown.svg" alt=""/>
     </div>
     <div class="v-list-dropdown">
       <ul ref="select">
         <li
-            v-for="option in options"
-            @click="selected(option)"
+            v-for="(option, i) in options"
+            @click="selected(option, i)"
             :class="{active: value[labelOption] === option[labelOption]}"
         >
           {{ option[labelOption] }}
-          <span v-if="details && +detailsValue(option)">{{ details.replace(/[{].*/, '') + detailsValue(option) + details.replace(/.*[{}]/, '') }}</span>
+          <span v-if="option.duration">~ {{ +option.duration + details }} hour</span>
         </li>
       </ul>
     </div>
@@ -38,11 +38,10 @@ export default {
       type: String,
       default: 'text'
     },
-    value: {},
-    details: {
-      type: String,
-      default: ''
+    value: {
+      type: Object
     },
+    details: {},
     style2: {
       type: Boolean,
       default: false
@@ -65,17 +64,18 @@ export default {
     clickOutside() {
       this.visible = false
     },
-    selected(option) {
-      this.$emit('update:value', option)
+    selected(option, i) {
+      option.index = i
+      this.$emit('input', option)
       this.$store.dispatch('setCache')
     },
-    detailsValue(item) {
+/*    detailsValue(item) {
       return item[this.details.match(/[{].*[}]/)[0].replace(/\W/gi, '')]
-    },
+    },*/
   },
-  created() {
-
-  },
+  /*created() {
+    !this.value && this.$emit('update:value', this.options[0])
+  },*/
 }
 </script>
 
@@ -98,14 +98,14 @@ export default {
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: $a24;
+      font-size: $a20;
       position: relative;
 
       span {
-        font-size: $a12;
+        font-size: $a13;
         font-weight: 600;
         position: absolute;
-        top: 100%;
+        top: 110%;
         left: 0;
         right: 0;
         display: flex;
@@ -276,6 +276,7 @@ export default {
             span {
               font-size: $m12;
               text-align: center;
+              white-space: nowrap;
             }
           }
         }

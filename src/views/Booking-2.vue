@@ -17,7 +17,7 @@
           label="item"
           label-option="item"
           :options="entrances"
-          :value.sync="data.entrance"
+          v-model="data.entrance"
           style2
           v-if="entrances.length"
       ></v-select>
@@ -99,6 +99,7 @@ export default {
             let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name;
             th.$store.commit('dataToSend', {key: 'address', payload: address})
             th.$store.commit('dataToSend', {key: 'zip', payload: zip.long_name})
+            this.$store.dispatch('setCache')
           } else {
             th.$store.commit('dataToSend', {key: 'address', payload: 'Address is not valid'})
           }

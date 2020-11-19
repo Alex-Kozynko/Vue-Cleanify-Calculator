@@ -2,18 +2,24 @@
   <div id="extra">
     <h2>Extra options</h2>
     <h5 class="title">ADD ONS</h5>
-    <div
-        class="item button"
-        :class="{active: data.addons.map(addon => addon.text).includes(item.text)}"
-        v-for="item in items"
-        :key="item.text"
-        @click="selectedAddons(item)"
-    >
-      <div class="icon">
-        <img :src="item.icon" alt="" />
+    <div class="addons-holder">
+      <div
+          class="item button"
+          :class="{
+            active: data.addons.map(addon => addon.text).includes(item.text) || item.addons_included.includes(data.selected.typecleaning.text),
+            disabled: item.addons_included.includes(data.selected.typecleaning.text)
+          }"
+          v-for="item in items"
+          :key="item.text"
+          @click="selectedAddons(item)"
+      >
+        <div class="icon">
+          <img :src="item.icon" alt=""/>
+        </div>
+        <p class="name">{{ item.text }}</p>
+        <p class="price" v-if="!item.addons_included.includes(data.selected.typecleaning.text)">${{ item.price }}</p>
+        <p class="price in" v-else>Included</p>
       </div>
-      <p class="name">{{item.text}}</p>
-      <p class="price">${{item.price}}</p>
     </div>
     <div class="petsHolder">
       <v-select
@@ -21,12 +27,13 @@
           label="item"
           label-option="item"
           :options="pets"
-          :value.sync="data.pet"
+          v-model="data.pet"
           style2
+          v-if="pets.length"
       ></v-select>
       <p class="detail">Some of our cleaners have pet allergies. </p>
     </div>
-    <textarea class="button" placeholder="Special instructions? (Optional)"></textarea>
+    <textarea class="button" placeholder="Special instructions? (Optional)" v-model="data.message"></textarea>
     <div class="buttons">
 <!--      <a
           href="/"
@@ -54,9 +61,6 @@ export default {
   computed: {
     items() {
       return this.$store.state.addons
-    },
-    subtotal() {
-      return this.$store.state.subtotal;
     },
     pets() {
       return this.$store.state.pets;
@@ -86,11 +90,16 @@ export default {
   h5 {
     width: 100%;
   }
+  .addons-holder {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: $a45;
+    grid-row-gap: $a15;
+  }
   .item {
     padding: 0 $a18 0 $a10;
     width: $a410;
     justify-content: flex-start;
-    margin-bottom: $a15;
     .icon {
       display: flex;
       align-items: center;
@@ -110,6 +119,10 @@ export default {
     .price {
       font-weight: 600;
       margin-left: auto;
+      &.in {
+        color: $primary;
+        letter-spacing: .05em;
+      }
     }
     &.active {
       background: transparentize($primary, .70);
@@ -123,8 +136,7 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    margin-top: $a20;
-    margin-bottom: $a35;
+    margin: $a35 0;
     .item {
       &.v-select {
         margin-bottom: 0;

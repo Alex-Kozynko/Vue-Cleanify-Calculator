@@ -9,12 +9,50 @@
             class="item"
             label="abridgment"
             label-option="text"
-            v-for="(select, key) in selects"
+            :options="selects.industry"
+            v-model="data.selected.industry"
+            v-if="selects.industry"
+        ></v-select>
+        <v-select
+            class="item"
+            label="abridgment"
+            label-option="text"
+            v-for="(select, i) in selects.premises"
+            v-if="data.selected.industry.industry_dependence && data.selected.industry.industry_dependence.includes(select.name)"
+            :key="i"
+            :options="select.items"
+            v-model="data.selected.premises[select.name]"
+        ></v-select>
+        <v-select
+            class="item"
+            label="abridgment"
+            label-option="text"
+            :options="selects.typecleaning"
+            :details="dependenciesTime"
+            v-model="data.selected.typecleaning"
+            v-if="selects.typecleaning"
+        ></v-select>
+        <label class="item" v-if="data.selected.industry.industry_dependence && data.selected.industry.industry_dependence.includes('sf')">
+          <input type="text" placeholder="sf" class="sf" v-mask="'######'" v-model="data.sf" maxlength="6">
+        </label>
+        <!--<v-select
+            class="item"
+            label="abridgment"
+            label-option="text"
+            v-for="(select, key) in selects.premises"
             :key="key"
             :details="key === 'typecleaning' ? '~ {duration} hour' : ''"
             :options="select"
             :value.sync="data.selected[key]"
-        ></v-select>
+        ></v-select>-->
+        <!--<v-select
+            class="item"
+            label="abridgment"
+            label-option="text"
+            :options="selects.bedroom"
+            :value.sync="data.selected.bedroom"
+            v-if="data.selected.industry.bedroom"
+        ></v-select>-->
         <nav>
           <router-link
               to="/calc"
@@ -37,7 +75,7 @@
               v-if="$route.name !== 'Booking' && $route.name !== 'Extra'"
           >
             {{ data.address ? (data.address + ', ' + data.zip) : 'Location' }}
-            <span class="subText">{{ data.frequent.text }} <span v-if="+data.frequent.sale">- {{data.frequent.sale +'% off'}}</span></span>
+            <span class="subText">{{ data.frequent.text }} <span v-if="+data.frequent.sale">- {{data.frequent.sale + '% off'}}</span></span>
           </router-link>
         </nav>
       </slide-up-down>
@@ -54,6 +92,7 @@
             :value="subtotal"
             :formatValue="formatToPrice"
             :duration="500"
+            v-if="data.selected.industry.industry_dependence"
         />
         <span class="sub">TOTAL</span>
       </p>
@@ -74,6 +113,7 @@ import router from './router'
 import store from './store'
 import moment from 'moment'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import {mask} from "vue-the-mask";
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -107,6 +147,9 @@ export default {
   store,
   router,
   moment,
+  directives: {
+    mask
+  },
 
   components: {
 
@@ -116,19 +159,25 @@ export default {
   },
   data() {
     return {
-      active: true
+      active: true,
+      dependenciesTime: 0
     }
   },
   computed: {
     subtotal() {
       let timeSale = this.data.date.time.sale ? this.data.date.time.sale : 0
       let frequentSale = (100 - this.data.frequent.sale) / 100
-      let bedroomSelected = this.data.selected.bedroom
-      let bathroomSelected = this.data.selected.bathroom
-      let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
-      let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
-      console.log((+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice) * frequentSale);
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice) * frequentSale;
+
+      let dependenciesPrice = 0;
+      this.dependenciesTime = 0;
+      this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
+        if (this.data.selected.industry.industry_dependence.includes(item.label)) {
+          dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
+          this.dependenciesTime  += +item.time * (this.data.selected.premises[item.label].index)
+        }
+      })
+
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;
@@ -137,15 +186,12 @@ export default {
       return this.$store.state.selects;
     },
     addonsPrice() {
-      return this.data.addons.length > 0 ? this.data.addons.map(addon => +addon.price).reduce((a, b) => a + b) : 0
+      return this.data.addons.length > 0 ? this.data.addons.map(addon => !addon.addons_included.includes(this.data.selected.typecleaning.text) && +addon.price).reduce((a, b) => a + b) : 0
     }
   },
   methods: {
     formatToPrice(value) {
       return '$' + value.toFixed(0);
-    },
-    currentHeight(e) {
-
     }
   },
   created() {
@@ -282,12 +328,14 @@ h5 {
 
     .item {
       padding: 0 $a20 0 $a25;
+      border: 0;
       border-bottom: 10px solid $primary;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
+      background: none;
 
       &:before {
         content: '';
@@ -299,15 +347,24 @@ h5 {
         position: absolute;
       }
 
+      .sf {
+        height: 100%;
+        border: none;
+        background: none;
+        font-weight: 700;
+        font-size: $a20;
+        width: $a70;
+      }
+
       &.link {
         padding: 0 $a36;
       }
 
       .subText {
-        font-size: $a12;
+        font-size: $a13;
         font-weight: 600;
         position: absolute;
-        bottom: $a10;
+        bottom: $a8;
         left: 0;
         right: 0;
         display: flex;
@@ -331,7 +388,7 @@ h5 {
 
       .item {
         font-weight: 700;
-        font-size: $a24;
+        font-size: $a20;
         text-decoration: none;
         color: $color;
       }
@@ -504,6 +561,7 @@ h5 {
           height: $m44 !important;
           margin-bottom: $m10;
           font-weight: bold;
+          border: $m1 solid $primary;
 
           p {
             font-weight: bold !important;

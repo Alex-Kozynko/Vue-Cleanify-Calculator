@@ -3,198 +3,218 @@
     <h2>Checkout</h2>
 <!--    <div class="firstClean">Get 50% OFF for your first clean</div>-->
     <form name="checkout" method="post" class="checkout woocommerce-checkout" action="/checkout" enctype="multipart/form-data">
-    <div class="form-info">
-      <div class="left">
-        <h3>Almost there !</h3>
-        <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
-        <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
-        <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
-        <input type="email" class="button item" placeholder="Email address*" required name="billing_email">
-        <input type="text" class="button item" placeholder="Company name" name="billing_company">
-        <input type="tel" class="button item" placeholder="Phone number*" required v-mask="'###-###-####'" name="billing_phone">
-        <div class="cupon">
-          <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon" >
-          <div class="button active" @click="chCoupon()">Apply</div>
-        </div>
-      </div>
-
-      <input type="hidden" name="_vue_order_coupon" v-model="apply_coupon" >
-
-      <div id="id_receipt" class="right" :class="{open: receiptVisible}">
-        <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
-        <div class="item">
-          <p class="name">Industry</p>
-          <p class="value">{{ data.selected.industry.text }}</p>
-        </div>
-        <input type="hidden" name="_vue_order_industry" :value="data.selected.industry.text" >
-
-        <div class="item">
-          <p class="name">Clean Type</p>
-          <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }} hours)</p>
-        </div>
-        <input type="hidden" name="_vue_order_typecleaning" :value="data.selected.typecleaning.text +' (~'+data.selected.typecleaning.duration + ' hours)'" >
-
-        <div class="item">
-          <p class="name">Bedroom</p>
-          <p class="value">{{ data.selected.bedroom.text }}</p>
-        </div>
-        <input type="hidden" name="_vue_order_bedroom" :value="data.selected.bedroom.text" >
-
-        <div class="item">
-          <p class="name">Bathroom</p>
-          <p class="value">{{ data.selected.bathroom.text }}</p>
-        </div>
-
-        <input type="hidden" name="_vue_order_bathroom" :value="data.selected.bathroom.text" >
-
-        <div class="item">
-          <p class="name">Date</p>
-          <p class="value">{{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }}</p>
-        </div>
-        <input type="hidden" name="_vue_order_date" :value="$moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY')" >
-
-        <div class="item">
-          <p class="name">Time</p>
-          <p class="value">{{ data.date.time.text }}</p>
-        </div>
-        <input type="hidden" name="_vue_order_date_time" :value="data.date.time.text" >
-
-
-        <div class="item">
-          <p class="name">Address</p>
-          <p class="value">-</p>
-        </div>
-
-          <input type="hidden" name="_vue_order_address" value="" >
-
-        <div class="item small">
-          <p class="name">Addons</p>
-          <div class="value" v-if="data.addons.length > 0">
-            <animated-number
-                class="number"
-                :value="addonsPrice"
-                :formatValue="formatToPrice"
-                :duration="500"
-            />
-            <div class="details-holder">
-              ?
-              <div class="detail">
-                <p v-for="addon in data.addons">{{ addon.text }}   <span> ${{addon.price}}</span></p>
-              </div>
-            </div>
-          </div>
-          <p class="value" v-else>-</p>
-        </div>
-        <!-- Вставить   значение -->
-        <input type="hidden" name="_vue_order_addons" value="" >
-
-        <div class="item">
-          <p class="name">Clean</p>
-          <p class="value">
-            <animated-number
-                class="number"
-                :value="clean"
-                :formatValue="formatToPrice"
-                :duration="500"
-            />
-          </p>
-        </div>
-        <input type="hidden" name="_vue_order_сlean" v-model="clean" >
-
-        <div class="item">
-          <p class="name">Recurring</p>
-          <p class="value">{{ data.frequent.text }}</p>
-        </div>
-        <input type="hidden" name="_vue_order_recurring" :value="data.frequent.text" >
-
-        <div class="item small">
-          <p class="name">Discounts</p>
-          <div class="value">
-            <animated-number
-                class="number"
-                :value="-data.date.time.sale - (clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)"
-                :formatValue="formatToPrice"
-                :duration="500"
-            />
-            <div class="details-holder">
-              ?
-              <div class="detail">
-<!--                <p>First Cleaning 50% OFF <span> $75</span></p>-->
-                <p v-if="+data.date.time.sale > 0">Time sale   <span> ${{data.date.time.sale}}</span></p>
-                <p v-if="+data.frequent.sale > 0">Recurring {{data.frequent.sale}}% off   <span> ${{((clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)).toFixed(0)}}</span></p>
-              </div>
-            </div>
+      <div class="form-info">
+        <div class="left">
+          <h3>Almost there !</h3>
+          <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
+          <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
+          <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
+          <input type="email" class="button item" placeholder="Email address*" required name="billing_email">
+          <input type="text" class="button item" placeholder="Company name" name="billing_company">
+          <input type="tel" class="button item" placeholder="Phone number*" required v-mask="'###-###-####'"
+                 name="billing_phone">
+          <div class="cupon">
+            <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon">
+            <div class="button active" @click="chCoupon()">Apply</div>
           </div>
         </div>
 
-         <!-- Вставить   значение -->
-        <input type="hidden" name="_vue_order_discounts" value="" >
+        <input type="hidden" name="_vue_order_coupon" v-model="apply_coupon">
+
+        <div id="id_receipt" class="right" :class="{open: receiptVisible}">
+          <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
+          <div class="item">
+            <p class="name">Industry</p>
+            <p class="value">{{ data.selected.industry.text }}</p>
+          </div>
+          <input type="hidden" name="_vue_order_industry" :value="data.selected.industry.text">
+
+          <div class="item">
+            <p class="name">Clean Type</p>
+            <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }}
+              hours)</p>
+          </div>
+          <input type="hidden" name="_vue_order_typecleaning"
+                 :value="data.selected.typecleaning.text +' (~'+data.selected.typecleaning.duration + ' hours)'">
+
+          <template v-for="(select, key) in data.selected.premises" v-if="data.selected.industry.industry_dependence.includes(key)">
+            <div class="item">
+              <p class="name">{{ key[0].toUpperCase() + key.slice(1) }}</p>
+              <p class="value">{{ select.text }}</p>
+            </div>
+            <input type="hidden" :name="'_vue_order_' + select.text" :value="select.text">
+          </template>
+
+          <div class="item">
+            <p class="name">Date</p>
+            <p class="value">
+              {{ $moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY') }}</p>
+          </div>
+          <input type="hidden" name="_vue_order_date"
+                 :value="$moment(data.date.month + data.date.day + data.date.year, 'MMDDYYYY').format('MMMM DD, YYYY')">
+
+          <div class="item">
+            <p class="name">Time</p>
+            <p class="value">{{ data.date.time.text }}</p>
+          </div>
+          <input type="hidden" name="_vue_order_date_time" :value="data.date.time.text">
 
 
-        <div class="item">
-          <p class="name">Promo</p>
-          <p class="value">-</p>
+          <div class="item">
+            <p class="name">Address</p>
+            <p class="value">{{data.address + ', ' + data.zip}}</p>
+          </div>
+
+          <input type="hidden" name="_vue_order_address" value="">
+
+          <div class="item" :class="{small: data.addons.length > 0}">
+            <p class="name">Addons</p>
+            <div class="value" v-if="data.addons.length > 0">
+              <animated-number
+                  class="number"
+                  :value="addonsPrice"
+                  :formatValue="formatToPrice"
+                  :duration="500"
+              />
+              <div class="details-holder">
+                ?
+                <div class="detail">
+                  <p v-for="addon in data.addons">
+                    {{ addon.text }}
+                    <span v-if="!addon.addons_included.includes(data.selected.typecleaning.text)"> ${{ addon.price }}</span>
+                    <span v-else>Included</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="value" v-else>-</p>
+          </div>
+          <!-- Вставить   значение -->
+          <input type="hidden" name="_vue_order_addons" :value="addonsPrice">
+
+          <div class="item">
+            <p class="name">Clean</p>
+            <p class="value">
+              <animated-number
+                  class="number"
+                  :value="clean"
+                  :formatValue="formatToPrice"
+                  :duration="500"
+              />
+            </p>
+          </div>
+          <input type="hidden" name="_vue_order_сlean" v-model="clean">
+
+          <div class="item">
+            <p class="name">Recurring</p>
+            <p class="value">{{ data.frequent.text }}</p>
+          </div>
+          <input type="hidden" name="_vue_order_recurring" :value="data.frequent.text">
+
+          <div class="item" :class="{small: +data.date.time.sale || +data.frequent.sale}">
+            <p class="name">Discounts</p>
+            <div class="value">
+              <animated-number
+                  class="number"
+                  :value="-data.date.time.sale - (clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)"
+                  :formatValue="formatToPrice"
+                  :duration="500"
+              />
+              <div class="details-holder" v-if="+data.date.time.sale || +data.frequent.sale">
+                ?
+                <div class="detail">
+                  <!--                <p>First Cleaning 50% OFF <span> $75</span></p>-->
+                  <p v-if="+data.date.time.sale > 0">Time sale <span> ${{ data.date.time.sale }}</span></p>
+                  <p v-if="+data.frequent.sale > 0">Recurring {{ data.frequent.sale }}% off
+                    <span> ${{ ((clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)).toFixed(0) }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Вставить   значение -->
+          <input type="hidden" name="_vue_order_discounts"
+                 :value="-data.date.time.sale - (clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)">
+
+
+          <div class="item">
+            <p class="name">Promo</p>
+            <p class="value">-</p>
+          </div>
+
+          <!-- Вставить   значение -->
+          <input type="hidden" name="_vue_order_promo" value="">
+
+
+          <div class="item total">
+            <p class="name">Total</p>
+            <p class="value">
+              <animated-number
+                  class="number"
+                  :value="subtotal"
+                  :formatValue="formatToPrice"
+                  :duration="500"
+              />
+            </p>
+          </div>
+          <input type="hidden" name="_vue_order_total_price" v-model="subtotal">
+
         </div>
-
-        <!-- Вставить   значение -->
-        <input type="hidden" name="_vue_order_promo" value="" >
-
-
-        <div class="item total">
-          <p class="name">Total</p>
-          <p class="value">
-            <animated-number
-              class="number"
-              :value="subtotal"
-              :formatValue="formatToPrice"
-              :duration="500"
-            />
-          </p>
-        </div>
-        <input type="hidden" name="_vue_order_total_price" v-model="subtotal">
-
       </div>
-    </div>
 
-  <input type="hidden"  name="payment_method"  v-model="payment_method"/>
+      <input type="hidden" name="payment_method" v-model="payment_method"/>
 
-  <div v-html="wp_nonce_field" v-show="false"></div>
+      <input type="hidden" name="details" :value="data.message"/>
 
-    <div class="footer">
-      <p>Your personal data will be used to process your order,
-        support your experience throughout this website, and
-        for other purposes described in our privacy policy.</p>
-      <label class="checkbox-holder">
-        <span class="checkbox">
-          <input type="checkbox">
-          <span></span>
-        </span>
-        I AGREE TO THE WEBSITE TERMS AND CONDITIONS
-      </label>
-      <div class="buttons-holder">
-        <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet'}">Pay with Card</div>
-        <button class="button" type="submit" @click="payment_method = 'paypal'" :class="{active: payment_method === 'paypal'}">PayPal</button>
-        <button class="button" type="submit" @click="payment_method = 'cod'">Submit Request</button>
+      <div v-html="wp_nonce_field" v-show="false"></div>
 
-       </div>
-      <div class="creditCard" v-show="payment_method === 'authnet'">
-        <div class="close" @click="cardPay = false"></div>
-        <div class="item">
-          <div class="button active">Credit cart</div>
-          <img src="~@/assets/img/cardType.png" alt="" />
+      <div class="footer">
+        <p>Your personal data will be used to process your order,
+          support your experience throughout this website, and
+          for other purposes described in our privacy policy.</p>
+        <label class="checkbox-holder">
+          <span class="checkbox">
+            <input type="checkbox" required>
+            <span></span>
+          </span>
+          <span>
+            I AGREE TO THE WEBSITE
+            <a href="/terms.html" target="_blank">TERMS</a>
+            AND
+            <a href="/policy.html" target="_blank">CONDITIONS</a>
+          </span>
+        </label>
+        <div class="buttons-holder">
+          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet'}">Pay
+            with Card
+          </div>
+          <button class="button" type="submit" @click="payment_method = 'paypal'"
+                  :class="{active: payment_method === 'paypal'}">PayPal
+          </button>
+          <button class="button" type="submit" @click="payment_method = 'cod'">Submit Request</button>
+
         </div>
-        <div class="item">
-          <input type="text" class="button cardNumber" placeholder="Card number" name="authnet-card-number">
-        </div>
-        <div class="item">
-          <input type="text" class="button" placeholder="MM/YY" name="authnet-card-expiry">
-          <input type="text" class="button" placeholder="CVC" name="authnet-card-cvc">
-        </div>
-        <button class="button active " name="woocommerce_checkout_place_order" type="submit" @click="payment_method = 'authnet'">Place order</button>
+        <div class="creditCard" v-show="payment_method === 'authnet'">
+          <div class="close" @click="payment_method = 'cod'"></div>
+          <div class="item">
+            <div class="button active">Credit cart</div>
+            <img src="~@/assets/img/cardType.png" alt=""/>
+          </div>
+          <div class="item">
+            <input type="text" class="button cardNumber" placeholder="Card number" name="authnet-card-number">
+          </div>
+          <div class="item">
+            <input type="text" class="button" placeholder="MM/YY" name="authnet-card-expiry">
+            <input type="text" class="button" placeholder="CVC" name="authnet-card-cvc">
+          </div>
+          <button class="button active " name="woocommerce_checkout_place_order" type="submit"
+                  @click="payment_method = 'authnet'">Place order
+          </button>
 
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
   </div>
 </template>
 
@@ -244,21 +264,27 @@ export default {
     subtotal() {
       let timeSale = this.data.date.time.sale ? this.data.date.time.sale : 0
       let frequentSale = (100 - this.data.frequent.sale) / 100
-      let bedroomSelected = this.data.selected.bedroom
-      let bathroomSelected = this.data.selected.bathroom
-      let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
-      let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + bedroomPrice + bathroomPrice ) * frequentSale;
+
+      let dependenciesPrice = 0
+      this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
+        if (this.data.selected.industry.industry_dependence.includes(item.label)) {
+          dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
+        }
+      })
+
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice) * frequentSale;
     },
     addonsPrice() {
-      return this.data.addons.length > 0 ? this.data.addons.map(addon => +addon.price).reduce((a, b) => a + b) : 0
+      return this.data.addons.length > 0 ? this.data.addons.map(addon => !addon.addons_included.includes(this.data.selected.typecleaning.text) && +addon.price).reduce((a, b) => a + b) : 0
     },
     clean() {
-      let bedroomSelected = this.data.selected.bedroom
-      let bathroomSelected = this.data.selected.bathroom
-      let bedroomPrice = +this.data.selected.typecleaning.dependencies.bedroom * (this.selects.bedroom ? (this.selects.bedroom.map(item => item.text).indexOf(bedroomSelected.text) + 1) : 1)
-      let bathroomPrice = +this.data.selected.typecleaning.dependencies.bathroom * (this.selects.bathroom ? (this.selects.bathroom.map(item => item.text).indexOf(bathroomSelected.text) + 1) : 1)
-      return (+this.data.selected.typecleaning.price + bedroomPrice + bathroomPrice );
+      let dependenciesPrice = 0
+      this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
+        if (this.data.selected.industry.industry_dependence.includes(item.label)) {
+          dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
+        }
+      })
+      return (+this.data.selected.typecleaning.price + dependenciesPrice );
     },
   },
   methods: {
@@ -478,6 +504,9 @@ export default {
         color: transparentize($color, .3);
         justify-content: center;
         margin-bottom: $a40;
+        a {
+          margin: 0 $a5;
+        }
         .checkbox {
           width: $a25;
           height: $a25;
@@ -705,6 +734,7 @@ export default {
           .button {
             width: 100%;
             margin: 0;
+            margin-bottom: $m10;
             &:not(:first-of-type) {
               margin: 0 0 $m10 0;
             }

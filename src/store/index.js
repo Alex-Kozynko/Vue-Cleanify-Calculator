@@ -14,145 +14,12 @@ export default new Vuex.Store({
     entrances: [],
     frequents: [],
     location: {},
-    selects: {
-      /*industry: [
-        {
-          text: 'Corporate Offices',
-          abridgment: 'Corp. Offices',
-        },
-        {
-          text: 'Residential Facilities',
-          abridgment: 'Residential Facilities',
-        },
-        {
-          text: 'Religious Facility',
-          abridgment: 'Religious Facility',
-        },
-        {
-          text: 'Fitness Locations',
-          abridgment: 'Fitness Locations',
-        },
-        {
-          text: 'Educational Facilities',
-          abridgment: 'Educational Facilities',
-        },
-        {
-          text: 'Medical Facilities',
-          abridgment: 'Medical Facilities',
-        },
-        {
-          text: 'Retail Storefronts',
-          abridgment: 'Retail Storefronts',
-        },
-        {
-          text: 'Hospitality',
-          abridgment: 'Hospitality',
-        }
-      ],
-      bedroom: [
-        {
-          text: 'Studio',
-          abridgment: 'Studio'
-        },
-        {
-          text: '1 Bedroom',
-          abridgment: '1 Bed'
-        },
-        {
-          text: '2 Bedrooms',
-          abridgment: '2 Bed'
-        },
-        {
-          text: '3 Bedrooms',
-          abridgment: '3 Bed'
-        },
-        {
-          text: '6 and Up Bedrooms',
-          abridgment: '6+ Bed'
-        },
-      ],
-      bathroom: [
-        {
-          text: '1 Bathroom',
-          abridgment: '1 Bath'
-        },
-        {
-          text: '2 Bathroom',
-          abridgment: '2 Bath'
-        },
-        {
-          text: '3 Bathroom',
-          abridgment: '3 Bath'
-        },
-        {
-          text: '4 Bathroom',
-          abridgment: '4 Bath'
-        },
-        {
-          text: '5 Bathroom',
-          abridgment: '5 Bath'
-        },
-        {
-          text: '6 and Up Bathroom',
-          abridgment: '6+ Bath'
-        },
-      ],
-      typecleaning: [
-        {
-          text: 'Standard',
-          abridgment: 'Standard',
-          duration: 2
-        },
-        {
-          text: 'Deep Clean',
-          abridgment: 'Deep Clean',
-          duration: 4
-        },
-      ],
-      dependencies: {
-        standard: {
-          bathroom: 20,
-          bedroom: 7
-        },
-        deep: {
-          bathroom: 60,
-          bedroom: 20
-        }
-      }*/
-    },
+    selects: {},
     dataToSend: {
       selected: {
-       industry: {
-          text: 'Corporate Offices',
-          abridgment: 'Corp. Offices',
-          data: {
-            bathroom: [
-              {
-                text: '1 bathroom',
-                abridgment: '1 bath',
-                price: 10 // $
-              }
-            ]
-          }
-        },
-       bedroom: {
-          text: 'Studio',
-          abridgment: 'Studio'
-        },
-       bathroom: {
-          text: '1 Bathroom',
-          abridgment: '1 Bath'
-        },
-       typecleaning: {
-         abridgment: "Standard",
-         dependencies: {
-           bathroom: "20",
-           bedroom: "7"
-         },
-         duration: "2",
-         text: "Standard",
-         price: '72'
-        },
+        industry: {},
+        typecleaning: {},
+        premises: {}
       },
       addons: [],
       pet: {item: 'No pets'},
@@ -161,7 +28,7 @@ export default new Vuex.Store({
       date: {
         day: $moment().add(1, 'days').format('DD'),
         month: $moment().add(1, 'days').format('MM'),
-        year:  $moment().add(1, 'days').format('YYYY'),
+        year: $moment().add(1, 'days').format('YYYY'),
         time: {
           text: "Please select time",
           sale: 0,
@@ -169,7 +36,9 @@ export default new Vuex.Store({
         }
       },
       address: '',
-      zip: ''
+      zip: '',
+      message: '',
+      sf: ''
     }
   },
   mutations: {
@@ -180,8 +49,16 @@ export default new Vuex.Store({
       state.times = payload['booking-time']
       state.entrances = payload['entrance']
       state.frequents = payload['frequent']
-      state.selects = payload['stepone']
       state.location = payload['location']
+      state.selects = payload['stepone']
+      if (!localStorage.getItem('state')) {
+        state.dataToSend.selected.industry = state.selects.industry[0]
+        state.dataToSend.selected.typecleaning = state.selects.typecleaning[0]
+        state.selects.premises.forEach((item, i) => {
+          item.items[0].index = 0
+          Vue.set(state.dataToSend.selected.premises, item.name, item.items[0])
+        })
+      }
     },
     cache(state, payload) {
       for (let key in payload) {

@@ -56,7 +56,7 @@
           label="text"
           label-option="text"
           :options="times"
-          :value.sync="data.date.time"
+          v-model="data.date.time"
           details="save ${sale}.00"
           style2
           reverse
