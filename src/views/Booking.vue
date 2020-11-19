@@ -57,7 +57,6 @@
           label-option="text"
           :options="times"
           v-model="data.date.time"
-          details="save ${sale}.00"
           style2
           reverse
           v-if="times.length"

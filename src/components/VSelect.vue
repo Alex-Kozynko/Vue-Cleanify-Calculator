@@ -4,6 +4,7 @@
       <p class="title">
         {{ value[label] }}
         <span v-if="value.duration">~ {{ +value.duration + details }} hour</span>
+        <span v-if="+value.sale">save$ {{value.sale }}.00</span>
       </p>
       <img src="@/assets/img/icons/arrowDown.svg" alt=""/>
     </div>
@@ -16,6 +17,7 @@
         >
           {{ option[labelOption] }}
           <span v-if="option.duration">~ {{ +option.duration + details }} hour</span>
+          <span v-if="+option.sale">save ${{option.sale}}.00</span>
         </li>
       </ul>
     </div>
