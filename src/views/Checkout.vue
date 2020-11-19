@@ -351,7 +351,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: auto;
+        margin-top: $a25;
         .subtitle {
           margin-top: $a10;
           margin-bottom: $a20;
