@@ -31,11 +31,11 @@
 
           <div class="item">
             <p class="name">Clean Type</p>
-            <p class="value">{{ data.selected.typecleaning.text }} (~{{ data.selected.typecleaning.duration }}
+            <p class="value">{{ data.selected.typecleaning.text }} (~{{ +data.selected.typecleaning.duration + +dependenciesTime }}
               hours)</p>
           </div>
           <input type="hidden" name="_vue_order_typecleaning"
-                 :value="data.selected.typecleaning.text +' (~'+data.selected.typecleaning.duration + ' hours)'">
+                 :value="data.selected.typecleaning.text +' (~'+ (+data.selected.typecleaning.duration + +dependenciesTime) + ' hours)'">
 
           <template v-for="(select, key) in data.selected.premises" v-if="data.selected.industry.industry_dependence.includes(key)">
             <div class="item">
@@ -241,7 +241,8 @@ export default {
       receiptVisible: false,
       payment_method: 'cod',
       coupon:'',
-      apply_coupon:''
+      apply_coupon:'',
+      dependenciesTime: 0
     }
   },
   computed: {
@@ -266,9 +267,11 @@ export default {
       let frequentSale = (100 - this.data.frequent.sale) / 100
 
       let dependenciesPrice = 0
+      this.dependenciesTime = 0;
       this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
         if (this.data.selected.industry.industry_dependence.includes(item.label)) {
           dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
+          this.dependenciesTime  += +item.time * (this.data.selected.premises[item.label].index)
         }
       })
 
