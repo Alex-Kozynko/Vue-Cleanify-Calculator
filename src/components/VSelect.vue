@@ -99,7 +99,7 @@ export default {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
+      //font-weight: 700;
       font-size: $a20;
       position: relative;
 

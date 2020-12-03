@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header v-if="$router.path !== 'calc-checkout'">
+    <header v-if="$route.path !== '/calc-checkout'">
       <a href="/" class="logo">
         <img src="@/assets/img/icons/logo.svg" alt=""/>
       </a>
@@ -23,6 +23,9 @@
             :options="select.items"
             v-model="data.selected.premises[select.name]"
         ></v-select>
+        <label class="item" v-if="data.selected.industry.industry_dependence && data.selected.industry.industry_dependence.includes('sf')">
+          <input type="text" placeholder="Sq.ft." class="sf" v-mask="'######'" v-model="data.sf" maxlength="6">
+        </label>
         <v-select
             class="item"
             label="abridgment"
@@ -32,9 +35,6 @@
             v-model="data.selected.typecleaning"
             v-if="selects.typecleaning"
         ></v-select>
-        <label class="item" v-if="data.selected.industry.industry_dependence && data.selected.industry.industry_dependence.includes('sf')">
-          <input type="text" placeholder="sf" class="sf" v-mask="'######'" v-model="data.sf" maxlength="6">
-        </label>
         <!--<v-select
             class="item"
             label="abridgment"
@@ -325,7 +325,11 @@ h5 {
         width: $a120;
       }
     }
-
+    label {
+      font-size: $a20;
+      text-decoration: none;
+      color: $color;
+    }
     .item {
       padding: 0 $a20 0 $a25;
       border: 0;
@@ -351,7 +355,7 @@ h5 {
         height: 100%;
         border: none;
         background: none;
-        font-weight: 700;
+        //font-weight: 700;
         font-size: $a20;
         width: $a70;
       }
@@ -387,7 +391,7 @@ h5 {
       display: flex;
 
       .item {
-        font-weight: 700;
+        //font-weight: 700;
         font-size: $a20;
         text-decoration: none;
         color: $color;

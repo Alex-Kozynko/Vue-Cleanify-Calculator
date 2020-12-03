@@ -38,7 +38,7 @@ export default new Vuex.Store({
       address: '',
       zip: '',
       message: '',
-      sf: ''
+      sf: 123
     }
   },
   mutations: {
@@ -75,13 +75,13 @@ export default new Vuex.Store({
         method: 'get',
         url: 'https://test2.niklex.net/wp-json/api/v1/data'
       })
-          .then((response) => {
-            console.log(response);
-            if (response.data['extra-addons']) {
-              commit('data', response.data)
-            }
-          })
-          .catch((error) => console.error(error))
+      .then((response) => {
+        console.log(response);
+        if (response.data['extra-addons']) {
+          commit('data', response.data)
+        }
+      })
+      .catch((error) => console.error(error))
     },
     getCache({state, commit}) {
       if (localStorage.getItem('state')) {

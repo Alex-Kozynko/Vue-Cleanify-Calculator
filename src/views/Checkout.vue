@@ -321,7 +321,7 @@ export default {
   #checkout {
     flex-direction: column;
     padding: $a55 $a460 !important;
-    height: calc(100vh - #{$a87});
+    height: 100%;
     h2 {
       margin-bottom: $a35;
     }
