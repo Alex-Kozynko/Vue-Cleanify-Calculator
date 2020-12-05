@@ -138,6 +138,9 @@ export default {
     justify-content: center;
     margin: 0 auto;
     position: relative;
+    img {
+      width: $a1000;
+    }
     .text {
       position: absolute;
       top: 50%;
