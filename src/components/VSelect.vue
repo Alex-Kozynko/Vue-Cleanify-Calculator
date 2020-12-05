@@ -1,22 +1,97 @@
 <template>
   <div class="v-select" :class="{open: visible, style2: style2, reverse: reverse, mobile: mobileStyle, button: mobileStyle}" @click="visible = !visible" v-click-outside="clickOutside">
     <div class="text">
-      <p class="title">
-        {{ value[label] }}
-        <span v-if="value.duration">~ {{ +value.duration + details }} hour</span>
+      <div class="title">
+        <p>{{ value[label] }}</p>
+<!--        <span v-if="value.duration">~ {{ +value.duration + details }} hour</span>-->
         <span v-if="+value.sale">save$ {{value.sale }}.00</span>
-      </p>
+      </div>
       <img src="@/assets/img/icons/arrowDown.svg" alt=""/>
     </div>
-    <div class="v-list-dropdown">
-      <ul ref="select">
+    <div class="v-list-dropdown" :class="{calendar: options[0].type === 'date', addons: options[0].type === 'addons'}">
+      <div class="zip" v-if="options[0].text === 'Zip code'">
+        <input type="text"
+               maxlength="5"
+               v-mask="'#####'"
+               v-model="data.zip"
+               @click.stop=""
+        >
+      </div>
+      <div class="date" v-else-if="options[0].type === 'date'" @click.stop>
+        <VueSlickCarousel
+            ref="c1"
+            class="months"
+            :asNavFor="$refs.c2"
+            :focusOnSelect="true"
+            :centerMode="true"
+            :infinite="false"
+            :variableWidth="true"
+            @beforeChange="syncSliders"
+        >
+          <p
+              v-for="month in 6"
+              class="item"
+          >
+            {{$moment().add(month - 1, 'month').format('MMMM')}}
+          </p>
+        </VueSlickCarousel>
+        <div class="dayOfWeek">
+          <div class="item" v-for="day in date">
+            <p class="day">{{day.day}}</p>
+            <p class="sale">${{day.sale}} off</p>
+          </div>
+        </div>
+        <VueSlickCarousel
+            ref="c2"
+            class="daysOfTheMonth"
+            :focusOnSelect="true"
+            :asNavFor="$refs.c1"
+            :infinite="false"
+            @beforeChange="syncSliders"
+        >
+          <div class="month" v-for="month in 6">
+            <div v-for="spaceDays in $moment().add(month - 1, 'month').startOf('month').day()"></div>
+            <div
+                v-for="day in $moment().add(month - 1, 'month').daysInMonth()"
+                class="button"
+                @click="setSale($moment().add(month - 1, 'month').startOf('month').add(day - 1, 'days').day(), day, month - 1)"
+                :class="{
+                active: +day === +data.date.day && (+$moment().add(month - 1, 'month').format('MM') === +data.date.month),
+                disabled: +day < +$moment().format('DD') && +$moment().add(month - 1, 'month').format('MM') <= +$moment().format('MM') && +$moment().add(month - 1, 'month').format('YYYY') <= +$moment().format('YYYY')
+              }"
+            >
+              {{day}}
+            </div>
+          </div>
+        </VueSlickCarousel>
+        <p style="text-align: right;">{{$moment(data.date.year + '-' + data.date.month + '-' + data.date.day).format('ddd. Do MMMM')}}</p>
+      </div>
+      <div class="addons" v-else-if="options[0].type === 'addons'" @click.stop>
+        <div
+            class="item button addon"
+            :class="{
+              active: data.addons.map(addon => addon.text).includes(item.text) || item.addons_included.includes(data.selected.typecleaning.text),
+              disabled: item.addons_included.includes(data.selected.typecleaning.text)
+            }"
+            v-for="item in addons"
+            :key="item.text"
+            @click="selectedAddons(item)"
+        >
+          <div class="icon">
+            <img :src="item.icon" alt=""/>
+          </div>
+          <p class="name">{{ item.text }}</p>
+          <p class="price">${{ item.price }}</p>
+        </div>
+      </div>
+      <ul ref="select" v-else>
         <li
             v-for="(option, i) in options"
             @click="selected(option, i)"
             :class="{active: value[labelOption] === option[labelOption]}"
         >
           {{ option[labelOption] }}
-          <span v-if="option.duration">~ {{ +option.duration + details }} hour</span>
+<!--          <span v-if="option.duration">~ {{ +option.duration + details }} hour</span>-->
           <span v-if="+option.sale">save ${{option.sale}}.00</span>
         </li>
       </ul>
@@ -25,8 +100,19 @@
 </template>
 
 <script>
+import {mask} from "vue-the-mask";
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+
 export default {
   name: 'v-select',
+  components: {
+    VueSlickCarousel
+  },
+  directives: {
+    mask
+  },
   props: {
     options: {
       type: Array,
@@ -60,7 +146,16 @@ export default {
   computed: {
     mobileStyle() {
       return window.innerWidth < 1023
-    }
+    },
+    data() {
+      return this.$store.state.dataToSend
+    },
+    date() {
+      return this.$store.state.date;
+    },
+    addons() {
+      return this.$store.state.addons
+    },
   },
   methods: {
     clickOutside() {
@@ -74,6 +169,27 @@ export default {
 /*    detailsValue(item) {
       return item[this.details.match(/[{].*[}]/)[0].replace(/\W/gi, '')]
     },*/
+    syncSliders(currentPosition, nextPosition) {
+      this.$refs.c1.goTo(nextPosition)
+      this.$refs.c2.goTo(nextPosition)
+    },
+    setSale(dayOfWeek, day, month) {
+      let oldDayOfWeek = this.$moment('' + this.data.date.year + this.data.date.month + this.data.date.day, "YYYYMMDD").day()
+      // if (this.data.date.day !== null) this.$store.commit('subtotal', this.subtotal + +this.date[oldDayOfWeek].sale)
+      this.data.date.day = String(day).length < 2 ? '0' + day : day
+      this.data.date.month = this.$moment().add(month, 'month').format('MM')
+      this.data.date.year = this.$moment().add(month, 'month').format('YYYY')
+      // this.$store.commit('subtotal', this.subtotal - +this.date[dayOfWeek].sale)
+      this.$store.dispatch('setCache')
+    },
+    selectedAddons(item) {
+      if (this.data.addons.map(addon => addon.text).includes(item.text)) {
+        this.$store.commit('dataToSend', {key: 'addons', payload: this.data.addons.filter(addon => addon.text !== item.text)})
+      } else {
+        this.$store.commit('dataToSend', {key: 'addons', payload: [...this.data.addons, item]})
+      }
+      this.$store.dispatch('setCache')
+    }
   },
   /*created() {
     !this.value && this.$emit('update:value', this.options[0])
@@ -81,7 +197,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .v-select {
   position: relative;
   display: flex;
@@ -100,8 +216,11 @@ export default {
       align-items: center;
       justify-content: center;
       //font-weight: 700;
-      font-size: $a20;
       position: relative;
+      white-space: nowrap;
+      p {
+        font-size: $a20;
+      }
 
       span {
         font-size: $a13;
@@ -136,6 +255,27 @@ export default {
     overflow: hidden;
     z-index: 100;
     box-shadow: 0 $a15 $a30 rgba(0, 0, 0, 0.1);
+
+    &.calendar {
+      border-radius: $a16;
+    }
+
+    &.addons {
+      left: auto;
+      right: 0;
+    }
+
+    .zip {
+      padding: $a15 $a25;
+      input {
+        border-width: 0;
+        border-bottom: 1px solid transparentize(#161F32, .9);;
+        padding-bottom: $a5;
+        background: none;
+        color: transparentize($color, .3);
+      }
+    }
+
     ul {
       list-style: none;
       max-height: $a320;
@@ -181,6 +321,124 @@ export default {
 
         &.active {
           background: transparentize($primary, .70);
+        }
+      }
+    }
+
+    .date {
+      width: $a300;
+      border: 1px solid $primary;
+      border-radius: $a16;
+      padding: $a20;
+      cursor: auto;
+      .months {
+        width: 100%;
+        .slick-prev, .slick-next {
+          width: $a15;
+          height: $a15;
+          background: url('~@/assets/img/icons/arrowRight.svg') no-repeat 0 0 / contain;
+          transform: none;
+          right: 10%;
+          left: auto;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          z-index: 1;
+          &.slick-disabled {
+            opacity: .3;
+          }
+          &:before {
+            display: none;
+          }
+        }
+        .slick-prev {
+          transform: rotate(180deg);
+          left: 10%;
+          right: auto;
+        }
+        .slick-track {
+          display: flex;
+          align-items: center;
+        }
+        .slick-slide {
+          opacity: 0;
+          transform: scale(.8);
+          transition: all 0.5s;
+          padding: 0 $a43;
+          &.slick-center {
+            opacity: 1;
+            transform: none;
+          }
+        }
+        .item {
+          text-align: center;
+          transition: all 0.5s;
+          font-size: $a25;
+          cursor: pointer;
+        }
+      }
+      .dayOfWeek {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-column-gap: $a9;
+        width: 100%;
+        margin-top: $a15;
+        .item {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          .day {
+            opacity: .4;
+          }
+          .sale {
+            opacity: .5;
+            margin-top: $a14;
+            text-align: center;
+          }
+        }
+      }
+      .daysOfTheMonth {
+        width: 100%;
+        margin-top: $a14;
+        overflow: hidden;
+        .month {
+          display: grid !important;
+          grid-template-columns: repeat(7, 1fr);
+          grid-column-gap: $a13;
+          grid-row-gap: $a10;
+          .button {
+            width: $a25;
+            height: $a25;
+            border-radius: $a5;
+            font-size: $a12;
+          }
+        }
+      }
+    }
+    .addons {
+      width: $a300;
+      padding: $a10;
+      .item:not(:last-of-type) {
+        margin-bottom: $a10;
+      }
+      .item {
+        padding: 0 $a18 0 $a10;
+        height: $a40;
+        border-radius: $a10;
+        .icon {
+          margin-right: $a15;
+        }
+        .price {
+          margin-left: auto;
+        }
+        &.addon {
+          &.active {
+            background: transparentize($primary, .70);
+            color: $color;
+            .name, .price {
+              opacity: 1;
+            }
+          }
         }
       }
     }

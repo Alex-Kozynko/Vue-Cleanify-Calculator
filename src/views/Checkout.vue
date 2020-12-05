@@ -9,11 +9,8 @@
           <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
           <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
           <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
-          <input type="email" class="button item" placeholder="Email address*" required name="billing_email">
           <input type="text" class="button item" placeholder="Company name" name="billing_company">
-          <input type="tel" class="button item" placeholder="Phone number*" required v-mask="'###-###-####'"
-                 name="billing_phone">
-          <div class="cupon">
+          <div class="cupon" :class="{ok: this.apply_coupon.amount, error: this.apply_coupon === false}">
             <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon">
             <div class="button active" @click="chCoupon()">Apply</div>
           </div>
@@ -22,22 +19,8 @@
         <input type="hidden" name="_vue_order_coupon" v-model="apply_coupon">
 
         <div id="id_receipt" class="right" :class="{open: receiptVisible}">
-          <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
-          <div class="item">
-            <p class="name">Industry</p>
-            <p class="value">{{ data.selected.industry.text }}</p>
-          </div>
-          <input type="hidden" name="_vue_order_industry" :value="data.selected.industry.text">
 
-          <div class="item">
-            <p class="name">Clean Type</p>
-            <p class="value">{{ data.selected.typecleaning.text }} (~{{ +data.selected.typecleaning.duration + +dependenciesTime }}
-              hours)</p>
-          </div>
-          <input type="hidden" name="_vue_order_typecleaning"
-                 :value="data.selected.typecleaning.text +' (~'+ (+data.selected.typecleaning.duration + +dependenciesTime) + ' hours)'">
-
-          <template v-for="(select, key) in data.selected.premises" v-if="data.selected.industry.industry_dependence.includes(key)">
+          <template v-for="(select, key) in data.selected.premises">
             <div class="item">
               <p class="name">{{ key[0].toUpperCase() + key.slice(1) }}</p>
               <p class="value">{{ select.text }}</p>
@@ -61,8 +44,8 @@
 
 
           <div class="item">
-            <p class="name">Address</p>
-            <p class="value">{{data.address + ', ' + data.zip}}</p>
+            <p class="name">Zip code</p>
+            <p class="value">{{data.zip}}</p>
           </div>
 
           <input type="hidden" name="_vue_order_address" value="">
@@ -140,7 +123,14 @@
 
           <div class="item">
             <p class="name">Promo</p>
-            <p class="value">-</p>
+            <p class="value">
+              <animated-number
+                  class="number"
+                  :value="promo"
+                  :formatValue="formatToPrice"
+                  :duration="500"
+              />
+            </p>
           </div>
 
           <!-- Вставить   значение -->
@@ -266,16 +256,35 @@ export default {
       let timeSale = this.data.date.time.sale ? this.data.date.time.sale : 0
       let frequentSale = (100 - this.data.frequent.sale) / 100
 
-      let dependenciesPrice = 0
+      let dependenciesPrice = 0;
       this.dependenciesTime = 0;
       this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
-        if (this.data.selected.industry.industry_dependence.includes(item.label)) {
-          dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
-          this.dependenciesTime  += +item.time * (this.data.selected.premises[item.label].index)
-        }
+        dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
 
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice) * frequentSale;
+      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice) * frequentSale
+
+      if (this.apply_coupon.discount_type !== 'percent') {
+        total -= this.apply_coupon.amount ? this.saleCupon : 0
+      } else {
+        total = total * this.saleCupon
+      }
+
+      return  total
+    },
+    saleCupon() {
+      if (this.apply_coupon.discount_type !== 'percent') {
+        return +this.apply_coupon.amount
+      } else {
+        return this.apply_coupon.amount ? 1 - +this.apply_coupon.amount / 100 : 1
+      }
+    },
+    promo() {
+      if (this.apply_coupon.discount_type !== 'percent') {
+        return +this.apply_coupon.amount * -1
+      } else {
+        return -this.subtotal / (100 - +this.apply_coupon.amount) * +this.apply_coupon.amount
+      }
     },
     addonsPrice() {
       return this.data.addons.length > 0 ? this.data.addons.map(addon => !addon.addons_included.includes(this.data.selected.typecleaning.text) && +addon.price).reduce((a, b) => a + b) : 0
@@ -283,9 +292,7 @@ export default {
     clean() {
       let dependenciesPrice = 0
       this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
-        if (this.data.selected.industry.industry_dependence.includes(item.label)) {
-          dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
-        }
+        dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
       return (+this.data.selected.typecleaning.price + dependenciesPrice );
     },
@@ -297,17 +304,23 @@ export default {
     chCoupon() {
       axios({
         method: 'get',
-        url: '/wp-json/api/v2/coupon/'+this.coupon
+        url: 'https://test2.niklex.net/wp-json/api/v2/coupon/'+this.coupon
       })
           .then((response) => {
             console.log(response.data);
             this.apply_coupon = '';
-            if (response.data) {
-              this.apply_coupon  =  this.coupon;
+            if (response.data.is_valid) {
+              this.apply_coupon  =  {
+                amount: response.data.amount,
+                discount_type: response.data.discount_type,
+                cupon: this.cupon
+              };
+            } else {
+              this.apply_coupon = false;
             }
           })
           .catch((error) => {
-            his.apply_coupon = '';
+            this.apply_coupon = false;
             console.error(error)}
 
 
@@ -372,6 +385,16 @@ export default {
           display: flex;
           justify-content: space-between;
           margin-top: $a10;
+          &.ok {
+            .item {
+              border-color: #00ff00;
+            }
+          }
+          &.error {
+            .item {
+              border-color: red;
+            }
+          }
           .item {
             margin-bottom: 0;
           }

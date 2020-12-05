@@ -38,7 +38,9 @@ export default new Vuex.Store({
       address: '',
       zip: '',
       message: '',
-      sf: 123
+      sf: 123,
+      qCleaners: '',
+      qHours: ''
     }
   },
   mutations: {
@@ -54,6 +56,7 @@ export default new Vuex.Store({
       if (!localStorage.getItem('state')) {
         state.dataToSend.selected.industry = state.selects.industry[0]
         state.dataToSend.selected.typecleaning = state.selects.typecleaning[0]
+        state.dataToSend.frequent = state.frequents[0]
         state.selects.premises.forEach((item, i) => {
           item.items[0].index = 0
           Vue.set(state.dataToSend.selected.premises, item.name, item.items[0])

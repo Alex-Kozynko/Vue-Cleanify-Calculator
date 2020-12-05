@@ -1,83 +1,48 @@
 <template>
   <div id="app">
-    <header v-if="$route.path !== '/calc-checkout'">
+    <header>
       <a href="/" class="logo">
         <img src="@/assets/img/icons/logo.svg" alt=""/>
       </a>
       <slide-up-down :active="active" :duration="500" class="progressbar">
         <v-select
             class="item"
-            label="abridgment"
-            label-option="text"
-            :options="selects.industry"
-            v-model="data.selected.industry"
-            v-if="selects.industry"
+            :options="[{text: 'Zip code'}]"
+            :value="{text: 'Zip code'}"
         ></v-select>
         <v-select
             class="item"
             label="abridgment"
             label-option="text"
             v-for="(select, i) in selects.premises"
-            v-if="data.selected.industry.industry_dependence && data.selected.industry.industry_dependence.includes(select.name)"
             :key="i"
             :options="select.items"
             v-model="data.selected.premises[select.name]"
         ></v-select>
-        <label class="item" v-if="data.selected.industry.industry_dependence && data.selected.industry.industry_dependence.includes('sf')">
-          <input type="text" placeholder="Sq.ft." class="sf" v-mask="'######'" v-model="data.sf" maxlength="6">
-        </label>
         <v-select
             class="item"
-            label="abridgment"
-            label-option="text"
-            :options="selects.typecleaning"
-            :details="dependenciesTime"
-            v-model="data.selected.typecleaning"
-            v-if="selects.typecleaning"
+            :options="[{text: data.date.month + '-' + data.date.day + '-' + data.date.year, type: 'date'}]"
+            :value="{text: data.date.month + '-' + data.date.day + '-' + data.date.year}"
         ></v-select>
-        <!--<v-select
-            class="item"
-            label="abridgment"
+        <v-select
+            class="item time"
+            label="text"
             label-option="text"
-            v-for="(select, key) in selects.premises"
-            :key="key"
-            :details="key === 'typecleaning' ? '~ {duration} hour' : ''"
-            :options="select"
-            :value.sync="data.selected[key]"
-        ></v-select>-->
-        <!--<v-select
+            :options="times"
+            v-model="data.date.time"
+        ></v-select>
+        <v-select
             class="item"
-            label="abridgment"
+            label="text"
             label-option="text"
-            :options="selects.bedroom"
-            :value.sync="data.selected.bedroom"
-            v-if="data.selected.industry.bedroom"
-        ></v-select>-->
-        <nav>
-          <router-link
-              to="/calc"
-              class="item link"
-          >
-            Extra
-          </router-link>
-          <router-link
-              to="/calc-booking"
-              class="item link"
-              v-if="$route.name !== 'Extra'"
-          >
-            {{ data.date.month + '-' + data.date.day + '-' + data.date.year }}
-            <span class="subText" v-if="!data.date.time.hidden">{{ data.date.time.text.slice(0, 9) }} <span
-                v-if="+data.date.time.sale">{{ '- $' + data.date.time.sale + '.00 off' }}</span></span>
-          </router-link>
-          <router-link
-              to="/calc-booking-2"
-              class="item link"
-              v-if="$route.name !== 'Booking' && $route.name !== 'Extra'"
-          >
-            {{ data.address ? (data.address + ', ' + data.zip) : 'Location' }}
-            <span class="subText">{{ data.frequent.text }} <span v-if="+data.frequent.sale">- {{data.frequent.sale + '% off'}}</span></span>
-          </router-link>
-        </nav>
+            :options="frequents"
+            v-model="data.frequent"
+        ></v-select>
+        <v-select
+            class="item"
+            :options="[{text: 'Addons', type: 'addons'}]"
+            :value="{text: 'Addons', type: 'addons'}"
+        ></v-select>
       </slide-up-down>
       <div
           @click="active = !active"
@@ -97,7 +62,7 @@
         <span class="sub">TOTAL</span>
       </p>
     </header>
-    <router-view class="main"/>
+    <router-view class="main" :time="dependenciesTime"/>
   </div>
 </template>
 
@@ -171,13 +136,12 @@ export default {
       let dependenciesPrice = 0;
       this.dependenciesTime = 0;
       this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
-        if (this.data.selected.industry.industry_dependence.includes(item.label)) {
-          dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
-          this.dependenciesTime  += +item.time * (this.data.selected.premises[item.label].index)
-        }
+        dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
+        this.dependenciesTime  += +item.time * (this.data.selected.premises[item.label].index)
       })
 
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice) * frequentSale;
+
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 0 ? (this.data.qHours * 50) : 0)) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;
@@ -187,7 +151,13 @@ export default {
     },
     addonsPrice() {
       return this.data.addons.length > 0 ? this.data.addons.map(addon => !addon.addons_included.includes(this.data.selected.typecleaning.text) && +addon.price).reduce((a, b) => a + b) : 0
-    }
+    },
+    times() {
+      return this.$store.state.times;
+    },
+    frequents() {
+      return this.$store.state.frequents;
+    },
   },
   methods: {
     formatToPrice(value) {
@@ -306,6 +276,7 @@ h5 {
 #app {
   header {
     height: $a87;
+    padding: 0 $a300;
     display: flex;
     background: #FBFBFB;
 
@@ -314,7 +285,7 @@ h5 {
     }
 
     .logo {
-      width: $a200;
+      padding-right: $a40;
       height: 100%;
       display: flex;
       align-items: center;
@@ -330,61 +301,78 @@ h5 {
       text-decoration: none;
       color: $color;
     }
-    .item {
-      padding: 0 $a20 0 $a25;
-      border: 0;
-      border-bottom: 10px solid $primary;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      background: none;
-
-      &:before {
-        content: '';
-        width: 1px;
-        background: #F0F0F0;
-        height: 100%;
-        right: 0;
-        top: 0;
-        position: absolute;
-      }
-
-      .sf {
-        height: 100%;
-        border: none;
-        background: none;
-        //font-weight: 700;
-        font-size: $a20;
-        width: $a70;
-      }
-
-      &.link {
-        padding: 0 $a36;
-      }
-
-      .subText {
-        font-size: $a13;
-        font-weight: 600;
-        position: absolute;
-        bottom: $a8;
-        left: 0;
-        right: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        span {
-          font-size: $a12;
-          font-weight: 600;
-          margin-left: $a3;
-        }
-      }
-    }
 
     .progressbar {
       display: flex;
+      flex-grow: 1;
+      &>.item {
+        padding: 0 $a20 0 $a25;
+        border: 0;
+        border-bottom: 10px solid $primary;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background: none;
+        flex-grow: 1;
+
+        &:not(:last-of-type) {
+          &:before {
+            content: '';
+            width: 1px;
+            background: #F0F0F0;
+            height: 100%;
+            right: 0;
+            top: 0;
+            position: absolute;
+          }
+        }
+
+        .sf {
+          height: 100%;
+          border: none;
+          background: none;
+          //font-weight: 700;
+          font-size: $a20;
+          width: $a70;
+        }
+
+        &.link {
+          padding: 0 $a36;
+        }
+
+        .subText {
+          font-size: $a13;
+          font-weight: 600;
+          position: absolute;
+          bottom: $a8;
+          left: 0;
+          right: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          span {
+            font-size: $a12;
+            font-weight: 600;
+            margin-left: $a3;
+          }
+        }
+
+        &.time {
+          .text {
+            .title {
+              p {
+                max-width: $a85;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+          }
+        }
+      }
     }
 
     nav {
@@ -404,11 +392,12 @@ h5 {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: $a200;
+      padding-left: $a40;
       margin-left: auto;
       font-weight: 700;
       font-size: $a40;
       border-left: 1px solid #F0F0F0;
+      width: $a105;
 
       .number {
         font-weight: 700;
@@ -439,7 +428,7 @@ h5 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: $a86;
+    margin-top: $a5;
     .back {
       margin-right: $a35;
       color: $color;
