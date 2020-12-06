@@ -8,7 +8,7 @@
       </div>
       <img src="@/assets/img/icons/arrowDown.svg" alt=""/>
     </div>
-    <div class="v-list-dropdown" :class="{calendar: options[0].type === 'date', addons: options[0].type === 'addons'}">
+    <div class="v-list-dropdown" :class="{calendar: options[0].type === 'date', addons: options[0].type === 'addons', zip: options[0].text === 'Zip code'}">
       <div class="zip" v-if="options[0].text === 'Zip code'">
         <input type="text"
                maxlength="5"
@@ -30,7 +30,6 @@
         >
           <p
               v-for="month in 6"
-              class="item"
           >
             {{$moment().add(month - 1, 'month').format('MMMM')}}
           </p>
@@ -57,7 +56,7 @@
                 @click="setSale($moment().add(month - 1, 'month').startOf('month').add(day - 1, 'days').day(), day, month - 1)"
                 :class="{
                 active: +day === +data.date.day && (+$moment().add(month - 1, 'month').format('MM') === +data.date.month),
-                disabled: +day < +$moment().format('DD') && +$moment().add(month - 1, 'month').format('MM') <= +$moment().format('MM') && +$moment().add(month - 1, 'month').format('YYYY') <= +$moment().format('YYYY')
+                disabled: $moment().add(month - 1, 'month').set('date', day - 2).isBefore($moment())
               }"
             >
               {{day}}
@@ -180,6 +179,7 @@ export default {
       this.data.date.month = this.$moment().add(month, 'month').format('MM')
       this.data.date.year = this.$moment().add(month, 'month').format('YYYY')
       // this.$store.commit('subtotal', this.subtotal - +this.date[dayOfWeek].sale)
+      this.visible = false
       this.$store.dispatch('setCache')
     },
     selectedAddons(item) {
@@ -510,7 +510,9 @@ export default {
       padding: 0 $m25 !important;
       .text {
         .title {
-          font-size: $m16;
+          p {
+            font-size: $m16;
+          }
           span {
             font-size: $m12;
             text-align: center;
@@ -538,6 +540,95 @@ export default {
               text-align: center;
               white-space: nowrap;
             }
+          }
+        }
+        .date {
+          position: fixed;
+          background: #ffffff;
+          top: $m10;
+          left: 0;
+          right: 0;
+          margin: auto;
+          border-radius: $m16;
+          width: 95%;
+          padding: $m15 0;
+          &>p {
+            padding-right: $m15;
+          }
+          .months {
+            width: 100%;
+            padding: 0 $m15;
+            //border: 1px solid $primary;
+            border-bottom: 0;
+            border-radius: $m16 $m16 0 0;
+            margin-bottom: $m15;
+            .item {
+              font-size: $m22;
+            }
+            .slick-prev {
+              width: $m15;
+              height: $m15;
+              left: 22%;
+            }
+            .slick-next {
+              width: $m15;
+              height: $m15;
+              right: 22%;
+            }
+          }
+          .dayOfWeek {
+            margin-top: 0;
+            padding: 0 $m15;
+            margin-bottom: $m10;
+            //border: 1px solid $primary;
+            border-top: 0;
+            border-bottom: 0;
+            .item {
+              border: none !important;
+              .day {
+                font-size: $m13;
+              }
+              .sale {
+                font-size: $m10;
+                text-align: center;
+                margin-top: $m10;
+              }
+            }
+          }
+          .daysOfTheMonth {
+            margin-top: 0;
+            //border: 1px solid $primary;
+            border-radius: 0 0 $m16 $m16;
+            border-top: 0;
+            .month {
+              grid-column-gap: $m13;
+              grid-row-gap: $m10;
+              padding: 0 $m15;
+            }
+            .button {
+              padding: 0;
+              border-radius: $m5;
+              width: $m25;
+              height: $m25;
+              font-size: $m12;
+            }
+          }
+        }
+        .addons {
+          width: 100%;
+          padding: $m10;
+          .item {
+            padding: 0 $m15;
+            border-radius: $m16;
+            .icon {
+              margin-right: $m10;
+            }
+          }
+        }
+        &.zip {
+          padding: $m10;
+          input {
+            width: 100%;
           }
         }
       }

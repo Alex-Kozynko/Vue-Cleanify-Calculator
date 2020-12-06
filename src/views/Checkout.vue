@@ -19,7 +19,7 @@
         <input type="hidden" name="_vue_order_coupon" v-model="apply_coupon">
 
         <div id="id_receipt" class="right" :class="{open: receiptVisible}">
-
+          <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
           <template v-for="(select, key) in data.selected.premises">
             <div class="item">
               <p class="name">{{ key[0].toUpperCase() + key.slice(1) }}</p>

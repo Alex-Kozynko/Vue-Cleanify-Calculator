@@ -1,7 +1,7 @@
 <template>
   <div id="extra">
     <h2 v-if="data.frequent.text !== 'One time'">Choose your frequency</h2>
-    <h2 v-else></h2>
+    <h2 v-else>Type cleaning</h2>
     <div class="addons-holder" v-if="data.frequent.text !== 'One time'">
       <div
           class="item button frequent"
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="addons-holder" v-else>
-      <v-select
+<!--      <v-select
           class="item button"
           label="abridgment"
           label-option="text"
@@ -24,7 +24,17 @@
           v-model="data.selected.typecleaning"
           v-if="selects.typecleaning"
           style2
-      ></v-select>
+      ></v-select>-->
+      <div
+          class="item button frequent"
+          :class="{active: item.text === data.selected.typecleaning.text}"
+          v-for="item in selects.typecleaning.slice(1)"
+          :key="item.text"
+          @click="data.selected.typecleaning = item"
+          v-if="selects.typecleaning"
+      >
+        <p class="name">{{item.text}}</p>
+      </div>
       <input type="number" class="item button num" placeholder="How many cleaners?" v-model="data.qCleaners">
       <input type="number" class="item button num" placeholder="How many hours?" v-model="data.qHours">
     </div>
@@ -48,8 +58,8 @@
              :class="{active: !data.entrance.item}"
       >
     </div>
-    <h2>Add ons</h2>
-    <div class="addons-holder">
+    <h2 v-if="data.frequent.text !== 'One time'">Add ons</h2>
+    <div class="addons-holder" v-if="data.frequent.text !== 'One time'">
       <div
           class="item button addon"
           :class="{
@@ -79,7 +89,7 @@
     <div class="deep" v-if="data.frequent.text !== 'One time'">
       <img src="@/assets/img/deep.png" alt="" />
       <p class="text">For a one time <br>
-        Deep Clean <span @click="data.frequent = {text: 'One time', sale: 0}; data.selected.typecleaning = selects.typecleaning[1]">Click Here</span></p>
+        Deep Clean <span @click="data.frequent = {text: 'One time', sale: 0}; data.selected.typecleaning = selects.typecleaning[1]; data.addons = []">Click Here</span></p>
     </div>
   </div>
 </template>
@@ -278,10 +288,44 @@ export default {
 
 @media screen and (max-width: $mobileOn) {
   #extra {
+    .deep {
+      width: 100%;
+      margin-bottom: $m30;
+      img {
+        width: 100%;
+        height: $m80;
+        border-radius: $m16;
+      }
+      .text {
+        font-size: $m17;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 $m25;
+        left: 0;
+        width: 100%;
+        span {
+          font-size: $m17;
+        }
+      }
+    }
+    h2 {
+      margin-bottom: $m20;
+    }
+    .addons-holder {
+      grid-template-columns: 1fr !important;
+      input {
+        padding-left: $m25 !important;
+      }
+    }
     .item {
       width: 100%;
       margin-bottom: $m10;
       padding: 0 $m20 0 $m10;
+      &.frequent {
+        justify-content: flex-start;
+        padding-left: $m25;
+      }
       .icon {
         width: $m40;
         height: $m40;

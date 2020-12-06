@@ -42,6 +42,8 @@
             class="item"
             :options="[{text: 'Addons', type: 'addons'}]"
             :value="{text: 'Addons', type: 'addons'}"
+            v-if="data.frequent.text !== 'One time'"
+            :reverse="reverse"
         ></v-select>
       </slide-up-down>
       <div
@@ -162,6 +164,9 @@ export default {
   methods: {
     formatToPrice(value) {
       return '$' + value.toFixed(0);
+    },
+    reverse() {
+      return window.innerWidth < 1023
     }
   },
   created() {
@@ -558,6 +563,10 @@ h5 {
 
           p {
             font-weight: bold !important;
+          }
+          &.time .text .title p {
+            max-width: none;
+            font-size: $m16;
           }
         }
       }
