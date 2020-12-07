@@ -149,7 +149,8 @@
               />
             </p>
           </div>
-          <input type="hidden" name="_vue_order_total_price" v-model="subtotal">
+          <input type="hidden" name="_vue_order_total_price" :value="clean">
+          <input type="hidden" name="_vue_order_discounted_amount" :value="subtotal">
 
         </div>
       </div>
