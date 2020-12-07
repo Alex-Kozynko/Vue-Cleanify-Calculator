@@ -167,7 +167,7 @@
           for other purposes described in our privacy policy.</p>
         <label class="checkbox-holder">
           <span class="checkbox">
-            <input type="checkbox" required>
+            <input type="checkbox" required v-model="agree">
             <span></span>
           </span>
           <span>
@@ -178,14 +178,26 @@
           </span>
         </label>
         <div class="buttons-holder">
-          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet'}">Pay
+          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !agree}">Pay
             with Card
           </div>
-          <button class="button" type="submit" @click="payment_method = 'paypal'"
-                  :class="{active: payment_method === 'paypal'}">PayPal
+          <button
+              class="button" type="submit"
+              @click="payment_method = 'paypal'"
+              :class="{active: payment_method === 'paypal', disabled: !agree}"
+              :disabled="!agree"
+          >
+            PayPal
           </button>
-          <button class="button" type="submit" @click="payment_method = 'cod'">Submit Request</button>
-
+          <button
+              class="button"
+              type="submit"
+              @click="payment_method = 'cod'"
+              :class="{disabled: !agree}"
+              :disabled="!agree"
+          >
+            Submit Request
+          </button>
         </div>
         <div class="creditCard" v-show="payment_method === 'authnet'">
           <div class="close" @click="payment_method = 'cod'"></div>
@@ -234,7 +246,8 @@ export default {
       payment_method: 'cod',
       coupon:'',
       apply_coupon:'',
-      dependenciesTime: 0
+      dependenciesTime: 0,
+      agree: false
     }
   },
   computed: {
@@ -576,6 +589,9 @@ export default {
         .button {
           width: $a200;
           margin: 0 $a15;
+          &.disabled {
+            color: rgba(16, 16, 16, 0.3);
+          }
         }
       }
       .creditCard {
