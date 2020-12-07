@@ -143,7 +143,7 @@ export default {
       })
 
 
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 0 ? (this.data.qHours * 50) : 0)) * frequentSale;
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;

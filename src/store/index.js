@@ -39,8 +39,8 @@ export default new Vuex.Store({
       zip: '',
       message: '',
       sf: 123,
-      qCleaners: '',
-      qHours: ''
+      qCleaners: 1,
+      qHours: 1
     }
   },
   mutations: {

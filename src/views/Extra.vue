@@ -1,7 +1,7 @@
 <template>
   <div id="extra">
     <h2 v-if="data.frequent.text !== 'One time'">Choose your frequency</h2>
-    <h2 v-else>Type cleaning</h2>
+    <h2 v-else>Choose moving type</h2>
     <div class="addons-holder" v-if="data.frequent.text !== 'One time'">
       <div
           class="item button frequent"
@@ -14,30 +14,40 @@
         <p class="sale" v-if="item.sale > 0">{{item.sale}}% off</p>
       </div>
     </div>
-    <div class="addons-holder" v-else>
-<!--      <v-select
-          class="item button"
-          label="abridgment"
-          label-option="text"
-          :options="selects.typecleaning.slice(1)"
-          :details="time"
-          v-model="data.selected.typecleaning"
-          v-if="selects.typecleaning"
-          style2
-      ></v-select>-->
-      <div
-          class="item button frequent"
-          :class="{active: item.text === data.selected.typecleaning.text}"
-          v-for="item in selects.typecleaning.slice(1)"
-          :key="item.text"
-          @click="data.selected.typecleaning = item"
-          v-if="selects.typecleaning"
-      >
-        <p class="name">{{item.text}}</p>
+    <template v-else>
+      <div class="addons-holder">
+        <!--      <v-select
+                  class="item button"
+                  label="abridgment"
+                  label-option="text"
+                  :options="selects.typecleaning.slice(1)"
+                  :details="time"
+                  v-model="data.selected.typecleaning"
+                  v-if="selects.typecleaning"
+                  style2
+              ></v-select>-->
+        <div
+            class="item button frequent"
+            :class="{active: item.text === data.selected.typecleaning.text}"
+            v-for="item in selects.typecleaning.slice(1)"
+            :key="item.text"
+            @click="data.selected.typecleaning = item"
+            v-if="selects.typecleaning"
+        >
+          <p class="name">{{ item.text }}</p>
+        </div>
       </div>
-      <input type="number" class="item button num" placeholder="How many cleaners?" v-model="data.qCleaners">
-      <input type="number" class="item button num" placeholder="How many hours?" v-model="data.qHours">
-    </div>
+      <div class="holder">
+        <div class="item">
+          <h3>How many cleaners?</h3>
+          <input type="number" class="item button num" placeholder="How many cleaners?" v-model="data.qCleaners" min="1">
+        </div>
+        <div class="item">
+          <h3>How many hours?</h3>
+          <input type="number" class="item button num" placeholder="How many hours?" v-model="data.qHours" min="1">
+        </div>
+      </div>
+    </template>
     <h2>How do we get in ?</h2>
     <div class="addons-holder col-4">
       <div
@@ -175,6 +185,25 @@ export default {
   h5 {
     width: 100%;
   }
+  .holder {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: $a45;
+    grid-row-gap: $a15;
+    width: 100%;
+    margin-bottom: $a55;
+    .item {
+      display: flex;
+      align-items: center;
+      input {
+        padding-left: $a25;
+      }
+      h3 {
+        width: auto;
+        margin-right: $a30;
+      }
+    }
+  }
   .addons-holder {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -311,6 +340,18 @@ export default {
     }
     h2 {
       margin-bottom: $m20;
+    }
+    .holder {
+      grid-template-columns: 1fr !important;
+      .item {
+        h3 {
+          margin-right: $m10;
+          min-width: 35%;
+        }
+        input {
+          padding-left: $m25;
+        }
+      }
     }
     .addons-holder {
       grid-template-columns: 1fr !important;
