@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <input type="hidden" name="_vue_order_coupon" :value="apply_coupon.cupon">
+        <input type="hidden" name="_vue_order_coupon" :value="apply_coupon.coupon">
 
         <div id="id_receipt" class="right" :class="{open: receiptVisible}">
           <p class="title">Receipt <span class="arrow" @click="receiptVisible = !receiptVisible"></span></p>
@@ -314,7 +314,7 @@ export default {
               this.apply_coupon  =  {
                 amount: response.data.amount,
                 discount_type: response.data.discount_type,
-                cupon: this.cupon
+                coupon: this.coupon
               };
             } else {
               this.apply_coupon = false;
