@@ -48,7 +48,7 @@
             <p class="name">Zip code</p>
             <p class="value">{{data.zip}}</p>
           </div>
-
+          <input type="hidden" name="_vue_order_zip" :value="data.zip">
           <input type="hidden" name="_vue_order_address" value="">
 
           <div class="item" :class="{small: data.addons.length > 0}">
