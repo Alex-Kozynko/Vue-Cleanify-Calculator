@@ -277,7 +277,7 @@ export default {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
 
-      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice) * frequentSale
+      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
 
       if (this.apply_coupon.discount_type !== 'percent') {
         total -= this.apply_coupon.amount ? this.saleCupon : 0
@@ -309,7 +309,7 @@ export default {
       this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
-      return (+this.data.selected.typecleaning.price + dependenciesPrice );
+      return (+this.data.selected.typecleaning.price + dependenciesPrice + (this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0));
     },
   },
   methods: {
