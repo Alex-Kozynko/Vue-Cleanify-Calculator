@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "lib": "npx vue-cli-service build --target lib"
   },
   "dependencies": {
     "animated-number-vue": "^1.0.0",
