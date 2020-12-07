@@ -160,7 +160,7 @@ export default {
     },
     frequents() {
       return this.$store.state.frequents;
-    },
+    }
   },
   methods: {
     formatToPrice(value) {
@@ -179,7 +179,7 @@ export default {
     }
   },
   updated() {
-
+    this.$store.dispatch('setCache')
   }
 }
 </script>
