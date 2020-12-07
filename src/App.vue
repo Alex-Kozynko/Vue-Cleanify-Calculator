@@ -18,6 +18,7 @@
             :key="i"
             :options="select.items"
             v-model="data.selected.premises[select.name]"
+            v-if="select.items.length"
         ></v-select>
         <v-select
             class="item"

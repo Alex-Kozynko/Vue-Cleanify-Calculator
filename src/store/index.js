@@ -40,7 +40,8 @@ export default new Vuex.Store({
       message: '',
       sf: 123,
       qCleaners: 1,
-      qHours: 1
+      qHours: 1,
+      email: ''
     }
   },
   mutations: {

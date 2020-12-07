@@ -9,6 +9,7 @@
           <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
           <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
           <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
+          <input type="email" class="button item" placeholder="Email address*" required name="billing_email" v-model="data.email">
           <input type="text" class="button item" placeholder="Company name" name="billing_company">
           <div class="cupon" :class="{ok: this.apply_coupon.amount, error: this.apply_coupon === false}">
             <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon">

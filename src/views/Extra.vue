@@ -29,10 +29,10 @@
         <div
             class="item button frequent"
             :class="{active: item.text === data.selected.typecleaning.text}"
-            v-for="item in selects.typecleaning.slice(1)"
+            v-for="(item, i) in selects.typecleaning"
             :key="item.text"
             @click="data.selected.typecleaning = item"
-            v-if="selects.typecleaning"
+            v-if="selects.typecleaning && i !== 0"
         >
           <p class="name">{{ item.text }}</p>
         </div>

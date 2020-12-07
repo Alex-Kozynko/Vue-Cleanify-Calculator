@@ -8,7 +8,7 @@
       </div>
       <img src="@/assets/img/icons/arrowDown.svg" alt=""/>
     </div>
-    <div class="v-list-dropdown" :class="{calendar: options[0].type === 'date', addons: options[0].type === 'addons', zip: options[0].text === 'Zip code'}">
+    <div class="v-list-dropdown" :class="{calendar: options[0].type === 'date', addons: options[0].type === 'addons', zip: options[0].text === 'Zip code'}" v-if="options[0]">
       <div class="zip" v-if="options[0].text === 'Zip code'">
         <input type="text"
                maxlength="5"
@@ -134,7 +134,6 @@ export default {
       default: false
     },
     reverse: {
-      type: Boolean
     }
   },
   data() {
