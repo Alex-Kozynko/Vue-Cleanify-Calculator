@@ -40,11 +40,24 @@
       <div class="holder">
         <div class="item">
           <h3>How many cleaners?</h3>
-          <input type="number" class="item button num" placeholder="How many cleaners?" v-model="data.qCleaners" min="1">
+          <div class="item button num">
+            {{data.qCleaners}}
+            <div class="arrow">
+              <img src="@/assets/img/icons/arrowDown.svg" alt="" class="upp" @click="data.qCleaners++"/>
+              <img src="@/assets/img/icons/arrowDown.svg" alt="" class="down" @click="data.qCleaners > 1 && data.qCleaners--"/>
+            </div>
+          </div>
+<!--          <input type="number" class="item button num" placeholder="How many cleaners?" v-model="data.qCleaners" min="1">-->
         </div>
         <div class="item">
           <h3>How many hours?</h3>
-          <input type="number" class="item button num" placeholder="How many hours?" v-model="data.qHours" min="1">
+          <div class="item button num">
+            {{data.qHours}}
+            <div class="arrow">
+              <img src="@/assets/img/icons/arrowDown.svg" alt="" class="upp" @click="data.qHours++"/>
+              <img src="@/assets/img/icons/arrowDown.svg" alt="" class="down" @click="data.qHours > 3 && data.qHours--"/>
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -187,7 +200,7 @@ export default {
   }
   .holder {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-column-gap: $a45;
     grid-row-gap: $a15;
     width: 100%;
@@ -195,8 +208,27 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      input {
+      &:hover {
+        background: none;
+        cursor: auto;
+      }
+      .num {
         padding-left: $a25;
+        padding-right: $a10;
+        width: $a100;
+        .arrow {
+          display: flex;
+          flex-direction: column;
+          margin-left: auto;
+          img {
+            width: $a15;
+            margin: $a4;
+            cursor: pointer;
+          }
+          .upp {
+            transform: rotate(180deg);
+          }
+        }
       }
       h3 {
         width: auto;

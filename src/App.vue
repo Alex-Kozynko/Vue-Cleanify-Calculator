@@ -144,7 +144,7 @@ export default {
       })
 
 
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.data.frequent.text === 'One time' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;

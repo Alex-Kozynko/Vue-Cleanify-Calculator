@@ -181,14 +181,14 @@
           <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !agree}">Pay
             with Card
           </div>
-          <button
+<!--          <button
               class="button" type="submit"
               @click="payment_method = 'paypal'"
               :class="{active: payment_method === 'paypal', disabled: !agree}"
               :disabled="!agree"
           >
             PayPal
-          </button>
+          </button>-->
           <button
               class="button"
               type="submit"
@@ -277,7 +277,7 @@ export default {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
 
-      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
+      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.data.frequent.text === 'One time' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
 
       if (this.apply_coupon.discount_type !== 'percent') {
         total -= this.apply_coupon.amount ? this.saleCupon : 0
