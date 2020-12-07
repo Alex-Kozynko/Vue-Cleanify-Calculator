@@ -26,7 +26,7 @@
               <p class="name">{{ key[0].toUpperCase() + key.slice(1) }}</p>
               <p class="value">{{ select.text }}</p>
             </div>
-            <input type="hidden" :name="'_vue_order_' + select.text" :value="select.text">
+            <input type="hidden" :name="'_vue_order_premises[' + key[0].toUpperCase() + key.slice(1)+']'" :value="select.text">
           </template>
 
           <div class="item">
