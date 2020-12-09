@@ -10,7 +10,7 @@
           <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
           <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
           <input type="email" class="button item" placeholder="Email address*" required name="billing_email" v-model="data.email">
-          <input type="text" class="button item" placeholder="Company name" name="shipping_company">
+          <input type="text" class="button item" placeholder="Company name" name="billing_company">
           <h4>Service address</h4>
           <div class="address" :class="{success: data.address.status === true, error: data.address.status === false}">
             <gmap-autocomplete
@@ -19,7 +19,7 @@
                 @place_changed="getAddressData($event)"
                 placeholder="Street address*"
                 required
-                name="billing_address_1"
+                name="shipping_address_1"
                 type="search"
             />
             <p class="status">Address is not valid</p>
