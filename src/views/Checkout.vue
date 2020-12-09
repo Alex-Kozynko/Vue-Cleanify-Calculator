@@ -243,14 +243,14 @@
               <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address"
                      :value="!sameBillingAddress ? '' : data.address.street" required>
               <div class="address">
-                <input type="text" class="button zip item" placeholder="Zip" name="cleaning_zip" :value="!sameBillingAddress ? '' : data.zip" required>
                 <input type="text" class="button item" placeholder="Apt" name="billing_apt">
-              </div>
-              <div class="address">
                 <input type="text" class="button item" placeholder="City*" name="billing_city"
                        :value="!sameBillingAddress ? '' : data.address.city" required>
+              </div>
+              <div class="address">
                 <input type="text" class="button item" placeholder="State*" name="billing_state"
                        :value="!sameBillingAddress ? '' : data.address.state" required>
+                <input type="text" class="button zip item" placeholder="Zip" name="cleaning_zip" :value="!sameBillingAddress ? '' : data.zip" required>
               </div>
             </template>
             <button class="button active " name="woocommerce_checkout_place_order" type="submit"
@@ -840,21 +840,16 @@ export default {
                 }
                 &:nth-of-type(2) {
                   width: calc(50% - #{$m5});
+                  margin-top: $m66;
+                  margin-left: auto;
                 }
               }
             }
             &:nth-of-type(2) {
-              justify-content: flex-end;
-              margin-top: -$m66;
+              margin-top: -$m132;
               .item {
                 width: calc(50% - #{$m5});
                 margin-right: 0;
-                &:nth-of-type(1) {
-                  margin-left: $m20;
-                }
-                &:nth-of-type(2) {
-                  margin-right: auto;
-                }
               }
             }
             input {
