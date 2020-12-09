@@ -26,7 +26,7 @@
             <input type="text" class="button zip item" placeholder="Zip" name="billing_postcode" v-model="data.zip">
           </div>
           <div class="address">
-            <input type="text" class="button apt item" placeholder="Apt" name="cleaning_apt">
+            <input type="text" class="button apt item" placeholder="Apt" name="billing_apt">
             <input type="text" class="button item" placeholder="City" name="billing_city" :value="data.address.city" readonly>
             <input type="text" class="button item" placeholder="State" name="billing_state" :value="data.address.state" readonly>
             
