@@ -140,8 +140,7 @@
           </div>
 
           <!-- Вставить   значение -->
-          <input type="hidden" name="_vue_order_discounts"
-                 :value="-data.date.time.sale - (clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)">
+          <input type="hidden" name="_vue_order_discounts" :value="-data.date.time.sale - (clean + addonsPrice - data.date.time.sale) * (data.frequent.sale / 100)">
 
 
           <div class="item">
