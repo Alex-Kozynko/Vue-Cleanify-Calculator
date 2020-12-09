@@ -184,6 +184,8 @@
 
       <input type="hidden" name="details" :value="data.message"/>
 
+      <input  type="hidden" name="billing_country" value="US">
+
       <div v-html="wp_nonce_field" v-show="false"></div>
 
       <div class="footer">
@@ -231,7 +233,7 @@
               <div class="button active">Credit cart</div>
               <img src="~@/assets/img/cardType.png" alt=""/>
             </div>
-            <input type="text" class="button cardNumber item" placeholder="Card number" name="authnet-card-number">
+            <input type="text" class="button cardNumber item" placeholder="Card number" v-mask='"#### #### #### ####"' name="authnet-card-number">
             <div class="item">
               <input type="text" class="button" placeholder="MM/YY" v-mask='"##/##"' name="authnet-card-expiry">
               <input type="text" class="button" placeholder="CVC" v-mask="'###'" name="authnet-card-cvc">
@@ -241,7 +243,7 @@
               <input type="checkbox" v-model="sameBillingAddress" name="same_billing_address">
               <span></span>
             </span>
-              <span>Billing address different to service address</span>
+              <span>Billing address same as Service address</span>
             </label>
             <div class="billing-address-holder" v-show="!sameBillingAddress">
              <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address_1"
