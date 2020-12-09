@@ -19,16 +19,19 @@
                 @place_changed="getAddressData($event)"
                 placeholder="Street address*"
                 required
-                name="cleaning_address"
+                name="billing_address_1"
                 type="search"
             />
             <p class="status">Address is not valid</p>
-            <input type="text" class="button zip item" placeholder="Zip" name="cleaning_zip" v-model="data.zip">
+            <input type="text" class="button zip item" placeholder="Zip" name="billing_postcode" v-model="data.zip">
           </div>
           <div class="address">
             <input type="text" class="button apt item" placeholder="Apt" name="cleaning_apt">
-            <input type="text" class="button item" placeholder="City" name="cleaning_city" :value="data.address.city" readonly>
-            <input type="text" class="button item" placeholder="State" name="cleaning_state" :value="data.address.state" readonly>
+            <input type="text" class="button item" placeholder="City" name="billing_city" :value="data.address.city" readonly>
+            <input type="text" class="button item" placeholder="State" name="billing_state" :value="data.address.state" readonly>
+            
+            <input  type="hidden" name="billing_country" value="US">
+
           </div>
           <div class="cupon" :class="{ok: this.apply_coupon.amount, error: this.apply_coupon === false}">
             <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon">
@@ -241,17 +244,17 @@
               <span>Billing address different to service address</span>
             </label>
             <template v-if="!sameBillingAddress">
-              <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address"
+             <input type="text" class="button gmapauto item" placeholder="Street address*" name="shipping_address_1"
                      :value="!sameBillingAddress ? '' : data.address.street" required>
               <div class="address">
-                <input type="text" class="button item" placeholder="Apt" name="billing_apt">
-                <input type="text" class="button item" placeholder="City*" name="billing_city"
+                <input type="text" class="button item" placeholder="Apt" name="shipping_apt">
+                <input type="text" class="button item" placeholder="City*" name="shipping_city"
                        :value="!sameBillingAddress ? '' : data.address.city" required>
               </div>
               <div class="address">
-                <input type="text" class="button item" placeholder="State*" name="billing_state"
+                <input type="text" class="button item" placeholder="State*" name="shipping_state"
                        :value="!sameBillingAddress ? '' : data.address.state" required>
-                <input type="text" class="button zip item" placeholder="Zip" name="cleaning_zip" :value="!sameBillingAddress ? '' : data.zip" required>
+                <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" :value="!sameBillingAddress ? '' : data.zip" required>
               </div>
             </template>
             <button class="button active " name="woocommerce_checkout_place_order" type="submit"
