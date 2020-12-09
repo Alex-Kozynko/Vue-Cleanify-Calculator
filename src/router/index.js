@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/*-cleaning',
+    path: '/*-cleaning/',
     name: 'Extra',
     component: Extra
   },
@@ -24,7 +24,7 @@ const routes = [
     component: Booking2
   },
   {
-    path: '/calc-checkout',
+    path: '/calc-checkout/',
     name: 'Checkout',
     component: Checkout
   },

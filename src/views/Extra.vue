@@ -1,8 +1,8 @@
 <template>
   <div id="extra">
-    <h2 v-if="$route.fullPath === '/recurring-cleaning'">Choose your frequency</h2>
+    <h2 v-if="$route.fullPath === '/recurring-cleaning/'">Choose your frequency</h2>
     <h2 v-else>Choose moving type</h2>
-    <div class="addons-holder" v-if="$route.fullPath === '/recurring-cleaning'">
+    <div class="addons-holder" v-if="$route.fullPath === '/recurring-cleaning/'">
       <div
           class="item button frequent"
           :class="{active: item.text === data.frequent.text}"
@@ -81,8 +81,8 @@
              :class="{active: !data.entrance.item}"
       >
     </div>
-    <h2 v-if="$route.fullPath === '/recurring-cleaning'">Add ons</h2>
-    <div class="addons-holder" v-if="$route.fullPath === '/recurring-cleaning'">
+    <h2 v-if="$route.fullPath === '/recurring-cleaning/'">Add ons</h2>
+    <div class="addons-holder" v-if="$route.fullPath === '/recurring-cleaning/'">
       <div
           class="item button addon"
           :class="{
@@ -109,10 +109,10 @@
         Next
       </router-link>
     </div>
-    <div class="deep" v-if="$route.fullPath === '/recurring-cleaning'">
+    <div class="deep" v-if="$route.fullPath === '/recurring-cleaning/'">
       <img src="@/assets/img/deep.png" alt="" />
       <p class="text">For a one time <br>
-        Deep Clean <span @click="data.frequent = {text: 'One time', sale: 0}; data.selected.typecleaning = selects.typecleaning[1]; data.addons = [];$router.push('/one-time-cleaning')">Click Here</span></p>
+        Deep Clean <span @click="data.frequent = {text: 'One time', sale: 0}; data.selected.typecleaning = selects.typecleaning[1]; data.addons = [];$router.push('/one-time-cleaning/')">Click Here</span></p>
     </div>
   </div>
 </template>
@@ -184,6 +184,7 @@ export default {
       font-size: $a35;
       color: #fff;
       white-space: pre-line;
+      line-height: initial;
       span {
         color: $primary;
         font-family: 'Gilroy ExtraBold';
@@ -427,6 +428,7 @@ export default {
           font-size: $m16;
           text-align: center;
           width: 100%;
+          line-height: initial;
         }
         &:first-child {
           border-radius: $m16 0 0 $m16;

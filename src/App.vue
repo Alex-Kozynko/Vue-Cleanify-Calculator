@@ -43,7 +43,7 @@
             class="item"
             :options="[{text: 'Addons', type: 'addons'}]"
             :value="{text: 'Addons', type: 'addons'}"
-            v-if="$route.fullPath === '/recurring-cleaning'"
+            v-if="$route.fullPath === '/recurring-cleaning/'"
             :reverse="reverse"
         ></v-select>
       </slide-up-down>
@@ -144,7 +144,7 @@ export default {
       })
 
 
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning/' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;
@@ -179,6 +179,7 @@ export default {
     }
   },
   updated() {
+    console.log(1);
     this.$store.dispatch('setCache')
   }
 }
@@ -255,6 +256,7 @@ h5 {
 .button {
   height: $a55;
   border: 1px solid $primary;
+  border-color: $primary !important;
   border-radius: $a16;
   display: flex;
   align-items: center;

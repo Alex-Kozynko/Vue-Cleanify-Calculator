@@ -12,7 +12,7 @@
           <input type="email" class="button item" placeholder="Email address*" required name="billing_email" v-model="data.email">
           <input type="text" class="button item" placeholder="Company name" name="billing_company">
           <h4>Service address</h4>
-          <div class="address" :class="{success: data.address.status === true, error: !data.address.status}">
+          <div class="address" :class="{success: data.address.status === true, error: data.address.status === false}">
             <gmap-autocomplete
                 class="button item gmapauto"
                 :value="data.address.street"
@@ -20,6 +20,7 @@
                 placeholder="Street address*"
                 required
                 name="cleaning_address"
+                type="search"
             />
             <p class="status">Address is not valid</p>
             <input type="text" class="button zip item" placeholder="Zip" name="cleaning_zip" v-model="data.zip">
@@ -229,8 +230,8 @@
             </div>
             <input type="text" class="button cardNumber item" placeholder="Card number" name="authnet-card-number">
             <div class="item">
-              <input type="text" class="button" placeholder="MM/YY" name="authnet-card-expiry">
-              <input type="text" class="button" placeholder="CVC" name="authnet-card-cvc">
+              <input type="text" class="button" placeholder="MM/YY" v-mask='"##/##"' name="authnet-card-expiry">
+              <input type="text" class="button" placeholder="CVC" v-mask="'###'" name="authnet-card-cvc">
             </div>
             <label class="checkbox-holder billing">
             <span class="checkbox">
@@ -321,7 +322,7 @@ export default {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
 
-      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
+      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning/' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
 
       if (this.apply_coupon.discount_type !== 'percent') {
         total -= this.apply_coupon.amount ? this.saleCupon : 0
@@ -367,12 +368,24 @@ export default {
     getAddressData(e) {
       let th = this
       new google.maps.Geocoder().geocode({'address': th.location.centeraddress}, (results, status) => {
+        console.log(results);
+        results[0].address_components.forEach(item => {
+          if (item.types.includes("administrative_area_level_1")) {
+            this.data.address.state = item.short_name
+            this.$store.dispatch('setCache')
+          }
+          if (item.types.includes("sublocality_level_1")) {
+            this.data.address.city = item.short_name
+            this.$store.dispatch('setCache')
+          }
+        })
         if (status === 'OK' && th.google.maps.geometry.spherical.computeDistanceBetween(e.geometry.location, results[0].geometry.location) < th.location.radius) {
           let zip = e.address_components.filter(item => item.types[0] === 'postal_code')[0]
           if (zip) {
             let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name;
             this.data.address.street = address;
             this.data.address.status = true
+            this.data.zip = zip.long_name
             /*th.$store.commit('dataToSend', {key: 'address', payload: address})
             th.$store.commit('dataToSend', {key: 'zip', payload: zip.long_name})*/
             this.$store.dispatch('setCache')
@@ -416,20 +429,33 @@ export default {
     },
   },
   updated() {
+    /*new this.google.maps.Geocoder().geocode({'address': this.data.zip}, (results, status) => {
+      results[0].address_components.forEach(item => {
+        if (item.types.includes("administrative_area_level_1")) {
+          this.data.address.state = item.short_name
+        }
+        if (item.types.includes("sublocality_level_1")) {
+          this.data.address.city = item.short_name
+        }
+      })
+    })*/
   },
   watch: {
     zip(zip) {
-      new google.maps.Geocoder().geocode({'address': zip}, (results, status) => {
+      console.log(zip);
+      /*new google.maps.Geocoder().geocode({'address': zip}, (results, status) => {
         console.log(results);
         results[0].address_components.forEach(item => {
           if (item.types.includes("administrative_area_level_1")) {
             this.data.address.state = item.short_name
+            this.$store.dispatch('setCache')
           }
           if (item.types.includes("sublocality_level_1")) {
             this.data.address.city = item.short_name
+            this.$store.dispatch('setCache')
           }
         })
-      })
+      })*/
     }
   }
 }
@@ -503,12 +529,12 @@ export default {
           }
           &.success {
             .gmapauto {
-              border-color: #00ff00;
+              border-color: #00ff00 !important;
             }
           }
           &.error {
             .gmapauto {
-              border-color: red;
+              border-color: red !important;
             }
             .status {
               display: block;
@@ -517,6 +543,7 @@ export default {
               left: $a25;
               color: red;
               font-size: $a10;
+              line-height: initial;
             }
           }
         }
@@ -544,12 +571,12 @@ export default {
           margin-top: $a10;
           &.ok {
             .item {
-              border-color: #00ff00;
+              border-color: #00ff00 !important;
             }
           }
           &.error {
             .item {
-              border-color: red;
+              border-color: red !important;
             }
           }
           .item {
@@ -768,10 +795,10 @@ export default {
           }
           .gmapauto {
             &.success {
-              border-color: #00ff00;
+              border-color: #00ff00 !important;
             }
             &.error {
-              border-color: red;
+              border-color: red !important;
             }
           }
         }
@@ -833,20 +860,30 @@ export default {
           }
           .address {
             flex-flow: row wrap;
+            .status {
+              font-size: $m10 !important;
+              top: auto !important;
+              bottom: calc(100% + #{$m5}) !important;
+              left: auto !important;
+              right: 0 !important;
+            }
             &:nth-of-type(1) {
+              z-index: 1;
               .item {
                 &:nth-of-type(1) {
                   margin-right: 0;
                 }
                 &:nth-of-type(2) {
                   width: calc(50% - #{$m5});
-                  margin-top: $m66;
                   margin-left: auto;
+                  position: absolute;
+                  right: 0;
+                  top: 200%;
+                  z-index: 1;
                 }
               }
             }
             &:nth-of-type(2) {
-              margin-top: -$m132;
               .item {
                 width: calc(50% - #{$m5});
                 margin-right: 0;
