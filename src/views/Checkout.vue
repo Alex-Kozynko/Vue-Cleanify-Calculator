@@ -22,6 +22,7 @@
                 name="cleaning_address"
             />
             <p class="status">Address is not valid</p>
+            <input type="text" class="button zip item" placeholder="Zip" name="cleaning_zip" v-model="data.zip">
           </div>
           <div class="address">
             <input type="text" class="button apt item" placeholder="Apt" name="cleaning_apt">
@@ -240,10 +241,11 @@
               <span>Billing address different to service address</span>
             </label>
             <template v-if="!sameBillingAddress">
+              <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address"
+                     :value="!sameBillingAddress ? '' : data.address.street" required>
               <div class="address">
-                <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address"
-                       :value="!sameBillingAddress ? '' : data.address.street" required>
-                <input type="text" class="button apt item" placeholder="Apt" name="billing_apt">
+                <input type="text" class="button zip item" placeholder="Zip" name="cleaning_zip" :value="!sameBillingAddress ? '' : data.zip" required>
+                <input type="text" class="button item" placeholder="Apt" name="billing_apt">
               </div>
               <div class="address">
                 <input type="text" class="button item" placeholder="City*" name="billing_city"
@@ -493,6 +495,9 @@ export default {
           position: relative;
           input:not(:last-of-type) {
             margin-right: $a15;
+          }
+          .zip {
+            width: 44.5%;
           }
           .status {
             display: none;
@@ -828,7 +833,31 @@ export default {
             margin-bottom: $m10;
           }
           .address {
-            flex-direction: column;
+            flex-flow: row wrap;
+            &:nth-of-type(1) {
+              .item {
+                &:nth-of-type(1) {
+                  margin-right: 0;
+                }
+                &:nth-of-type(2) {
+                  width: calc(50% - #{$m5});
+                }
+              }
+            }
+            &:nth-of-type(2) {
+              justify-content: flex-end;
+              margin-top: -$m66;
+              .item {
+                width: calc(50% - #{$m5});
+                margin-right: 0;
+                &:nth-of-type(1) {
+                  margin-left: $m20;
+                }
+                &:nth-of-type(2) {
+                  margin-right: auto;
+                }
+              }
+            }
             input {
               overflow: hidden;
               text-overflow: ellipsis;
@@ -992,7 +1021,9 @@ export default {
             width: 100%;
           }
           .address {
-            flex-direction: column;
+            input {
+              width: calc(50% - #{$m5}) !important;
+            }
           }
           input {
             width: 100% !important;
