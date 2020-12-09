@@ -39,6 +39,7 @@ export default new Vuex.Store({
         street: '',
         city: '',
         state: '',
+        apt: '',
         status: 'none'
       },
       billingAddress: {

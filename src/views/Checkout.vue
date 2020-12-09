@@ -26,10 +26,10 @@
             <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.zip">
           </div>
           <div class="address">
-            <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt">
+            <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt" v-model="data.address.apt">
             <input type="text" class="button item" placeholder="City" name="shipping_city" :value="data.address.city" readonly>
             <input type="text" class="button item" placeholder="State" name="shipping_state" :value="data.address.state" readonly>
-            
+
             <input  type="hidden" name="shipping_country" value="US">
 
           </div>
@@ -243,7 +243,7 @@
             </span>
               <span>Billing address different to service address</span>
             </label>
-            <template v-if="!sameBillingAddress">
+            <div class="billing-address-holder" v-show="!sameBillingAddress">
              <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address_1"
                      :value="!sameBillingAddress ? '' : data.address.street" required>
               <div class="address">
@@ -256,7 +256,7 @@
                        :value="!sameBillingAddress ? '' : data.address.state" required>
                 <input type="text" class="button zip item" placeholder="Zip" name="billing_postcode" :value="!sameBillingAddress ? '' : data.zip" required>
               </div>
-            </template>
+            </div>
             <button class="button active " name="woocommerce_checkout_place_order" type="submit"
                     @click="payment_method = 'authnet'">Place order
             </button>
