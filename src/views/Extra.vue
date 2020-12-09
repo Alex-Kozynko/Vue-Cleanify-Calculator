@@ -1,8 +1,8 @@
 <template>
   <div id="extra">
-    <h2 v-if="data.frequent.text !== 'One time'">Choose your frequency</h2>
+    <h2 v-if="$route.fullPath === '/recurring-cleaning'">Choose your frequency</h2>
     <h2 v-else>Choose moving type</h2>
-    <div class="addons-holder" v-if="data.frequent.text !== 'One time'">
+    <div class="addons-holder" v-if="$route.fullPath === '/recurring-cleaning'">
       <div
           class="item button frequent"
           :class="{active: item.text === data.frequent.text}"
@@ -15,7 +15,7 @@
       </div>
     </div>
     <template v-else>
-      <div class="addons-holder">
+      <div class="addons-holder fr">
         <!--      <v-select
                   class="item button"
                   label="abridgment"
@@ -81,8 +81,8 @@
              :class="{active: !data.entrance.item}"
       >
     </div>
-    <h2 v-if="data.frequent.text !== 'One time'">Add ons</h2>
-    <div class="addons-holder" v-if="data.frequent.text !== 'One time'">
+    <h2 v-if="$route.fullPath === '/recurring-cleaning'">Add ons</h2>
+    <div class="addons-holder" v-if="$route.fullPath === '/recurring-cleaning'">
       <div
           class="item button addon"
           :class="{
@@ -109,10 +109,10 @@
         Next
       </router-link>
     </div>
-    <div class="deep" v-if="data.frequent.text !== 'One time'">
+    <div class="deep" v-if="$route.fullPath === '/recurring-cleaning'">
       <img src="@/assets/img/deep.png" alt="" />
       <p class="text">For a one time <br>
-        Deep Clean <span @click="data.frequent = {text: 'One time', sale: 0}; data.selected.typecleaning = selects.typecleaning[1]; data.addons = []">Click Here</span></p>
+        Deep Clean <span @click="data.frequent = {text: 'One time', sale: 0}; data.selected.typecleaning = selects.typecleaning[1]; data.addons = [];$router.push('/one-time-cleaning')">Click Here</span></p>
     </div>
   </div>
 </template>
@@ -349,6 +349,7 @@ export default {
 
 @media screen and (max-width: $mobileOn) {
   #extra {
+    padding-top: $m10;
     .deep {
       width: 100%;
       margin-bottom: $m30;
@@ -375,20 +376,84 @@ export default {
     }
     .holder {
       grid-template-columns: 1fr !important;
+      padding-top: $m20;
       .item {
         h3 {
           margin-right: $m10;
           min-width: 35%;
         }
-        input {
+        .num {
+          width: $m80;
+          padding-right: $m15;
           padding-left: $m25;
+          margin-left: auto;
+          margin-bottom: 0;
+          .arrow {
+            margin-left: $m15;
+            img {
+              width: $m12;
+              margin: $m5 0;
+            }
+          }
         }
       }
     }
     .addons-holder {
       grid-template-columns: 1fr !important;
+      &.fr {
+        .item {
+          &:nth-child(-n + 2) {
+            padding: 0 $m20;
+          }
+          p {
+            font-size: $m12 !important;
+          }
+        }
+      }
+    }
+    .addons-holder:first-of-type, .addons-holder.col-4 {
+      display: flex;
+      flex-wrap: wrap;
+      grid-column-gap: 0;
+      grid-row-gap: 0;
+      .item {
+        border-radius: 0;
+        width: calc(100%/3);
+        height: $m56;
+        padding: 0 $m5;
+        margin-bottom: 0;
+        p {
+          white-space: normal;
+          font-size: $m16;
+          text-align: center;
+          width: 100%;
+        }
+        &:first-child {
+          border-radius: $m16 0 0 $m16;
+        }
+        &:last-child {
+          border-radius: 0 $m16 $m16 0;
+        }
+      }
       input {
         padding-left: $m25 !important;
+      }
+    }
+    .addons-holder.col-4 {
+      .item {
+        width: 50%;
+        &:nth-child(1) {
+          border-radius: $m16 0 0 0;
+        }
+        &:nth-child(2) {
+          border-radius: 0 $m16 0 0;
+        }
+        &:nth-child(4) {
+          border-radius: 0 0 $m16 0;
+        }
+        &:nth-child(3) {
+          border-radius: 0 0 0 $m16;
+        }
       }
     }
     .item {

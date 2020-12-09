@@ -43,7 +43,7 @@
             class="item"
             :options="[{text: 'Addons', type: 'addons'}]"
             :value="{text: 'Addons', type: 'addons'}"
-            v-if="data.frequent.text !== 'One time'"
+            v-if="$route.fullPath === '/recurring-cleaning'"
             :reverse="reverse"
         ></v-select>
       </slide-up-down>
@@ -144,7 +144,7 @@ export default {
       })
 
 
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.data.frequent.text === 'One time' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
+      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
     },
     data() {
       return this.$store.state.dataToSend;
@@ -491,29 +491,44 @@ h5 {
 
       .mobileTrigger {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: center;
-        width: $m25;
-        height: $m25;
-        background: inherit;
+        width: $m32;
+        height: $m32;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
         margin: auto;
-        border-radius: 50%;
+        border-radius: $m8;
         transform: translate(0, -50%);
-        padding-bottom: $m5;
         transition: all .5s;
+        background: $primary;
+        padding-bottom: $m5;
 
-        &.up {
-          img {
-            transform: rotate(180deg);
-          }
+        &:before {
+          content: "";
+          border-right: $m3 solid $color;
+          border-bottom: $m3 solid $color;
+          width: $m8;
+          height: $m8;
+          transform: rotate(45deg);
         }
 
         img {
           width: 40%;
+          display: none;
+        }
+
+        &.up {
+          padding-bottom: 0;
+          padding-top: $m5;
+          &:before {
+            transform: rotate(225deg);
+          }
+          img {
+            transform: rotate(180deg);
+          }
         }
       }
 

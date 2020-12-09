@@ -35,7 +35,17 @@ export default new Vuex.Store({
           hidden: true
         }
       },
-      address: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        status: 'none'
+      },
+      billingAddress: {
+        street: '',
+        city: '',
+        state: ''
+      },
       zip: '',
       message: '',
       sf: 123,

@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/calc',
+    path: '/*-cleaning',
     name: 'Extra',
     component: Extra
   },

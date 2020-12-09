@@ -11,6 +11,23 @@
           <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
           <input type="email" class="button item" placeholder="Email address*" required name="billing_email" v-model="data.email">
           <input type="text" class="button item" placeholder="Company name" name="billing_company">
+          <h4>Service address</h4>
+          <div class="address" :class="{success: data.address.status === true, error: !data.address.status}">
+            <gmap-autocomplete
+                class="button item gmapauto"
+                :value="data.address.street"
+                @place_changed="getAddressData($event)"
+                placeholder="Street address*"
+                required
+                name="cleaning_address"
+            />
+            <p class="status">Address is not valid</p>
+          </div>
+          <div class="address">
+            <input type="text" class="button apt item" placeholder="Apt" name="cleaning_apt">
+            <input type="text" class="button item" placeholder="City" name="cleaning_city" :value="data.address.city" readonly>
+            <input type="text" class="button item" placeholder="State" name="cleaning_state" :value="data.address.state" readonly>
+          </div>
           <div class="cupon" :class="{ok: this.apply_coupon.amount, error: this.apply_coupon === false}">
             <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon">
             <div class="button active" @click="chCoupon()">Apply</div>
@@ -43,11 +60,15 @@
           </div>
           <input type="hidden" name="_vue_order_date_time" :value="data.date.time.text">
 
-
           <div class="item">
+            <p class="name">Address</p>
+            <p class="value">{{data.address.street + ', ' + data.zip}}</p>
+          </div>
+
+<!--          <div class="item">
             <p class="name">Zip code</p>
             <p class="value">{{data.zip}}</p>
-          </div>
+          </div>-->
           <input type="hidden" name="_vue_order_zip" :value="data.zip">
           <input type="hidden" name="_vue_order_address" value="">
 
@@ -178,7 +199,7 @@
           </span>
         </label>
         <div class="buttons-holder">
-          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !agree}">Pay
+          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !agree || !data.address.status}">Pay
             with Card
           </div>
 <!--          <button
@@ -193,28 +214,48 @@
               class="button"
               type="submit"
               @click="payment_method = 'cod'"
-              :class="{disabled: !agree}"
-              :disabled="!agree"
+              :class="{disabled: !agree || !data.address.status}"
+              :disabled="!agree || !data.address.status"
           >
             Submit Request
           </button>
         </div>
         <div class="creditCard" v-show="payment_method === 'authnet'">
           <div class="close" @click="payment_method = 'cod'"></div>
-          <div class="item">
-            <div class="button active">Credit cart</div>
-            <img src="~@/assets/img/cardType.png" alt=""/>
+          <div class="holder">
+            <div class="item">
+              <div class="button active">Credit cart</div>
+              <img src="~@/assets/img/cardType.png" alt=""/>
+            </div>
+            <input type="text" class="button cardNumber item" placeholder="Card number" name="authnet-card-number">
+            <div class="item">
+              <input type="text" class="button" placeholder="MM/YY" name="authnet-card-expiry">
+              <input type="text" class="button" placeholder="CVC" name="authnet-card-cvc">
+            </div>
+            <label class="checkbox-holder billing">
+            <span class="checkbox">
+              <input type="checkbox" v-model="sameBillingAddress" name="same_billing_address">
+              <span></span>
+            </span>
+              <span>Billing address different to service address</span>
+            </label>
+            <template v-if="!sameBillingAddress">
+              <div class="address">
+                <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address"
+                       :value="!sameBillingAddress ? '' : data.address.street" required>
+                <input type="text" class="button apt item" placeholder="Apt" name="billing_apt">
+              </div>
+              <div class="address">
+                <input type="text" class="button item" placeholder="City*" name="billing_city"
+                       :value="!sameBillingAddress ? '' : data.address.city" required>
+                <input type="text" class="button item" placeholder="State*" name="billing_state"
+                       :value="!sameBillingAddress ? '' : data.address.state" required>
+              </div>
+            </template>
+            <button class="button active " name="woocommerce_checkout_place_order" type="submit"
+                    @click="payment_method = 'authnet'">Place order
+            </button>
           </div>
-          <div class="item">
-            <input type="text" class="button cardNumber" placeholder="Card number" name="authnet-card-number">
-          </div>
-          <div class="item">
-            <input type="text" class="button" placeholder="MM/YY" name="authnet-card-expiry">
-            <input type="text" class="button" placeholder="CVC" name="authnet-card-cvc">
-          </div>
-          <button class="button active " name="woocommerce_checkout_place_order" type="submit"
-                  @click="payment_method = 'authnet'">Place order
-          </button>
 
         </div>
       </div>
@@ -226,6 +267,7 @@
 import AnimatedNumber from "animated-number-vue";
 import {mask} from 'vue-the-mask'
 import axios from "axios";
+import {gmapApi} from "vue2-google-maps";
 export default {
   name: "Checkout",
   components: {
@@ -234,11 +276,11 @@ export default {
   directives: {
     mask
   },
-   mounted() {
-      let checkoutScript = document.createElement('script')
-      checkoutScript.setAttribute('src', '/wp-content/plugins/woocommerce/assets/js/frontend/checkout.min.js')
-      document.head.appendChild(checkoutScript)
-    },
+  mounted() {
+    let checkoutScript = document.createElement('script')
+    checkoutScript.setAttribute('src', '/wp-content/plugins/woocommerce/assets/js/frontend/checkout.min.js')
+    document.head.appendChild(checkoutScript)
+  },
   data() {
     return {
       cardPay: false,
@@ -247,7 +289,8 @@ export default {
       coupon:'',
       apply_coupon:'',
       dependenciesTime: 0,
-      agree: false
+      agree: false,
+      sameBillingAddress: true
     }
   },
   computed: {
@@ -273,11 +316,11 @@ export default {
 
       let dependenciesPrice = 0;
       this.dependenciesTime = 0;
-      this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
+      this.data.selected.typecleaning.typecleaning_dependencies && this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
 
-      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.data.frequent.text === 'One time' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
+      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
 
       if (this.apply_coupon.discount_type !== 'percent') {
         total -= this.apply_coupon.amount ? this.saleCupon : 0
@@ -306,13 +349,42 @@ export default {
     },
     clean() {
       let dependenciesPrice = 0
-      this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
+      this.data.selected.typecleaning.typecleaning_dependencies && this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
       return (+this.data.selected.typecleaning.price + dependenciesPrice + (this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0));
     },
+    location() {
+      return this.$store.state.location;
+    },
+    zip() {
+      return this.data.zip
+    },
+    google: gmapApi
   },
   methods: {
+    getAddressData(e) {
+      let th = this
+      new google.maps.Geocoder().geocode({'address': th.location.centeraddress}, (results, status) => {
+        if (status === 'OK' && th.google.maps.geometry.spherical.computeDistanceBetween(e.geometry.location, results[0].geometry.location) < th.location.radius) {
+          let zip = e.address_components.filter(item => item.types[0] === 'postal_code')[0]
+          if (zip) {
+            let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name;
+            this.data.address.street = address;
+            this.data.address.status = true
+            /*th.$store.commit('dataToSend', {key: 'address', payload: address})
+            th.$store.commit('dataToSend', {key: 'zip', payload: zip.long_name})*/
+            this.$store.dispatch('setCache')
+          } else {
+            this.data.address.status = false
+            this.data.address.street = '';
+          }
+        } else {
+          this.data.address.status = false
+          this.data.address.street = '';
+        }
+      })
+    },
     formatToPrice(value) {
       return value < 0 ? '-$' + value.toFixed(0) * -1 : '$' + value.toFixed(0);
     },
@@ -342,6 +414,23 @@ export default {
           )
     },
   },
+  updated() {
+  },
+  watch: {
+    zip(zip) {
+      new google.maps.Geocoder().geocode({'address': zip}, (results, status) => {
+        console.log(results);
+        results[0].address_components.forEach(item => {
+          if (item.types.includes("administrative_area_level_1")) {
+            this.data.address.state = item.short_name
+          }
+          if (item.types.includes("sublocality_level_1")) {
+            this.data.address.city = item.short_name
+          }
+        })
+      })
+    }
+  }
 }
 </script>
 
@@ -352,6 +441,12 @@ export default {
     height: 100%;
     h2 {
       margin-bottom: $a35;
+    }
+    input[readonly] {
+      background: #F0F0F0;
+      &:hover {
+        background: #F0F0F0 !important;
+      }
     }
     .firstClean {
       width: 100%;
@@ -372,6 +467,7 @@ export default {
     .form-info {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
       width: 100%;
       margin-bottom: $a45;
       .left {
@@ -380,11 +476,53 @@ export default {
         flex-direction: column;
         align-items: center;
         margin-top: $a25;
+        h4 {
+          text-align: left;
+          margin-bottom: $a30;
+          padding-left: $a25;
+        }
+        h3 {
+          padding-left: $a25;
+          text-align: left;
+          width: 100%;
+        }
+        .address {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          position: relative;
+          input:not(:last-of-type) {
+            margin-right: $a15;
+          }
+          .status {
+            display: none;
+          }
+          &.success {
+            .gmapauto {
+              border-color: #00ff00;
+            }
+          }
+          &.error {
+            .gmapauto {
+              border-color: red;
+            }
+            .status {
+              display: block;
+              position: absolute;
+              bottom: $a15;
+              left: $a25;
+              color: red;
+              font-size: $a10;
+            }
+          }
+        }
         .subtitle {
           margin-top: $a10;
           margin-bottom: $a20;
           opacity: .3;
           font-size: $a15;
+          width: 100%;
+          padding-left: $a25;
         }
         .item {
           padding: 0 $a25;
@@ -598,7 +736,8 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: $a25;
+        width: $a410;
+        margin: $a25 auto 0 auto;
         .close {
           display: none;
         }
@@ -609,29 +748,53 @@ export default {
           background: rgba(102, 108, 121, 0.2);
           margin-bottom: $a25;
         }
+        .billing {
+          width: $a410;
+          justify-content: flex-start;
+        }
+        .address {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          input:first-of-type {
+            margin-right: $a15;
+          }
+          .apt {
+            width: $a130;
+          }
+          .gmapauto {
+            &.success {
+              border-color: #00ff00;
+            }
+            &.error {
+              border-color: red;
+            }
+          }
+        }
+        input {
+          padding: 0 $a25;
+        }
         .item {
           display: flex;
           align-items: center;
           justify-content: space-between;
           margin-bottom: $a30;
-          width: $a410;
+          width: 100%;
           img {
             width: $a180;
           }
           input {
-            padding: 0 $a25;
             width: calc(50% - #{$a20});
+            box-sizing: border-box;
           }
           .button.active {
             width: $a200;
             margin-right: $a35;
           }
-          .cardNumber {
-            width: $a410;
-          }
         }
         .button.active {
           padding: 0 $a35;
+          margin: 0 auto;
         }
       }
     }
@@ -656,9 +819,23 @@ export default {
           h3, .subtitle {
             display: none;
           }
+          h4 {
+            margin-bottom: $m20;
+            margin-top: $m20;
+          }
           .item {
             padding: 0 $m25;
             margin-bottom: $m10;
+          }
+          .address {
+            flex-direction: column;
+            input {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              &:not(:last-of-type) {
+                margin-right: $m10;
+              }
+            }
           }
         }
         .right {
@@ -685,8 +862,8 @@ export default {
                 content: '';
                 border-right: $m3 solid $color;
                 border-bottom: $m3 solid $color;
-                width: $m6;
-                height: $m6;
+                width: $m8;
+                height: $m8;
                 transform: rotate(45deg);
               }
             }
@@ -791,37 +968,37 @@ export default {
           left: 0;
           width: 100%;
           height: 100%;
-          padding: $m20;
+          padding: $m10;
+          justify-content: flex-start;
+          z-index: 100;
+          max-height: 100%;
           background: transparentize($color, .5);
-          justify-content: center;
-          .close {
-
-          }
-          &:before {
-            width: 95%;
-            height: $m300;
+          .holder {
             background: #ffffff;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: auto;
-            z-index: -1;
             border-radius: $m16;
+            max-height: 100%;
+            overflow: auto;
+            padding: $m10;
+            &>.item:nth-child(1) {
+              display: none;
+            }
           }
           .item {
             width: 100%;
             flex-flow: row wrap;
             margin-bottom: 0;
-            &:nth-of-type(2) {
-              display: none;
-            }
-            input {
-              width: 100% !important;
-              margin-bottom: $m10;
-              padding: 0 $m25;
-            }
+          }
+          .billing {
+            width: 100%;
+          }
+          .address {
+            flex-direction: column;
+          }
+          input {
+            width: 100% !important;
+            margin-bottom: $m10 !important;
+            padding: 0 $m25;
+            min-height: $m56;
           }
           .button.active {
             width: 100%;
@@ -831,14 +1008,12 @@ export default {
             display: block;
             position: absolute;
             top: 0;
-            bottom: $m290;
+            right: 0;
             width: $m25;
             height: $m25;
             background: linear-gradient(0deg, $color, $color) no-repeat center center / 2px 70%, linear-gradient(0deg, $color, $color) no-repeat center center / 70% 2px, #fff;
             border-radius: 50%;
             transform: rotate(45deg);
-            margin: auto;
-            right: 1%;
             box-shadow: 0 0 $m3 0 rgba(0, 0, 0, 0.3);
           }
         }
