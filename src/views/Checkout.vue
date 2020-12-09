@@ -10,7 +10,7 @@
           <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
           <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
           <input type="email" class="button item" placeholder="Email address*" required name="billing_email" v-model="data.email">
-          <input type="text" class="button item" placeholder="Company name" name="billing_company">
+          <input type="text" class="button item" placeholder="Company name" name="shipping_company">
           <h4>Service address</h4>
           <div class="address" :class="{success: data.address.status === true, error: data.address.status === false}">
             <gmap-autocomplete
@@ -23,14 +23,14 @@
                 type="search"
             />
             <p class="status">Address is not valid</p>
-            <input type="text" class="button zip item" placeholder="Zip" name="billing_postcode" v-model="data.zip">
+            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.zip">
           </div>
           <div class="address">
-            <input type="text" class="button apt item" placeholder="Apt" name="billing_apt">
-            <input type="text" class="button item" placeholder="City" name="billing_city" :value="data.address.city" readonly>
-            <input type="text" class="button item" placeholder="State" name="billing_state" :value="data.address.state" readonly>
+            <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt">
+            <input type="text" class="button item" placeholder="City" name="shipping_city" :value="data.address.city" readonly>
+            <input type="text" class="button item" placeholder="State" name="shipping_state" :value="data.address.state" readonly>
             
-            <input  type="hidden" name="billing_country" value="US">
+            <input  type="hidden" name="shipping_country" value="US">
 
           </div>
           <div class="cupon" :class="{ok: this.apply_coupon.amount, error: this.apply_coupon === false}">
@@ -244,17 +244,17 @@
               <span>Billing address different to service address</span>
             </label>
             <template v-if="!sameBillingAddress">
-             <input type="text" class="button gmapauto item" placeholder="Street address*" name="shipping_address_1"
+             <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address_1"
                      :value="!sameBillingAddress ? '' : data.address.street" required>
               <div class="address">
-                <input type="text" class="button item" placeholder="Apt" name="shipping_apt">
-                <input type="text" class="button item" placeholder="City*" name="shipping_city"
+                <input type="text" class="button item" placeholder="Apt" name="billing_apt">
+                <input type="text" class="button item" placeholder="City*" name="billing_city"
                        :value="!sameBillingAddress ? '' : data.address.city" required>
               </div>
               <div class="address">
-                <input type="text" class="button item" placeholder="State*" name="shipping_state"
+                <input type="text" class="button item" placeholder="State*" name="billing_state"
                        :value="!sameBillingAddress ? '' : data.address.state" required>
-                <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" :value="!sameBillingAddress ? '' : data.zip" required>
+                <input type="text" class="button zip item" placeholder="Zip" name="billing_postcode" :value="!sameBillingAddress ? '' : data.zip" required>
               </div>
             </template>
             <button class="button active " name="woocommerce_checkout_place_order" type="submit"
