@@ -15,6 +15,7 @@
                v-mask="'#####'"
                v-model="data.zip"
                @click.stop=""
+               :readonly="data.address.status"
         >
       </div>
       <div class="date" v-else-if="options[0].type === 'date'" @click.stop>

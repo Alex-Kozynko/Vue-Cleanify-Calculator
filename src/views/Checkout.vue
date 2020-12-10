@@ -24,7 +24,7 @@
                 type="search"
             />
             <p class="status">Address is not valid</p>
-            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.zip">
+            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.zip" :readonly="data.address.status">
           </div>
           <div class="address">
             <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt" v-model="data.address.apt">
@@ -192,9 +192,9 @@
 
       <div class="footer">
         <div class="buttons-holder">
-          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !data.address.status}">Pay
+<!--          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !data.address.status}">Pay
             with Card
-          </div>
+          </div>-->
 <!--          <button
               class="button" type="submit"
               @click="payment_method = 'paypal'"
@@ -473,7 +473,7 @@ export default {
     chCoupon() {
       axios({
         method: 'get',
-        url: 'https://test2.niklex.net/wp-json/api/v2/coupon/'+this.coupon
+        url: 'https://cleanify.com/wp-json/api/v2/coupon/'+this.coupon
       })
           .then((response) => {
             console.log(response.data);

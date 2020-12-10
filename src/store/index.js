@@ -91,7 +91,7 @@ export default new Vuex.Store({
     getData({state, commit}) {
       axios({
         method: 'get',
-        url: 'https://cleanify.com//wp-json/api/v1/data'
+        url: 'https://cleanify.com/wp-json/api/v1/data'
       })
       .then((response) => {
         console.log(response);
