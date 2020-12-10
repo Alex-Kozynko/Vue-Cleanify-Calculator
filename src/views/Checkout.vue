@@ -7,9 +7,10 @@
         <div class="left">
           <h3>Almost there !</h3>
           <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
-          <input type="text" class="button item" placeholder="First name*" required name="billing_first_name">
-          <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name">
-          <input type="email" class="button item" placeholder="Email address*" required name="billing_email" v-model="data.email">
+          <input type="text" class="button item" placeholder="First name*" name="shipping_first_name" required v-model="data.firstName">
+          <input type="text" class="button item" placeholder="Last name*" name="shipping_last_name" required v-model="data.lastName">
+          <input type="email" class="button item" placeholder="Email address*" required v-model="data.email">
+          <input type="tel" class="button item" placeholder="Phone*" name="billing_phone" required v-model="data.phone">
           <input type="text" class="button item" placeholder="Company name" name="billing_company">
           <h4>Service address</h4>
           <div class="address" :class="{success: data.address.status === true, error: data.address.status === false}">
@@ -34,6 +35,7 @@
 
           </div>
           <div class="cupon" :class="{ok: this.apply_coupon.amount, error: this.apply_coupon === false}">
+            <p v-if="this.apply_coupon === false" class="message">The coupon code you entered is not valid.</p>
             <input type="text" class="button item" placeholder="Have a coupon? Enter your CODE here." v-model="coupon">
             <div class="button active" @click="chCoupon()">Apply</div>
           </div>
@@ -78,7 +80,7 @@
           <input type="hidden" name="_vue_order_address" value="">
 
           <div class="item" :class="{small: data.addons.length > 0}">
-            <p class="name">Addons</p>
+            <p class="name">Add-ons</p>
             <div class="value" v-if="data.addons.length > 0">
               <animated-number
                   class="number"
@@ -189,25 +191,10 @@
       <div v-html="wp_nonce_field" v-show="false"></div>
 
       <div class="footer">
-        <p>Your personal data will be used to process your order,
-          support your experience throughout this website, and
-          for other purposes described in our privacy policy.</p>
-        <label class="checkbox-holder">
-          <span class="checkbox">
-            <input type="checkbox" required v-model="agree">
-            <span></span>
-          </span>
-          <span>
-            I AGREE TO THE WEBSITE
-            <a href="/terms.html" target="_blank">TERMS</a>
-            AND
-            <a href="/policy.html" target="_blank">CONDITIONS</a>
-          </span>
-        </label>
         <div class="buttons-holder">
-          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !agree || !data.address.status}">Pay
+<!--          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !data.address.status}">Pay
             with Card
-          </div>
+          </div>-->
 <!--          <button
               class="button" type="submit"
               @click="payment_method = 'paypal'"
@@ -226,6 +213,21 @@
             Submit Request
           </button>
         </div>
+        <label class="checkbox-holder">
+          <span class="checkbox">
+            <input type="checkbox" required v-model="agree">
+            <span></span>
+          </span>
+          <span>
+            I AGREE TO THE WEBSITE
+            <a href="/terms.html" target="_blank">TERMS</a>
+            AND
+            <a href="/policy.html" target="_blank">CONDITIONS</a>
+          </span>
+        </label>
+        <p>Your personal data will be used to process your order,
+          support your experience throughout this website, and
+          for other purposes described in our privacy policy.</p>
         <div class="creditCard" v-show="payment_method === 'authnet'">
           <div class="close" @click="payment_method = 'cod'"></div>
           <div class="holder">
@@ -233,10 +235,10 @@
               <div class="button active">Credit cart</div>
               <img src="~@/assets/img/cardType.png" alt=""/>
             </div>
-            <input type="text" class="button cardNumber item" placeholder="Card number" v-mask='"#### #### #### ####"' name="authnet-card-number">
+            <input type="text" class="button cardNumber item" placeholder="Card number" :required="payment_method === 'authnet'" v-mask='"#### #### #### ####"' name="authnet-card-number">
             <div class="item">
-              <input type="text" class="button" placeholder="MM/YY" v-mask='"##/##"' name="authnet-card-expiry">
-              <input type="text" class="button" placeholder="CVC" v-mask="'###'" name="authnet-card-cvc">
+              <input type="text" class="button" placeholder="MM/YY" v-mask='"##/##"' name="authnet-card-expiry" :required="payment_method === 'authnet'">
+              <input type="text" class="button" placeholder="CVC" v-mask="'###'" name="authnet-card-cvc" autocomplete="cc-csc">
             </div>
             <label class="checkbox-holder billing">
             <span class="checkbox">
@@ -246,26 +248,77 @@
               <span>Billing address same as Service address</span>
             </label>
             <div class="billing-address-holder" v-show="!sameBillingAddress">
-             <input type="text" class="button gmapauto item" placeholder="Street address*" name="billing_address_1"
-                     :value="!sameBillingAddress ? '' : data.address.street" required>
               <div class="address">
-                <input type="text" class="button item" placeholder="Apt" name="billing_apt">
-                <input type="text" class="button item" placeholder="City*" name="billing_city"
-                       :value="!sameBillingAddress ? '' : data.address.city" required>
+                <input type="text"
+                       class="button gmapauto item"
+                       placeholder="Street address*"
+                       name="billing_address_1"
+                       :value="!sameBillingAddress ? '' : data.address.street"
+                       required
+                >
+                <input type="text"
+                       class="button item"
+                       placeholder="Apt"
+                       name="billing_apt"
+                       :value="!sameBillingAddress ? '' : data.address.apt"
+                >
               </div>
               <div class="address">
-                <input type="text" class="button item" placeholder="State*" name="billing_state"
-                       :value="!sameBillingAddress ? '' : data.address.state" required>
-                <input type="text" class="button zip item" placeholder="Zip" name="billing_postcode" :value="!sameBillingAddress ? '' : data.zip" required>
+                <input type="text"
+                       class="button item"
+                       placeholder="City*"
+                       name="billing_city"
+                       :value="!sameBillingAddress ? '' : data.address.city"
+                       required
+                >
+                <input type="text"
+                       class="button item"
+                       placeholder="State*"
+                       name="billing_state"
+                       :value="!sameBillingAddress ? '' : data.address.state"
+                       required
+                >
+              </div>
+              <div class="address">
+                <input type="text"
+                       class="button zip item"
+                       placeholder="Zip"
+                       name="billing_postcode"
+                       :value="!sameBillingAddress ? '' : data.zip"
+                       required
+                >
+                <input type="email" class="button item" placeholder="Email address*" required name="billing_email" :value="!sameBillingAddress ? '' : data.email">
+              </div>
+              <div class="address">
+                <input type="text" class="button item" placeholder="First name*" required name="billing_first_name" :value="!sameBillingAddress ? '' : data.firstName">
+                <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name" :value="!sameBillingAddress ? '' : data.lastName">
               </div>
             </div>
             <button class="button active " name="woocommerce_checkout_place_order" type="submit"
-                    @click="payment_method = 'authnet'">Place order
+                    @click="payment_method = 'authnet'"
+                    :class="{disabled: !agree}"
+                    :disabled="!agree"
+            >
+              Place order
             </button>
+            <label class="checkbox-holder">
+          <span class="checkbox">
+            <input type="checkbox" required v-model="agree">
+            <span></span>
+          </span>
+              <span>
+            I AGREE TO THE WEBSITE
+            <a href="/terms.html" target="_blank">TERMS</a>
+            AND
+            <a href="/policy.html" target="_blank">CONDITIONS</a>
+          </span>
+            </label>
+            <p>Your personal data will be used to process your order,
+              support your experience throughout this website, and
+              for other purposes described in our privacy policy.</p>
           </div>
-
+          </div>
         </div>
-      </div>
     </form>
   </div>
 </template>
@@ -327,7 +380,12 @@ export default {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
 
-      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning/' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale
+      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (
+              this.data.frequent.text === 'One time' &&
+          (
+              this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0)
+          )
+      ) * frequentSale
 
       if (this.apply_coupon.discount_type !== 'percent') {
         total -= this.apply_coupon.amount ? this.saleCupon : 0
@@ -335,7 +393,7 @@ export default {
         total = total * this.saleCupon
       }
 
-      return  total
+      return this.data.frequent.text === 'One time' ? total * this.data.qCleaners : total
     },
     saleCupon() {
       if (this.apply_coupon.discount_type !== 'percent') {
@@ -359,7 +417,12 @@ export default {
       this.data.selected.typecleaning.typecleaning_dependencies && this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
       })
-      return (+this.data.selected.typecleaning.price + dependenciesPrice + (this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0));
+      let total = +this.data.selected.typecleaning.price + this.addonsPrice + dependenciesPrice + (
+              this.data.frequent.text === 'One time' &&
+              (
+                  this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0)
+              )
+      return this.data.frequent.text === 'One time' ? total * this.data.qCleaners : total
     },
     location() {
       return this.$store.state.location;
@@ -471,6 +534,9 @@ export default {
     flex-direction: column;
     padding: $a55 $a460 !important;
     height: 100%;
+    .woocommerce-error li {
+      color: $color !important;
+    }
     h2 {
       margin-bottom: $a35;
     }
@@ -580,8 +646,16 @@ export default {
             }
           }
           &.error {
+            position: relative;
             .item {
               border-color: red !important;
+            }
+            .message {
+              color: red;
+              position: absolute;
+              top: 110%;
+              left: $a25;
+              font-size: $a10;
             }
           }
           .item {
@@ -760,6 +834,7 @@ export default {
       .buttons-holder {
         display: flex;
         justify-content: center;
+        margin-bottom: $a25;
         .button {
           width: $a200;
           margin: 0 $a15;
@@ -830,7 +905,7 @@ export default {
         }
         .button.active {
           padding: 0 $a35;
-          margin: 0 auto;
+          margin: 0 auto $a25 auto;
         }
       }
     }
@@ -852,6 +927,11 @@ export default {
           width: 100%;
         }
         .left {
+          .cupon {
+            .message {
+              font-size: $m10 !important;
+            }
+          }
           h3, .subtitle {
             display: none;
           }

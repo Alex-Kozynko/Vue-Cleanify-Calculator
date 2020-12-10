@@ -52,7 +52,10 @@ export default new Vuex.Store({
       sf: 123,
       qCleaners: 1,
       qHours: 3,
-      email: ''
+      email: '',
+      firstName: '',
+      lastName: '',
+      phone: ''
     }
   },
   mutations: {
@@ -88,7 +91,7 @@ export default new Vuex.Store({
     getData({state, commit}) {
       axios({
         method: 'get',
-        url: 'https://test2.niklex.net/wp-json/api/v1/data'
+        url: 'https://cleanify.com//wp-json/api/v1/data'
       })
       .then((response) => {
         console.log(response);

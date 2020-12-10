@@ -138,13 +138,18 @@ export default {
 
       let dependenciesPrice = 0;
       this.dependenciesTime = 0;
-      this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
+      this.data.selected.typecleaning.typecleaning_dependencies && this.data.selected.typecleaning.typecleaning_dependencies.forEach(item => {
         dependenciesPrice += +item.price * (this.data.selected.premises[item.label].index + 1)
-        this.dependenciesTime  += +item.time * (this.data.selected.premises[item.label].index)
       })
 
+      let total = (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (
+              this.data.frequent.text === 'One time' &&
+              (
+                  this.data.qHours > 2 ? ((this.data.qHours - 2) * 50) : 0)
+          )
+      ) * frequentSale
 
-      return (+this.data.selected.typecleaning.price + this.addonsPrice - timeSale + dependenciesPrice + (this.data.qHours > 2 && this.$route.fullPath === '/one-time-cleaning/' ? ((this.data.qHours - 2) * 50) : 0)) * frequentSale;
+      return this.data.frequent.text === 'One time' ? total * this.data.qCleaners : total
     },
     data() {
       return this.$store.state.dataToSend;
