@@ -508,6 +508,9 @@ export default {
   .v-select {
     &.style2, &.mobile {
       padding: 0 $m25 !important;
+      &:hover {
+        background: #fff !important;
+      }
       .text {
         .title {
           p {
@@ -542,75 +545,83 @@ export default {
             }
           }
         }
-        .date {
+        &.calendar {
           position: fixed;
-          background: #ffffff;
-          top: $m10;
+          background: transparentize($secondary, .5);
+          width: 100%;
+          height: 100vh;
+          border-radius: 0;
+          border: 0;
+          top: 0;
           left: 0;
-          right: 0;
-          margin: auto;
-          border-radius: $m16;
-          width: 95%;
-          padding: $m15 0;
-          &>p {
-            padding-right: $m15;
-          }
-          .months {
-            width: 100%;
-            padding: 0 $m15;
-            //border: 1px solid $primary;
-            border-bottom: 0;
-            border-radius: $m16 $m16 0 0;
-            margin-bottom: $m15;
-            .item {
-              font-size: $m22;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .date {
+            background: #ffffff;
+            border-radius: $m16;
+            width: 95%;
+            padding: $m15 0;
+            &>p {
+              padding-right: $m15;
             }
-            .slick-prev {
-              width: $m15;
-              height: $m15;
-              left: 22%;
-            }
-            .slick-next {
-              width: $m15;
-              height: $m15;
-              right: 22%;
-            }
-          }
-          .dayOfWeek {
-            margin-top: 0;
-            padding: 0 $m15;
-            margin-bottom: $m10;
-            //border: 1px solid $primary;
-            border-top: 0;
-            border-bottom: 0;
-            .item {
-              border: none !important;
-              .day {
-                font-size: $m13;
-              }
-              .sale {
-                font-size: $m10;
-                text-align: center;
-                margin-top: $m10;
-              }
-            }
-          }
-          .daysOfTheMonth {
-            margin-top: 0;
-            //border: 1px solid $primary;
-            border-radius: 0 0 $m16 $m16;
-            border-top: 0;
-            .month {
-              grid-column-gap: $m13;
-              grid-row-gap: $m10;
+            .months {
+              width: 100%;
               padding: 0 $m15;
+              //border: 1px solid $primary;
+              border-bottom: 0;
+              border-radius: $m16 $m16 0 0;
+              margin-bottom: $m15;
+              .item {
+                font-size: $m22;
+              }
+              .slick-prev {
+                width: $m15;
+                height: $m15;
+                left: 22%;
+              }
+              .slick-next {
+                width: $m15;
+                height: $m15;
+                right: 22%;
+              }
             }
-            .button {
-              padding: 0;
-              border-radius: $m5;
-              width: $m25;
-              height: $m25;
-              font-size: $m12;
+            .dayOfWeek {
+              margin-top: 0;
+              padding: 0 $m15;
+              margin-bottom: $m10;
+              //border: 1px solid $primary;
+              border-top: 0;
+              border-bottom: 0;
+              .item {
+                border: none !important;
+                .day {
+                  font-size: $m13;
+                }
+                .sale {
+                  font-size: $m10;
+                  text-align: center;
+                  margin-top: $m10;
+                }
+              }
+            }
+            .daysOfTheMonth {
+              margin-top: 0;
+              //border: 1px solid $primary;
+              border-radius: 0 0 $m16 $m16;
+              border-top: 0;
+              .month {
+                grid-column-gap: $m13;
+                grid-row-gap: $m10;
+                padding: 0 $m15;
+              }
+              .button {
+                padding: 0;
+                border-radius: $m5;
+                width: $m25;
+                height: $m25;
+                font-size: $m12;
+              }
             }
           }
         }
@@ -643,6 +654,9 @@ export default {
           border-radius: 0 0 $m16 $m16 !important;
         }
       }
+    }
+    &.open {
+      z-index: 10;
     }
   }
 }
