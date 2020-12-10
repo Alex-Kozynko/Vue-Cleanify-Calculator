@@ -192,9 +192,9 @@
 
       <div class="footer">
         <div class="buttons-holder">
-<!--          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !data.address.status}">Pay
+          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !data.address.status}">Pay
             with Card
-          </div>-->
+          </div>
 <!--          <button
               class="button" type="submit"
               @click="payment_method = 'paypal'"
