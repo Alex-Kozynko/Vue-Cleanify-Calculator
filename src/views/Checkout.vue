@@ -508,23 +508,6 @@ export default {
         })
       })*/
     }
-  },
-  mounted() {
-    /*let checkoutScript = document.createElement('script')
-    checkoutScript.setAttribute('src', '/wp-content/plugins/woocommerce/assets/js/frontend/checkout.min.js')
-    document.head.appendChild(checkoutScript)*/
-  },
-  updated() {
-    /*new this.google.maps.Geocoder().geocode({'address': this.data.zip}, (results, status) => {
-      results[0].address_components.forEach(item => {
-        if (item.types.includes("administrative_area_level_1")) {
-          this.data.address.state = item.short_name
-        }
-        if (item.types.includes("sublocality_level_1")) {
-          this.data.address.city = item.short_name
-        }
-      })
-    })*/
   }
 }
 </script>

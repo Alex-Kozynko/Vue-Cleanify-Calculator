@@ -102,7 +102,7 @@
       </div>
     </div>
     <div class="buttons">
-    
+
   <!--    <router-link
           :to="{name: 'Checkout'}"
           class="button active"
@@ -110,6 +110,13 @@
        Next
       </router-link>
  -->
+      <a
+          @click="data.frequent = $store.state.frequents[0]; $router.go(-1)"
+          class="back"
+          v-if="$route.fullPath !== '/recurring-cleaning/'"
+      >
+        < Back
+      </a>
      <a href="/checkout" class="button active">Next</a>
 
 

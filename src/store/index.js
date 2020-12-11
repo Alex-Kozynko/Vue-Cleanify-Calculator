@@ -68,8 +68,8 @@ export default new Vuex.Store({
       state.frequents = payload['frequent']
       state.location = payload['location']
       state.selects = payload['stepone']
-      state.dataToSend.frequent = state.frequents[0]
       if (!localStorage.getItem('state')) {
+        state.dataToSend.frequent = state.frequents[0]
         state.dataToSend.selected.industry = state.selects.industry[0]
         state.dataToSend.selected.typecleaning = state.selects.typecleaning[0]
         state.selects.premises.forEach((item, i) => {

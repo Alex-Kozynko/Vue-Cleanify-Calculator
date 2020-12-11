@@ -43,7 +43,7 @@
             class="item"
             :options="[{text: 'Addons', type: 'addons'}]"
             :value="{text: 'Addons', type: 'addons'}"
-            v-if="$route.fullPath === '/recurring-cleaning/'"
+            v-if="data.frequent.text !== 'One time'"
             :reverse="reverse"
         ></v-select>
       </slide-up-down>
