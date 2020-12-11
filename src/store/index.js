@@ -40,21 +40,26 @@ export default new Vuex.Store({
         city: '',
         state: '',
         apt: '',
-        status: 'none'
+        status: 'none',
+        email: '',
+        firstName: '',
+        lastName: '',
+        zip: ''
       },
       billingAddress: {
         street: '',
         city: '',
-        state: ''
+        state: '',
+        apt: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        zip: ''
       },
-      zip: '',
       message: '',
       sf: 123,
       qCleaners: 1,
       qHours: 3,
-      email: '',
-      firstName: '',
-      lastName: '',
       phone: ''
     }
   },

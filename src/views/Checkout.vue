@@ -7,9 +7,9 @@
         <div class="left">
           <h3>Almost there !</h3>
           <p class="subtitle">Enter your payment & contact info to finalize your appoinment</p>
-          <input type="text" class="button item" placeholder="First name*" name="shipping_first_name" required v-model="data.firstName">
-          <input type="text" class="button item" placeholder="Last name*" name="shipping_last_name" required v-model="data.lastName">
-          <input type="email" class="button item" placeholder="Email address*" required v-model="data.email">
+          <input type="text" class="button item" placeholder="First name*" name="shipping_first_name" required v-model="data.address.firstName">
+          <input type="text" class="button item" placeholder="Last name*" name="shipping_last_name" required v-model="data.address.lastName">
+          <input type="email" class="button item" placeholder="Email address*" required v-model="data.address.email">
           <input type="tel" class="button item" placeholder="Phone*" name="billing_phone" required v-model="data.phone">
           <input type="text" class="button item" placeholder="Company name" name="billing_company">
           <h4>Service address</h4>
@@ -24,7 +24,7 @@
                 type="search"
             />
             <p class="status">Address is not valid</p>
-            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.zip" :readonly="data.address.status">
+            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.address.zip" :readonly="data.address.status">
           </div>
           <div class="address">
             <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt" v-model="data.address.apt">
@@ -69,14 +69,14 @@
 
           <div class="item">
             <p class="name">Address</p>
-            <p class="value">{{data.address.street + ', ' + data.zip}}</p>
+            <p class="value">{{data.address.street + ', ' + data.address.zip}}</p>
           </div>
 
 <!--          <div class="item">
             <p class="name">Zip code</p>
-            <p class="value">{{data.zip}}</p>
+            <p class="value">{{data.address.zip}}</p>
           </div>-->
-          <input type="hidden" name="_vue_order_zip" :value="data.zip">
+          <input type="hidden" name="_vue_order_zip" :value="data.address.zip">
           <input type="hidden" name="_vue_order_address" value="">
 
           <div class="item" :class="{small: data.addons.length > 0}">
@@ -249,49 +249,50 @@
             </label>
             <div class="billing-address-holder" v-show="!sameBillingAddress">
               <div class="address">
-                <input type="text"
-                       class="button gmapauto item"
-                       placeholder="Street address*"
-                       name="billing_address_1"
-                       :value="!sameBillingAddress ? '' : data.address.street"
-                       required
-                >
-                <input type="text"
-                       class="button item"
-                       placeholder="Apt"
-                       name="billing_apt"
-                       :value="!sameBillingAddress ? '' : data.address.apt"
-                >
+                <input type="text" class="button item" placeholder="First name*" required name="billing_first_name" :value="!sameBillingAddress ? data.billingAddress.firstName : data.address.firstName">
+                <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name" :value="!sameBillingAddress ? data.billingAddress.lastName : data.address.lastName">
               </div>
+              <gmap-autocomplete
+                  class="button item gmapauto"
+                  :value="!sameBillingAddress ? data.billingAddress.street : data.address.street"
+                  @place_changed="getAddressDataBilling($event)"
+                  placeholder="Street address*"
+                  required
+                  name="billing_address_1"
+                  type="search"
+              />
               <div class="address">
                 <input type="text"
                        class="button item"
                        placeholder="City*"
                        name="billing_city"
-                       :value="!sameBillingAddress ? '' : data.address.city"
+                       :value="!sameBillingAddress ? data.billingAddress.city : data.address.city"
                        required
                 >
                 <input type="text"
                        class="button item"
                        placeholder="State*"
                        name="billing_state"
-                       :value="!sameBillingAddress ? '' : data.address.state"
+                       :value="!sameBillingAddress ? data.billingAddress.state : data.address.state"
                        required
                 >
               </div>
               <div class="address">
                 <input type="text"
-                       class="button zip item"
-                       placeholder="Zip"
-                       name="billing_postcode"
-                       :value="!sameBillingAddress ? '' : data.zip"
-                       required
+                       class="button item"
+                       placeholder="Apt"
+                       name="billing_apt"
+                       :value="!sameBillingAddress ? data.billingAddress.apt : data.address.apt"
                 >
-                <input type="email" class="button item" placeholder="Email address*" required name="billing_email" :value="!sameBillingAddress ? '' : data.email">
-              </div>
-              <div class="address">
-                <input type="text" class="button item" placeholder="First name*" required name="billing_first_name" :value="!sameBillingAddress ? '' : data.firstName">
-                <input type="text" class="button item" placeholder="Last name*" required name="billing_last_name" :value="!sameBillingAddress ? '' : data.lastName">
+                <input type="text"
+                       class="button zip item"
+                       placeholder="Zip*"
+                       name="billing_postcode"
+                       :value="!sameBillingAddress ? data.billingAddress.zip : data.address.zip"
+                       required
+                       maxlength="5"
+                >
+                <input type="hidden" class="button item" placeholder="Email address*" required name="billing_email" :value="data.address.email">
               </div>
             </div>
             <button class="button active " name="woocommerce_checkout_place_order" type="submit"
@@ -423,7 +424,7 @@ export default {
       return this.$store.state.location;
     },
     zip() {
-      return this.data.zip
+      return this.data.address.zip
     },
     google: gmapApi
   },
@@ -448,7 +449,8 @@ export default {
             let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name;
             this.data.address.street = address;
             this.data.address.status = true
-            this.data.zip = zip.long_name
+            this.data.address.zip = zip.long_name
+            this.data.billingAddress = JSON.parse(JSON.stringify(this.data.address))
             /*th.$store.commit('dataToSend', {key: 'address', payload: address})
             th.$store.commit('dataToSend', {key: 'zip', payload: zip.long_name})*/
             this.$store.dispatch('setCache')
@@ -459,6 +461,24 @@ export default {
         } else {
           this.data.address.status = false
           this.data.address.street = '';
+        }
+      })
+    },
+    getAddressDataBilling(e) {
+      let address =  e.address_components.filter(item => item.types[0] === "street_number")[0].long_name + ' ' + e.address_components.filter(item => item.types[0] === "route")[0].long_name;
+      this.data.billingAddress.street = address;
+      e.address_components.forEach(item => {
+        if (item.types.includes("administrative_area_level_1")) {
+          this.data.billingAddress.state = item.short_name
+          this.$store.dispatch('setCache')
+        }
+        if (item.types.includes("sublocality_level_1")) {
+          this.data.billingAddress.city = item.short_name
+          this.$store.dispatch('setCache')
+        }
+        if (item.types.includes("postal_code")) {
+          this.data.billingAddress.zip = item.short_name
+          this.$store.dispatch('setCache')
         }
       })
     },
@@ -876,6 +896,7 @@ export default {
           width: 100%;
           img {
             width: $a180;
+            margin: 0 auto;
           }
           input {
             width: calc(50% - #{$a20});
