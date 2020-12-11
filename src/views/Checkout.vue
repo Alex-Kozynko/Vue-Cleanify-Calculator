@@ -24,7 +24,7 @@
                 type="search"
             />
             <p class="status">Address is not valid</p>
-            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.zip" readonly>
+            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.zip" :readonly="data.address.status">
           </div>
           <div class="address">
             <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt" v-model="data.address.apt">
@@ -192,7 +192,7 @@
 
       <div class="footer">
         <div class="buttons-holder">
-          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !agree || !data.address.status}">Pay
+          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !data.address.status}">Pay
             with Card
           </div>
 <!--          <button
@@ -233,7 +233,7 @@
           <div class="holder">
             <div class="item">
 <!--              <div class="button active">Credit cart</div>-->
-              <img src="~@/assets/img/cardType.png" alt="" class="cardType"/>
+              <img src="~@/assets/img/cardType.png" alt=""/>
             </div>
             <input type="text" class="button cardNumber item" placeholder="Card number" :required="payment_method === 'authnet'" v-mask='"#### #### #### ####"' name="authnet-card-number">
             <div class="item">
@@ -337,9 +337,9 @@ export default {
     mask
   },
   mounted() {
-    let checkoutScript = document.createElement('script')
+    /*let checkoutScript = document.createElement('script')
     checkoutScript.setAttribute('src', '/wp-content/plugins/woocommerce/assets/js/frontend/checkout.min.js')
-    document.head.appendChild(checkoutScript)
+    document.head.appendChild(checkoutScript)*/
   },
   data() {
     return {
@@ -893,9 +893,6 @@ export default {
           width: 100%;
           img {
             width: $a180;
-            &.cardType {
-              margin: 0 auto;
-            }
           }
           input {
             width: calc(50% - #{$a20});

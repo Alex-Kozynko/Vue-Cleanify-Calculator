@@ -102,12 +102,17 @@
       </div>
     </div>
     <div class="buttons">
-      <router-link
+    
+  <!--    <router-link
           :to="{name: 'Checkout'}"
           class="button active"
       >
-        Next
+       Next
       </router-link>
+ -->
+     <a href="/checkout" class="button active">Next</a>
+
+
     </div>
     <div class="deep" v-if="$route.fullPath === '/recurring-cleaning/'">
       <img src="@/assets/img/deep.png" alt="" />
