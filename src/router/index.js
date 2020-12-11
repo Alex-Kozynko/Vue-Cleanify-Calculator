@@ -24,7 +24,7 @@ const routes = [
     component: Booking2
   },
   {
-    path: '/calc-checkout/',
+    path: '/checkout/',
     name: 'Checkout',
     component: Checkout
   },
