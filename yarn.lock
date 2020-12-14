@@ -8027,11 +8027,6 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-vue-google-autocomplete@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/vue-google-autocomplete/-/vue-google-autocomplete-1.1.0.tgz#74b700da8d905e2c3dd0bc219b3d740e99277b2e"
-  integrity sha1-dLcA2o2QXiw90Lwhmz10Dpkney4=
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
@@ -8137,13 +8132,6 @@ vue-touch@^2.0.0-beta.4:
     rollup-plugin-cleanup "^0.1.4"
     rollup-plugin-commonjs "^7.0.0"
     rollup-plugin-node-resolve "^2.0.0"
-
-vue2-google-maps-withscopedautocomp@^0.12.1:
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/vue2-google-maps-withscopedautocomp/-/vue2-google-maps-withscopedautocomp-0.12.1.tgz#30c895bbfd7dfb874474259607f7d38af69f14c6"
-  integrity sha512-oyHBKjC497L2C95MTc0rQVDcewRldsoWMiKGFUvL/VbYUFcy/a9c2gnaJ8RPxeIhqdTdw54thlLQX/RGetfduw==
-  dependencies:
-    marker-clusterer-plus "^2.1.4"
 
 vue2-google-maps@^0.10.7:
   version "0.10.7"

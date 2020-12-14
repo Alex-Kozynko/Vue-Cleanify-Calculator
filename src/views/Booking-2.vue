@@ -55,15 +55,13 @@
 
 <script>
 import VSelect from "@/components/VSelect";
-import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import {mask} from 'vue-the-mask'
 import {gmapApi} from 'vue2-google-maps'
 
 export default {
   name: "Booking-2",
   components: {
-    VSelect,
-    VueGoogleAutocomplete
+    VSelect
   },
   directives: {
     mask

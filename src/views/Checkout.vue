@@ -16,18 +16,21 @@
           <div class="address" :class="{success: data.address.status === true, error: data.address.status === false}">
             <gmap-autocomplete
                 class="button item gmapauto"
-                :value="data.address.street"
-                @place_changed="getAddressData($event)"
                 placeholder="Street address*"
-                required
-                name="shipping_address_1"
+                name="billing_address_1"
                 type="search"
+                required
+                :value="!sameBillingAddress ? data.billingAddress.street : data.address.street"
+                :options="{
+                    componentRestrictions: {country: 'us'}
+                  }"
+                @place_changed="getAddressData($event)"
             />
             <p class="status">Address is not valid</p>
-            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.address.zip" :readonly="data.address.status">
+            <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt" v-model="data.address.apt">
           </div>
           <div class="address">
-            <input type="text" class="button apt item" placeholder="Apt" name="shipping_apt" v-model="data.address.apt">
+            <input type="text" class="button zip item" placeholder="Zip" name="shipping_postcode" v-model="data.address.zip" :readonly="data.address.status">
             <input type="text" class="button item" placeholder="City" name="shipping_city" :value="data.address.city" readonly>
             <input type="text" class="button item" placeholder="State" name="shipping_state" :value="data.address.state" readonly>
 
@@ -192,7 +195,7 @@
 
       <div class="footer">
         <div class="buttons-holder">
-          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: !agree || !data.address.status}">Pay
+          <div class="button" @click="payment_method = 'authnet'" :class="{active: payment_method === 'authnet', disabled: data.address.status !== true}">Pay
             with Card
           </div>
 <!--          <button
@@ -207,27 +210,12 @@
               class="button"
               type="submit"
               @click="payment_method = 'cod'"
-              :class="{disabled: !agree || !data.address.status}"
+              :class="{disabled: data.address.status !== true}"
               :disabled="!agree || !data.address.status"
           >
             Submit Request
           </button>
         </div>
-        <label class="checkbox-holder">
-          <span class="checkbox">
-            <input type="checkbox" required v-model="agree">
-            <span></span>
-          </span>
-          <span>
-            I AGREE TO THE WEBSITE
-            <a href="/terms.html" target="_blank">TERMS</a>
-            AND
-            <a href="/policy.html" target="_blank">CONDITIONS</a>
-          </span>
-        </label>
-        <p>Your personal data will be used to process your order,
-          support your experience throughout this website, and
-          for other purposes described in our privacy policy.</p>
         <div class="creditCard" v-show="payment_method === 'authnet'">
           <div class="close" @click="payment_method = 'cod'"></div>
           <div class="holder">
@@ -254,13 +242,22 @@
               </div>
               <gmap-autocomplete
                   class="button item gmapauto"
-                  :value="!sameBillingAddress ? data.billingAddress.street : data.address.street"
-                  @place_changed="getAddressDataBilling($event)"
                   placeholder="Street address*"
-                  required
                   name="billing_address_1"
                   type="search"
+                  required
+                  :value="!sameBillingAddress ? data.billingAddress.street : data.address.street"
+                  :options="{
+                    componentRestrictions: {country: 'us'}
+                  }"
+                  @place_changed="getAddressDataBilling($event)"
               />
+              <input type="text"
+                     class="button item"
+                     placeholder="Apt"
+                     name="billing_apt"
+                     :value="!sameBillingAddress ? data.billingAddress.apt : data.address.apt"
+              >
               <div class="address">
                 <input type="text"
                        class="button item"
@@ -279,12 +276,6 @@
               </div>
               <div class="address">
                 <input type="text"
-                       class="button item"
-                       placeholder="Apt"
-                       name="billing_apt"
-                       :value="!sameBillingAddress ? data.billingAddress.apt : data.address.apt"
-                >
-                <input type="text"
                        class="button zip item"
                        placeholder="Zip*"
                        name="billing_postcode"
@@ -292,7 +283,7 @@
                        required
                        maxlength="5"
                 >
-                <input type="hidden" class="button item" placeholder="Email address*" required name="billing_email" :value="data.address.email">
+                <input type="email" class="button item" placeholder="Email address*" required name="billing_email" :value="!sameBillingAddress ? data.billingAddress.email : data.address.email">
               </div>
             </div>
             <button class="button active " name="woocommerce_checkout_place_order" type="submit"
@@ -302,24 +293,24 @@
             >
               Place order
             </button>
-            <label class="checkbox-holder">
+          </div>
+        </div>
+        <label class="checkbox-holder">
           <span class="checkbox">
             <input type="checkbox" required v-model="agree">
             <span></span>
           </span>
-              <span>
+          <span>
             I AGREE TO THE WEBSITE
             <a href="/terms.html" target="_blank">TERMS</a>
             AND
             <a href="/policy.html" target="_blank">CONDITIONS</a>
           </span>
-            </label>
-            <p>Your personal data will be used to process your order,
-              support your experience throughout this website, and
-              for other purposes described in our privacy policy.</p>
-          </div>
-          </div>
-        </div>
+        </label>
+        <p>Your personal data will be used to process your order,
+          support your experience throughout this website, and
+          for other purposes described in our privacy policy.</p>
+      </div>
     </form>
   </div>
 </template>
@@ -433,6 +424,7 @@ export default {
       let th = this
       new google.maps.Geocoder().geocode({'address': th.location.centeraddress}, (results, status) => {
         console.log(results);
+        console.log(results[0].geometry.location);
         results[0].address_components.forEach(item => {
           if (item.types.includes("administrative_area_level_1")) {
             this.data.address.state = item.short_name
@@ -510,29 +502,22 @@ export default {
 
           )
     },
-  },
-  watch: {
-    zip(zip) {
-      console.log(zip);
-      /*new google.maps.Geocoder().geocode({'address': zip}, (results, status) => {
-        console.log(results);
-        results[0].address_components.forEach(item => {
-          if (item.types.includes("administrative_area_level_1")) {
-            this.data.address.state = item.short_name
-            this.$store.dispatch('setCache')
-          }
-          if (item.types.includes("sublocality_level_1")) {
-            this.data.address.city = item.short_name
-            this.$store.dispatch('setCache')
-          }
-        })
-      })*/
-    }
   }
 }
 </script>
 
 <style lang="scss">
+.pac-item {
+  span {
+    font-size: 11px;
+    &.pac-item-query {
+      font-size: 13px;
+    }
+    &.pac-matched {
+      font-size: 13px;
+    }
+  }
+}
   #checkout {
     flex-direction: column;
     padding: $a55 $a460 !important;
@@ -613,7 +598,7 @@ export default {
             .status {
               display: block;
               position: absolute;
-              bottom: $a15;
+              bottom: $a5;
               left: $a25;
               color: red;
               font-size: $a10;
@@ -632,7 +617,7 @@ export default {
         .item {
           padding: 0 $a25;
           width: 100%;
-          margin-bottom: $a30;
+          margin-bottom: $a15;
           cursor: auto;
           &:hover {
             background: none;
@@ -795,7 +780,7 @@ export default {
         cursor: pointer;
         color: transparentize($color, .3);
         justify-content: center;
-        margin-bottom: $a40;
+        margin-bottom: $a15;
         a {
           margin: 0 $a5;
         }
@@ -852,6 +837,9 @@ export default {
         align-items: center;
         width: $a410;
         margin: $a25 auto 0 auto;
+        .checkbox-holder {
+          margin-bottom: $a30;
+        }
         .close {
           display: none;
         }
@@ -892,7 +880,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: $a30;
+          margin-bottom: $a15;
           width: 100%;
           img {
             width: $a180;
