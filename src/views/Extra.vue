@@ -111,7 +111,7 @@
       </router-link>
  -->
       <a
-          @click="data.frequent = $store.state.frequents[0]; $router.go(-1)"
+          @click="data.frequent = $store.state.frequents[0]; $router.push('/recurring-cleaning/')"
           class="back"
           v-if="$route.fullPath !== '/recurring-cleaning/'"
       >
@@ -167,6 +167,11 @@ export default {
         this.$store.commit('dataToSend', {key: 'addons', payload: [...this.data.addons, item]})
       }
       this.$store.dispatch('setCache')
+    }
+  },
+  created() {
+    if (this.data.frequent.text === 'One time') {
+      this.$router.push('/one-time-cleaning/')
     }
   }
 }

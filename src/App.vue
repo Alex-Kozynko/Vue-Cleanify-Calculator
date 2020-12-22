@@ -82,6 +82,7 @@ import store from './store'
 import moment from 'moment'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import {mask} from "vue-the-mask";
+import $moment from "moment";
 
 Vue.use(VueGoogleMaps, {
   load: {
