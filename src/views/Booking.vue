@@ -133,21 +133,21 @@ export default {
   #booking {
     display: flex;
     flex-direction: column;
-    padding-bottom: $a350;
-    height: calc(100vh - #{$a87});
+    padding-bottom: vwD(350);
+    height: calc(100vh - #{vwD(87)});
     .date {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0 auto;
-      padding: 0 $a50;
+      padding: 0 vwD(50);
       .months {
         width: 70%;
-        margin-top: $a20;
+        margin-top: vwD(20);
         .slick-prev, .slick-next {
-          width: $a8;
-          height: $a13;
+          width: vwD(8);
+          height: vwD(13);
           background: url('~@/assets/img/icons/arrowRight.svg') no-repeat 0 0 / contain;
           transform: none;
           right: 40%;
@@ -176,7 +176,7 @@ export default {
           opacity: .4;
           transform: scale(.8);
           transition: all 0.5s;
-          padding: 0 $a43;
+          padding: 0 vwD(43);
           &.slick-center {
             opacity: 1;
             transform: none;
@@ -185,16 +185,16 @@ export default {
         .item {
           text-align: center;
           transition: all 0.5s;
-          font-size: $a25;
+          font-size: vwD(25);
           cursor: pointer;
         }
       }
       .dayOfWeek {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        grid-column-gap: $a17;
+        grid-column-gap: vwD(17);
         width: 100%;
-        margin-top: $a70;
+        margin-top: vwD(70);
         .item {
           display: flex;
           align-items: center;
@@ -204,19 +204,19 @@ export default {
           }
           .sale {
             opacity: .5;
-            margin-top: $a14;
+            margin-top: vwD(14);
           }
         }
       }
       .daysOfTheMonth {
         width: 100%;
-        margin-top: $a14;
+        margin-top: vwD(14);
         overflow: hidden;
         .month {
           display: grid !important;
           grid-template-columns: repeat(7, 1fr);
-          grid-column-gap: $a17;
-          grid-row-gap: $a22;
+          grid-column-gap: vwD(17);
+          grid-row-gap: vwD(22);
         }
       }
     }
@@ -226,10 +226,10 @@ export default {
       flex-direction: column;
       align-items: center;
       h2 {
-        margin-bottom: $a40;
+        margin-bottom: vwD(40);
       }
       .v-select {
-        width: $a450;
+        width: vwD(450);
       }
     }
   }
@@ -239,67 +239,67 @@ export default {
         padding: 0;
         .months {
           width: 100%;
-          padding: $m20 $m15;
+          padding: vwM(20) vwM(15);
           border: 1px solid $primary;
           border-bottom: 0;
-          border-radius: $m16 $m16 0 0;
+          border-radius: vwM(16) vwM(16) 0 0;
           .item {
-            font-size: $m22;
+            font-size: vwM(22);
           }
           .slick-slide {
             opacity: 0;
           }
           .slick-prev {
-            width: $m15;
-            height: $m15;
+            width: vwM(15);
+            height: vwM(15);
             left: 22%;
           }
           .slick-next {
-            width: $m15;
-            height: $m15;
+            width: vwM(15);
+            height: vwM(15);
             right: 22%;
           }
         }
         .dayOfWeek {
           margin-top: 0;
-          padding: 0 $m15 $m15 $m15;
+          padding: 0 vwM(15) vwM(15) vwM(15);
           border: 1px solid $primary;
           border-top: 0;
           border-bottom: 0;
           .item {
             .day {
-              font-size: $m13;
+              font-size: vwM(13);
             }
             .sale {
-              font-size: $m10;
+              font-size: vwM(10);
               text-align: center;
-              margin-top: $m10;
+              margin-top: vwM(10);
             }
           }
         }
         .daysOfTheMonth {
           margin-top: 0;
-          padding-bottom: $m20;
+          padding-bottom: vwM(20);
           border: 1px solid $primary;
-          border-radius: 0 0 $m16 $m16;
+          border-radius: 0 0 vwM(16) vwM(16);
           border-top: 0;
           .month {
-            grid-column-gap: $m13;
-            grid-row-gap: $m10;
-            padding: 0 $m15;
+            grid-column-gap: vwM(13);
+            grid-row-gap: vwM(10);
+            padding: 0 vwM(15);
           }
           .button {
             padding: 0;
-            border-radius: $m5;
-            width: $m25;
-            height: $m25;
-            font-size: $m12;
+            border-radius: vwM(5);
+            width: vwM(25);
+            height: vwM(25);
+            font-size: vwM(12);
           }
         }
       }
       .time {
         h2 {
-          margin-bottom: $m20;
+          margin-bottom: vwM(20);
         }
         .v-select {
           width: 100%;

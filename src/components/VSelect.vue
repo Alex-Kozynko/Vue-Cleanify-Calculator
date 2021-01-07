@@ -219,11 +219,11 @@ export default {
       position: relative;
       white-space: nowrap;
       p {
-        font-size: $a20;
+        font-size: vwD(20);
       }
 
       span {
-        font-size: $a13;
+        font-size: vwD(13);
         font-weight: 600;
         position: absolute;
         top: 110%;
@@ -236,9 +236,9 @@ export default {
     }
 
     img {
-      margin-left: $a15;
+      margin-left: vwD(15);
       transition: all 0.2s;
-      width: $a15;
+      width: vwD(15);
     }
   }
 
@@ -247,17 +247,17 @@ export default {
     left: 0;
     min-width: 100%;
     top: 100%;
-    border-radius: 0 0 $a20 $a20;
+    border-radius: 0 0 vwD(20) vwD(20);
     background: #FBFBFB;
     padding: 1px 0;
     opacity: 0;
     visibility: hidden;
     overflow: hidden;
     z-index: 100;
-    box-shadow: 0 $a15 $a30 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 vwD(15) vwD(30) rgba(0, 0, 0, 0.1);
 
     &.calendar {
-      border-radius: $a16;
+      border-radius: vwD(16);
     }
 
     &.addons {
@@ -266,11 +266,11 @@ export default {
     }
 
     .zip {
-      padding: $a15 $a25;
+      padding: vwD(15) vwD(25);
       input {
         border-width: 0;
         border-bottom: 1px solid transparentize(#161F32, .9);;
-        padding-bottom: $a5;
+        padding-bottom: vwD(5);
         background: none;
         color: transparentize($color, .3);
       }
@@ -278,7 +278,7 @@ export default {
 
     ul {
       list-style: none;
-      max-height: $a320;
+      max-height: vwD(320);
       overflow: auto;
       &::-webkit-scrollbar {
         width: 2px;
@@ -301,9 +301,9 @@ export default {
         width: 2px;
       }
       li {
-        padding: 0 $a25;
+        padding: 0 vwD(25);
         width: 100%;
-        height: $a40;
+        height: vwD(40);
         transition: all 0.2s;
         display: flex;
         align-items: center;
@@ -312,8 +312,8 @@ export default {
         flex-grow: 1;
         span {
           opacity: .5;
-          font-size: $a12;
-          margin-left: $a10;
+          font-size: vwD(12);
+          margin-left: vwD(10);
         }
         &:hover {
           background: transparentize($primary, .85);
@@ -326,16 +326,16 @@ export default {
     }
 
     .date {
-      width: $a300;
+      width: vwD(300);
       border: 1px solid $primary;
-      border-radius: $a16;
-      padding: $a20;
+      border-radius: vwD(16);
+      padding: vwD(20);
       cursor: auto;
       .months {
         width: 100%;
         .slick-prev, .slick-next {
-          width: $a15;
-          height: $a15;
+          width: vwD(15);
+          height: vwD(15);
           background: url('~@/assets/img/icons/arrowRight.svg') no-repeat 0 0 / contain;
           transform: none;
           right: 10%;
@@ -364,7 +364,7 @@ export default {
           opacity: 0;
           transform: scale(.8);
           transition: all 0.5s;
-          padding: 0 $a43;
+          padding: 0 vwD(43);
           &.slick-center {
             opacity: 1;
             transform: none;
@@ -373,16 +373,16 @@ export default {
         .item {
           text-align: center;
           transition: all 0.5s;
-          font-size: $a25;
+          font-size: vwD(25);
           cursor: pointer;
         }
       }
       .dayOfWeek {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        grid-column-gap: $a9;
+        grid-column-gap: vwD(9);
         width: 100%;
-        margin-top: $a15;
+        margin-top: vwD(15);
         .item {
           display: flex;
           align-items: center;
@@ -392,41 +392,41 @@ export default {
           }
           .sale {
             opacity: .5;
-            margin-top: $a14;
+            margin-top: vwD(14);
             text-align: center;
           }
         }
       }
       .daysOfTheMonth {
         width: 100%;
-        margin-top: $a14;
+        margin-top: vwD(14);
         overflow: hidden;
         .month {
           display: grid !important;
           grid-template-columns: repeat(7, 1fr);
-          grid-column-gap: $a13;
-          grid-row-gap: $a10;
+          grid-column-gap: vwD(13);
+          grid-row-gap: vwD(10);
           .button {
-            width: $a25;
-            height: $a25;
-            border-radius: $a5;
-            font-size: $a12;
+            width: vwD(25);
+            height: vwD(25);
+            border-radius: vwD(5);
+            font-size: vwD(12);
           }
         }
       }
     }
     .addons {
-      width: $a300;
-      padding: $a10;
+      width: vwD(300);
+      padding: vwD(10);
       .item:not(:last-of-type) {
-        margin-bottom: $a10;
+        margin-bottom: vwD(10);
       }
       .item {
-        padding: 0 $a18 0 $a10;
-        height: $a40;
-        border-radius: $a10;
+        padding: 0 vwD(18) 0 vwD(10);
+        height: vwD(40);
+        border-radius: vwD(10);
         .icon {
-          margin-right: $a15;
+          margin-right: vwD(15);
         }
         .price {
           margin-left: auto;
@@ -458,7 +458,7 @@ export default {
   }
 
   &.style2, &.mobile {
-    padding: 0 $a25 !important;
+    padding: 0 vwD(25) !important;
     &:hover {
       background: none !important;
     }
@@ -468,7 +468,7 @@ export default {
       .title {
         opacity: .7;
         font-weight: 500;
-        font-size: $a16;
+        font-size: vwD(16);
         flex-direction: row;
         justify-content: space-between;
         flex-grow: 1;
@@ -486,20 +486,20 @@ export default {
       background: #fff;
     }
     &.open {
-      border-radius: $a16 $a16 0 0 !important;
+      border-radius: vwD(16) vwD(16) 0 0 !important;
       border-color: $secondary !important;
     }
     &.reverse {
       .v-list-dropdown {
         top: auto;
         bottom: 100%;
-        border-radius: $a20 $a20 0 0;
-        box-shadow: 0 (-$a15) $a30 rgba(0, 0, 0, 0.1);
+        border-radius: vwD(20) vwD(20) 0 0;
+        box-shadow: 0 (-vwD(15)) vwD(30) rgba(0, 0, 0, 0.1);
         border: 1px solid $secondary;
         border-bottom-color: $primary;
       }
       &.open {
-        border-radius: 0 0 $a16 $a16 !important;
+        border-radius: 0 0 vwD(16) vwD(16) !important;
       }
     }
   }
@@ -507,39 +507,39 @@ export default {
 @media screen and (max-width: $mobileOn) {
   .v-select {
     &.style2, &.mobile {
-      padding: 0 $m25 !important;
+      padding: 0 vwM(25) !important;
       &:hover {
         background: #fff !important;
       }
       .text {
         .title {
           p {
-            font-size: $m16;
+            font-size: vwM(16);
           }
           span {
-            font-size: $m12;
+            font-size: vwM(12);
             text-align: center;
           }
         }
         img {
-          width: $m13;
-          margin-left: $m10;
+          width: vwM(13);
+          margin-left: vwM(10);
         }
       }
       .v-list-dropdown {
-        border-radius: 0 0 $m16 $m16;
-        padding: $m4 0;
-        border-width: $m1;
-        left: -$m1;
-        width: calc(100% + #{$m2});
+        border-radius: 0 0 vwM(16) vwM(16);
+        padding: vwM(4) 0;
+        border-width: vwM(1);
+        left: -vwM(1);
+        width: calc(100% + #{vwM(2)});
         ul {
-          max-height: $m210;
+          max-height: vwM(210);
           li {
             height: auto;
-            padding: $m8 $m25;
+            padding: vwM(8) vwM(25);
             white-space: normal;
             span {
-              font-size: $m12;
+              font-size: vwM(12);
               text-align: center;
               white-space: nowrap;
             }
@@ -559,99 +559,99 @@ export default {
           justify-content: center;
           .date {
             background: #ffffff;
-            border-radius: $m16;
+            border-radius: vwM(16);
             width: 95%;
-            padding: $m15 0;
+            padding: vwM(15) 0;
             &>p {
-              padding-right: $m15;
+              padding-right: vwM(15);
             }
             .months {
               width: 100%;
-              padding: 0 $m15;
+              padding: 0 vwM(15);
               //border: 1px solid $primary;
               border-bottom: 0;
-              border-radius: $m16 $m16 0 0;
-              margin-bottom: $m15;
+              border-radius: vwM(16) vwM(16) 0 0;
+              margin-bottom: vwM(15);
               .item {
-                font-size: $m22;
+                font-size: vwM(22);
               }
               .slick-prev {
-                width: $m15;
-                height: $m15;
+                width: vwM(15);
+                height: vwM(15);
                 left: 22%;
               }
               .slick-next {
-                width: $m15;
-                height: $m15;
+                width: vwM(15);
+                height: vwM(15);
                 right: 22%;
               }
             }
             .dayOfWeek {
               margin-top: 0;
-              padding: 0 $m15;
-              margin-bottom: $m10;
+              padding: 0 vwM(15);
+              margin-bottom: vwM(10);
               //border: 1px solid $primary;
               border-top: 0;
               border-bottom: 0;
               .item {
                 border: none !important;
                 .day {
-                  font-size: $m13;
+                  font-size: vwM(13);
                 }
                 .sale {
-                  font-size: $m10;
+                  font-size: vwM(10);
                   text-align: center;
-                  margin-top: $m10;
+                  margin-top: vwM(10);
                 }
               }
             }
             .daysOfTheMonth {
               margin-top: 0;
               //border: 1px solid $primary;
-              border-radius: 0 0 $m16 $m16;
+              border-radius: 0 0 vwM(16) vwM(16);
               border-top: 0;
               .month {
-                grid-column-gap: $m13;
-                grid-row-gap: $m10;
-                padding: 0 $m15;
+                grid-column-gap: vwM(13);
+                grid-row-gap: vwM(10);
+                padding: 0 vwM(15);
               }
               .button {
                 padding: 0;
-                border-radius: $m5;
-                width: $m25;
-                height: $m25;
-                font-size: $m12;
+                border-radius: vwM(5);
+                width: vwM(25);
+                height: vwM(25);
+                font-size: vwM(12);
               }
             }
           }
         }
         .addons {
           width: 100%;
-          padding: $m10;
+          padding: vwM(10);
           .item {
-            padding: 0 $m15;
-            border-radius: $m16;
+            padding: 0 vwM(15);
+            border-radius: vwM(16);
             .icon {
-              margin-right: $m10;
+              margin-right: vwM(10);
             }
           }
         }
         &.zip {
-          padding: $m10;
+          padding: vwM(10);
           input {
             width: 100%;
           }
         }
       }
       &.open {
-        border-radius: $m16 $m16 0 0 !important;
+        border-radius: vwM(16) vwM(16) 0 0 !important;
       }
       &.reverse {
         .v-list-dropdown {
-          border-radius: $m16 $m16 0 0;
+          border-radius: vwM(16) vwM(16) 0 0;
         }
         &.open {
-          border-radius: 0 0 $m16 $m16 !important;
+          border-radius: 0 0 vwM(16) vwM(16) !important;
         }
       }
     }

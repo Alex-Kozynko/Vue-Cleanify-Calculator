@@ -227,26 +227,26 @@ body * {
   box-sizing: border-box;
   font-family: 'Gilroy', sans-serif;
   font-weight: 500;
-  font-size: $a16;
+  font-size: vwD(16);
   outline: none;
   text-decoration: none;
 }
 
 h2 {
   font-weight: 800;
-  font-size: $a35;
+  font-size: vwD(35);
   width: 100%;
   text-align: center;
 }
 
 h3 {
-  font-size: $a25;
+  font-size: vwD(25);
   font-weight: 600;
   opacity: .8;
 }
 
 h4 {
-  font-size: $a18;
+  font-size: vwD(18);
   font-weight: 600;
   opacity: .6;
   width: 100%;
@@ -255,15 +255,15 @@ h4 {
 
 h5 {
   font-weight: 600;
-  font-size: $a13;
-  margin-bottom: $a15;
+  font-size: vwD(13);
+  margin-bottom: vwD(15);
 }
 
 .button {
-  height: $a55;
+  height: vwD(55);
   border: 1px solid $primary;
   border-color: $primary !important;
-  border-radius: $a16;
+  border-radius: vwD(16);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,15 +282,15 @@ h5 {
   &.disabled {
     border-color: #E5E5E5;
     opacity: .6;
-    box-shadow: inset 0 $a2 $a2 rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 vwD(2) vwD(2) rgba(0, 0, 0, 0.1);
     pointer-events: none;
   }
 }
 
 #app {
   header {
-    height: $a87;
-    padding: 0 $a300;
+    height: vwD(87);
+    padding: 0 vwD(300);
     display: flex;
     background: #FBFBFB;
 
@@ -299,7 +299,7 @@ h5 {
     }
 
     .logo {
-      padding-right: $a40;
+      padding-right: vwD(40);
       height: 100%;
       display: flex;
       align-items: center;
@@ -307,11 +307,11 @@ h5 {
       border-right: 1px solid #F0F0F0;
 
       img {
-        width: $a120;
+        width: vwD(120);
       }
     }
     label {
-      font-size: $a20;
+      font-size: vwD(20);
       text-decoration: none;
       color: $color;
     }
@@ -320,7 +320,7 @@ h5 {
       display: flex;
       flex-grow: 1;
       &>.item {
-        padding: 0 $a20 0 $a25;
+        padding: 0 vwD(20) 0 vwD(25);
         border: 0;
         border-bottom: 10px solid $primary;
         display: flex;
@@ -348,19 +348,19 @@ h5 {
           border: none;
           background: none;
           //font-weight: 700;
-          font-size: $a20;
-          width: $a70;
+          font-size: vwD(20);
+          width: vwD(70);
         }
 
         &.link {
-          padding: 0 $a36;
+          padding: 0 vwD(36);
         }
 
         .subText {
-          font-size: $a13;
+          font-size: vwD(13);
           font-weight: 600;
           position: absolute;
-          bottom: $a8;
+          bottom: vwD(8);
           left: 0;
           right: 0;
           display: flex;
@@ -368,9 +368,9 @@ h5 {
           justify-content: center;
 
           span {
-            font-size: $a12;
+            font-size: vwD(12);
             font-weight: 600;
-            margin-left: $a3;
+            margin-left: vwD(3);
           }
         }
 
@@ -378,7 +378,7 @@ h5 {
           .text {
             .title {
               p {
-                max-width: $a85;
+                max-width: vwD(85);
                 display: block;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -394,7 +394,7 @@ h5 {
 
       .item {
         //font-weight: 700;
-        font-size: $a20;
+        font-size: vwD(20);
         text-decoration: none;
         color: $color;
       }
@@ -406,21 +406,21 @@ h5 {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding-left: $a40;
+      padding-left: vwD(40);
       margin-left: auto;
       font-weight: 700;
-      font-size: $a40;
+      font-size: vwD(40);
       border-left: 1px solid #F0F0F0;
-      width: $a105;
+      width: vwD(105);
 
       .number {
         font-weight: 700;
-        font-size: $a40;
+        font-size: vwD(40);
       }
 
       .sub {
         text-transform: uppercase;
-        font-size: $a10;
+        font-size: vwD(10);
         font-weight: 600;
         color: $color;
         text-align: center;
@@ -429,7 +429,7 @@ h5 {
   }
 
   .main {
-    padding: $a55 $a300;
+    padding: vwD(55) vwD(300);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -442,14 +442,14 @@ h5 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: $a5;
+    margin-top: vwD(5);
     .back {
-      margin-right: $a35;
+      margin-right: vwD(35);
       color: $color;
       cursor: pointer;
     }
     .button {
-      width: $a110;
+      width: vwD(110);
       &[disabled] {
         background: #9CE1E0;
         color: $color;
@@ -464,62 +464,62 @@ h5 {
   }
   body,
   body * {
-    font-size: $m16;
+    font-size: vwM(16);
   }
   h2 {
-    font-size: $m26;
+    font-size: vwM(26);
     text-align: left;
-    margin: $m20 0;
+    margin: vwM(20) 0;
   }
   h5 {
-    font-size: $m13;
-    margin-bottom: $m12;
+    font-size: vwM(13);
+    margin-bottom: vwM(12);
   }
 
   .button {
-    height: $m56;
-    border-radius: $m16;
-    padding: 0 $m35;
-    border-width: $m1;
+    height: vwM(56);
+    border-radius: vwM(16);
+    padding: 0 vwM(35);
+    border-width: vwM(1);
   }
 
   #app {
     header {
       height: auto;
-      padding: 0 $m16;
+      padding: 0 vwM(16);
       align-items: center;
-      filter: drop-shadow(0 $m5 $m10 rgba(0, 0, 0, 0.1));
+      filter: drop-shadow(0 vwM(5) vwM(10) rgba(0, 0, 0, 0.1));
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       z-index: 100;
-      border-bottom: $m1 solid rgba(0, 0, 0, 0.1);
+      border-bottom: vwM(1) solid rgba(0, 0, 0, 0.1);
       flex-flow: row wrap;
 
       .mobileTrigger {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: $m32;
-        height: $m32;
+        width: vwM(32);
+        height: vwM(32);
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
         margin: auto;
-        border-radius: $m8;
+        border-radius: vwM(8);
         transform: translate(0, -50%);
         transition: all .5s;
         background: $primary;
-        padding-bottom: $m5;
+        padding-bottom: vwM(5);
 
         &:before {
           content: "";
-          border-right: $m3 solid $color;
-          border-bottom: $m3 solid $color;
-          width: $m8;
-          height: $m8;
+          border-right: vwM(3) solid $color;
+          border-bottom: vwM(3) solid $color;
+          width: vwM(8);
+          height: vwM(8);
           transform: rotate(45deg);
         }
 
@@ -530,7 +530,7 @@ h5 {
 
         &.up {
           padding-bottom: 0;
-          padding-top: $m5;
+          padding-top: vwM(5);
           &:before {
             transform: rotate(225deg);
           }
@@ -543,15 +543,15 @@ h5 {
       .logo {
         width: auto;
         border-right: 0;
-        padding: $m10 0;
+        padding: vwM(10) 0;
 
         img {
-          width: $m100;
+          width: vwM(100);
         }
       }
 
       .item {
-        border-width: $m1;
+        border-width: vwM(1);
 
         &:before {
           display: none;
@@ -569,63 +569,63 @@ h5 {
           content: '';
           position: absolute;
           bottom: 100%;
-          left: -$m16;
-          width: calc(100% + #{$m32});
-          height: $m1;
+          left: -vwM(16);
+          width: calc(100% + #{vwM(32)});
+          height: vwM(1);
           background: rgba(0,0,0,0.1);
         }
 
         &>.item:first-of-type {
-          margin-top: $m16;
+          margin-top: vwM(16);
         }
 
         .item {
-          height: $m44 !important;
-          margin-bottom: $m10;
+          height: vwM(44) !important;
+          margin-bottom: vwM(10);
           font-weight: bold;
-          border: $m1 solid $primary;
+          border: vwM(1) solid $primary;
 
           p {
             font-weight: bold !important;
           }
           &.time .text .title p {
             max-width: none;
-            font-size: $m16;
+            font-size: vwM(16);
           }
         }
       }
 
       nav {
         flex-direction: column;
-        padding-bottom: $m16;
+        padding-bottom: vwM(16);
 
         .item {
-          font-size: $m16;
-          border-radius: $m16;
-          border: $m1 solid $primary;
+          font-size: vwM(16);
+          border-radius: vwM(16);
+          border: vwM(1) solid $primary;
           flex-direction: row;
           justify-content: space-between;
-          padding: 0 $m25 !important;
+          padding: 0 vwM(25) !important;
           color: transparentize($color, .3);
 
           .subText {
             position: static;
-            font-size: $m14;
+            font-size: vwM(14);
           }
         }
       }
 
       .fullCost {
         width: auto;
-        padding: 0 0 0 $m15;
+        padding: 0 0 0 vwM(15);
         border-left: 0;
 
         .number {
-          font-size: $m26;
+          font-size: vwM(26);
         }
 
         .sub {
-          font-size: $m10;
+          font-size: vwM(10);
           display: none;
         }
       }
@@ -634,18 +634,18 @@ h5 {
     .main {
       width: 100%;
       height: auto !important;
-      padding: 0 $m16 !important;
-      padding-top: $m60 !important;
+      padding: 0 vwM(16) !important;
+      padding-top: vwM(60) !important;
     }
 
     .buttons {
-      margin-top: $m30;
-      padding-bottom: $m50;
+      margin-top: vwM(30);
+      padding-bottom: vwM(50);
       .button {
         width: auto;
       }
       .back {
-        margin-right: $m15;
+        margin-right: vwM(15);
       }
     }
   }

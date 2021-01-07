@@ -520,13 +520,13 @@ export default {
 }
   #checkout {
     flex-direction: column;
-    padding: $a55 $a460 !important;
+    padding: vwD(55) vwD(460) !important;
     height: 100%;
     .woocommerce-error li {
       color: $color !important;
     }
     h2 {
-      margin-bottom: $a35;
+      margin-bottom: vwD(35);
     }
     input[readonly] {
       background: #F0F0F0;
@@ -536,16 +536,16 @@ export default {
     }
     .firstClean {
       width: 100%;
-      height: $a76;
+      height: vwD(76);
       background: $primary;
-      border-radius: $a16;
+      border-radius: vwD(16);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: $a30;
+      font-size: vwD(30);
       color: #ffffff;
-      margin-bottom: $a40;
+      margin-bottom: vwD(40);
     }
     .checkout {
       width: 100%;
@@ -555,20 +555,20 @@ export default {
       justify-content: space-between;
       align-items: flex-start;
       width: 100%;
-      margin-bottom: $a45;
+      margin-bottom: vwD(45);
       .left {
-        width: $a515;
+        width: vwD(515);
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: $a25;
+        margin-top: vwD(25);
         h4 {
           text-align: left;
-          margin-bottom: $a30;
-          padding-left: $a25;
+          margin-bottom: vwD(30);
+          padding-left: vwD(25);
         }
         h3 {
-          padding-left: $a25;
+          padding-left: vwD(25);
           text-align: left;
           width: 100%;
         }
@@ -578,7 +578,7 @@ export default {
           width: 100%;
           position: relative;
           input:not(:last-of-type) {
-            margin-right: $a15;
+            margin-right: vwD(15);
           }
           .zip {
             width: 44.5%;
@@ -598,26 +598,26 @@ export default {
             .status {
               display: block;
               position: absolute;
-              bottom: $a5;
-              left: $a25;
+              bottom: vwD(5);
+              left: vwD(25);
               color: red;
-              font-size: $a10;
+              font-size: vwD(10);
               line-height: initial;
             }
           }
         }
         .subtitle {
-          margin-top: $a10;
-          margin-bottom: $a20;
+          margin-top: vwD(10);
+          margin-bottom: vwD(20);
           opacity: .3;
-          font-size: $a15;
+          font-size: vwD(15);
           width: 100%;
-          padding-left: $a25;
+          padding-left: vwD(25);
         }
         .item {
-          padding: 0 $a25;
+          padding: 0 vwD(25);
           width: 100%;
-          margin-bottom: $a15;
+          margin-bottom: vwD(15);
           cursor: auto;
           &:hover {
             background: none;
@@ -627,7 +627,7 @@ export default {
           width: 100%;
           display: flex;
           justify-content: space-between;
-          margin-top: $a10;
+          margin-top: vwD(10);
           &.ok {
             .item {
               border-color: #00ff00 !important;
@@ -642,29 +642,29 @@ export default {
               color: red;
               position: absolute;
               top: 110%;
-              left: $a25;
-              font-size: $a10;
+              left: vwD(25);
+              font-size: vwD(10);
             }
           }
           .item {
             margin-bottom: 0;
           }
           .button.active {
-            margin-left: $a36;
-            min-width: $a108;
+            margin-left: vwD(36);
+            min-width: vwD(108);
           }
         }
       }
       .right {
-        width: $a360;
+        width: vwD(360);
         background: transparentize($color, .97);
-        padding: $a25 $a15 $a15 $a15;
+        padding: vwD(25) vwD(15) vwD(15) vwD(15);
         border-radius: 1px;
         .title {
           width: 100%;
           text-align: center;
-          font-size: $a25;
-          margin-bottom: $a20;
+          font-size: vwD(25);
+          margin-bottom: vwD(20);
           .arrow {
             display: none;
           }
@@ -674,9 +674,9 @@ export default {
           align-items: center;
           justify-content: space-between;
           border-bottom: 1px solid #EAEAF0;
-          padding: $a10 0;
+          padding: vwD(10) 0;
           &.small {
-            padding: $a6 0;
+            padding: vwD(6) 0;
           }
           p.name, p.value {
             opacity: .7;
@@ -704,7 +704,7 @@ export default {
           &.total {
             border-bottom: 0;
             p {
-              font-size: $a23;
+              font-size: vwD(23);
               font-weight: bold;
               span {
                 font-size: inherit;
@@ -713,25 +713,25 @@ export default {
             }
           }
           .details-holder {
-            width: $a25;
-            height: $a25;
-            border-radius: $a8;
+            width: vwD(25);
+            height: vwD(25);
+            border-radius: vwD(8);
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px solid $primary;
             background: transparentize($primary, .8);
             font-weight: bold;
-            font-size: $a10;
+            font-size: vwD(10);
             position: relative;
             cursor: help;
             .detail {
               border: 1px solid $primary;
               background: linear-gradient(0deg, transparentize($primary, .8), transparentize($primary, .8)), #fff;
-              top: calc(100% + #{$a16});
+              top: calc(100% + #{vwD(16)});
               left: 50%;
-              padding: $a15 $a20;
-              border-radius: 0 $a16 $a16 $a16;
+              padding: vwD(15) vwD(20);
+              border-radius: 0 vwD(16) vwD(16) vwD(16);
               z-index: -1;
               opacity: 0;
               visibility: hidden;
@@ -744,10 +744,10 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 span {
-                  margin-left: $a25;
+                  margin-left: vwD(25);
                 }
                 &:not(:last-of-type) {
-                  margin-bottom: $a10;
+                  margin-bottom: vwD(10);
                 }
               }
             }
@@ -766,13 +766,13 @@ export default {
       width: 80%;
       border-top: 1px solid rgba(102, 108, 121, 0.2);
       margin: 0 auto;
-      padding-top: $a30;
+      padding-top: vwD(30);
       p {
         white-space: pre-line;
-        width: $a410;
+        width: vwD(410);
         margin: 0 auto;
         opacity: .7;
-        margin-bottom: $a25;
+        margin-bottom: vwD(25);
       }
       .checkbox-holder {
         display: flex;
@@ -780,19 +780,19 @@ export default {
         cursor: pointer;
         color: transparentize($color, .3);
         justify-content: center;
-        margin-bottom: $a15;
+        margin-bottom: vwD(15);
         a {
-          margin: 0 $a5;
+          margin: 0 vwD(5);
         }
         .checkbox {
-          width: $a25;
-          height: $a25;
-          border-radius: $a4;
+          width: vwD(25);
+          height: vwD(25);
+          border-radius: vwD(4);
           border: 1px solid $primary;
           box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1);
           background: transparentize($primary, .8);
           cursor: pointer;
-          margin-right: $a15;
+          margin-right: vwD(15);
           position: relative;
           input {
             position: absolute;
@@ -805,13 +805,13 @@ export default {
               span {
                 position: absolute;
                 top: 0;
-                bottom: $a5;
+                bottom: vwD(5);
                 left: 0;
                 right: 0;
                 margin: auto;
                 transform: rotate(-45deg);
-                width: $a15;
-                height: $a8;
+                width: vwD(15);
+                height: vwD(8);
                 border-left: 2px solid $color;
                 border-bottom: 2px solid $color;
               }
@@ -822,10 +822,10 @@ export default {
       .buttons-holder {
         display: flex;
         justify-content: center;
-        margin-bottom: $a25;
+        margin-bottom: vwD(25);
         .button {
-          width: $a200;
-          margin: 0 $a15;
+          width: vwD(200);
+          margin: 0 vwD(15);
           &.disabled {
             color: rgba(16, 16, 16, 0.3);
           }
@@ -835,23 +835,23 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: $a410;
-        margin: $a25 auto 0 auto;
+        width: vwD(410);
+        margin: vwD(25) auto 0 auto;
         .checkbox-holder {
-          margin-bottom: $a30;
+          margin-bottom: vwD(30);
         }
         .close {
           display: none;
         }
         &:before {
           content: '';
-          width: $a200;
+          width: vwD(200);
           height: 1px;
           background: rgba(102, 108, 121, 0.2);
-          margin-bottom: $a25;
+          margin-bottom: vwD(25);
         }
         .billing {
-          width: $a410;
+          width: vwD(410);
           justify-content: flex-start;
         }
         .address {
@@ -859,10 +859,10 @@ export default {
           justify-content: space-between;
           width: 100%;
           input:first-of-type {
-            margin-right: $a15;
+            margin-right: vwD(15);
           }
           .apt {
-            width: $a130;
+            width: vwD(130);
           }
           .gmapauto {
             &.success {
@@ -874,30 +874,30 @@ export default {
           }
         }
         input {
-          padding: 0 $a25;
+          padding: 0 vwD(25);
         }
         .item {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: $a15;
+          margin-bottom: vwD(15);
           width: 100%;
           img {
-            width: $a180;
+            width: vwD(180);
             margin: 0 auto;
           }
           input {
-            width: calc(50% - #{$a20});
+            width: calc(50% - #{vwD(20)});
             box-sizing: border-box;
           }
           .button.active {
-            width: $a200;
-            margin-right: $a35;
+            width: vwD(200);
+            margin-right: vwD(35);
           }
         }
         .button.active {
-          padding: 0 $a35;
-          margin: 0 auto $a25 auto;
+          padding: 0 vwD(35);
+          margin: 0 auto vwD(25) auto;
         }
       }
     }
@@ -905,13 +905,13 @@ export default {
   @media screen and (max-width: $mobileOn) {
     #checkout {
       h2 {
-        margin-bottom: $m20;
+        margin-bottom: vwM(20);
       }
       .firstClean {
-        font-size: $m16;
-        height: $m56;
-        border-radius: $m16;
-        margin-bottom: $m16;
+        font-size: vwM(16);
+        height: vwM(56);
+        border-radius: vwM(16);
+        margin-bottom: vwM(16);
       }
       .form-info {
         flex-direction: column;
@@ -921,26 +921,26 @@ export default {
         .left {
           .cupon {
             .message {
-              font-size: $m10 !important;
+              font-size: vwM(10) !important;
             }
           }
           h3, .subtitle {
             display: none;
           }
           h4 {
-            margin-bottom: $m20;
-            margin-top: $m20;
+            margin-bottom: vwM(20);
+            margin-top: vwM(20);
           }
           .item {
-            padding: 0 $m25;
-            margin-bottom: $m10;
+            padding: 0 vwM(25);
+            margin-bottom: vwM(10);
           }
           .address {
             flex-flow: row wrap;
             .status {
-              font-size: $m10 !important;
+              font-size: vwM(10) !important;
               top: auto !important;
-              bottom: calc(100% + #{$m5}) !important;
+              bottom: calc(100% + #{vwM(5)}) !important;
               left: auto !important;
               right: 0 !important;
             }
@@ -951,7 +951,7 @@ export default {
                   margin-right: 0;
                 }
                 &:nth-of-type(2) {
-                  width: calc(50% - #{$m5});
+                  width: calc(50% - #{vwM(5)});
                   margin-left: auto;
                   position: absolute;
                   right: 0;
@@ -962,7 +962,7 @@ export default {
             }
             &:nth-of-type(2) {
               .item {
-                width: calc(50% - #{$m5});
+                width: calc(50% - #{vwM(5)});
                 margin-right: 0;
               }
             }
@@ -970,16 +970,16 @@ export default {
               overflow: hidden;
               text-overflow: ellipsis;
               &:not(:last-of-type) {
-                margin-right: $m10;
+                margin-right: vwM(10);
               }
             }
           }
         }
         .right {
-          padding: $m15;
-          margin-top: $m15;
+          padding: vwM(15);
+          margin-top: vwM(15);
           .title {
-            font-size: $m24;
+            font-size: vwM(24);
             text-align: left;
             margin-bottom: 0;
             width: 100%;
@@ -990,65 +990,65 @@ export default {
               display: flex;
               align-items: center;
               justify-content: center;
-              width: $m32;
-              height: $m32;
-              border-radius: $m8;
+              width: vwM(32);
+              height: vwM(32);
+              border-radius: vwM(8);
               background: $primary;
-              padding-bottom: $m4;
+              padding-bottom: vwM(4);
               &:before {
                 content: '';
-                border-right: $m3 solid $color;
-                border-bottom: $m3 solid $color;
-                width: $m8;
-                height: $m8;
+                border-right: vwM(3) solid $color;
+                border-bottom: vwM(3) solid $color;
+                width: vwM(8);
+                height: vwM(8);
                 transform: rotate(45deg);
               }
             }
           }
           .item {
-            padding: $m10 0 !important;
+            padding: vwM(10) 0 !important;
             display: none;
             p {
-              font-size: $m13;
+              font-size: vwM(13);
             }
             .value {
-              font-size: $m13;
+              font-size: vwM(13);
               span {
                 font-size: inherit;
                 font-weight: inherit;
               }
             }
             .details-holder {
-              width: $m20;
-              height: $m20;
-              border-radius: $m6;
-              font-size: $m10;
+              width: vwM(20);
+              height: vwM(20);
+              border-radius: vwM(6);
+              font-size: vwM(10);
               .detail {
                 top: 0;
                 left: auto;
-                right: calc(100% + #{$m10});
-                border-radius: $m8;
-                padding: $m10;
+                right: calc(100% + #{vwM(10)});
+                border-radius: vwM(8);
+                padding: vwM(10);
                 p {
                   span {
-                    font-size: $m12;
-                    margin-left: $m10;
+                    font-size: vwM(12);
+                    margin-left: vwM(10);
                   }
                 }
               }
             }
             &.total {
               p {
-                font-size: $m20;
+                font-size: vwM(20);
               }
             }
           }
           &.open {
             .title {
-              margin-bottom: $m15;
+              margin-bottom: vwM(15);
               .arrow {
                 padding-bottom: 0;
-                padding-top: $m4;
+                padding-top: vwM(4);
                 &:before {
                   transform: rotate(225deg);
                 }
@@ -1068,18 +1068,18 @@ export default {
         }
         .checkbox-holder {
           align-items: flex-start;
-          margin-top: $m15;
+          margin-top: vwM(15);
           .checkbox {
-            min-width: $m20;
-            height: $m20;
-            border-radius: $m6;
-            margin-right: $m10;
-            margin-top: $m2;
+            min-width: vwM(20);
+            height: vwM(20);
+            border-radius: vwM(6);
+            margin-right: vwM(10);
+            margin-top: vwM(2);
             input:checked~ {
               span {
-                width: $m10;
-                height: $m6;
-                bottom: $m3;
+                width: vwM(10);
+                height: vwM(6);
+                bottom: vwM(3);
               }
             }
           }
@@ -1087,14 +1087,14 @@ export default {
         .buttons-holder {
           justify-content: space-between;
           flex-direction: column-reverse;
-          margin-top: $m20;
-          padding-bottom: $m30;
+          margin-top: vwM(20);
+          padding-bottom: vwM(30);
           .button {
             width: 100%;
             margin: 0;
-            margin-bottom: $m10;
+            margin-bottom: vwM(10);
             &:not(:first-of-type) {
-              margin: 0 0 $m10 0;
+              margin: 0 0 vwM(10) 0;
             }
           }
         }
@@ -1105,17 +1105,17 @@ export default {
           left: 0;
           width: 100%;
           height: 100%;
-          padding: $m10;
+          padding: vwM(10);
           justify-content: flex-start;
           z-index: 100;
           max-height: 100%;
           background: transparentize($color, .5);
           .holder {
             background: #ffffff;
-            border-radius: $m16;
+            border-radius: vwM(16);
             max-height: 100%;
             overflow: auto;
-            padding: $m10;
+            padding: vwM(10);
             &>.item:nth-child(1) {
               display: none;
             }
@@ -1130,30 +1130,30 @@ export default {
           }
           .address {
             input {
-              width: calc(50% - #{$m5}) !important;
+              width: calc(50% - #{vwM(5)}) !important;
             }
           }
           input {
             width: 100% !important;
-            margin-bottom: $m10 !important;
-            padding: 0 $m25;
-            min-height: $m56;
+            margin-bottom: vwM(10) !important;
+            padding: 0 vwM(25);
+            min-height: vwM(56);
           }
           .button.active {
             width: 100%;
-            margin-top: $m10;
+            margin-top: vwM(10);
           }
           .close {
             display: block;
             position: absolute;
             top: 0;
             right: 0;
-            width: $m25;
-            height: $m25;
+            width: vwM(25);
+            height: vwM(25);
             background: linear-gradient(0deg, $color, $color) no-repeat center center / 2px 70%, linear-gradient(0deg, $color, $color) no-repeat center center / 70% 2px, #fff;
             border-radius: 50%;
             transform: rotate(45deg);
-            box-shadow: 0 0 $m3 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 vwM(3) 0 rgba(0, 0, 0, 0.3);
           }
         }
       }

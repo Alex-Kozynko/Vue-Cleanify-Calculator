@@ -180,7 +180,7 @@ export default {
 <style lang="scss">
 #extra {
   .buttons {
-    margin-bottom: $a70;
+    margin-bottom: vwD(70);
   }
   .deep {
     display: flex;
@@ -189,29 +189,29 @@ export default {
     margin: 0 auto;
     position: relative;
     img {
-      width: $a1000;
+      width: vwD(1000);
     }
     .text {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      left: $a80;
+      left: vwD(80);
       right: 0;
       font-family: 'Gilroy ExtraBold';
-      font-size: $a35;
+      font-size: vwD(35);
       color: #fff;
       white-space: pre-line;
       line-height: initial;
       span {
         color: $primary;
         font-family: 'Gilroy ExtraBold';
-        font-size: $a35;
+        font-size: vwD(35);
         cursor: pointer;
       }
     }
   }
   h2 {
-    margin-bottom: $a40;
+    margin-bottom: vwD(40);
   }
   h5 {
     width: 100%;
@@ -219,10 +219,10 @@ export default {
   .holder {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: $a45;
-    grid-row-gap: $a15;
+    grid-column-gap: vwD(45);
+    grid-row-gap: vwD(15);
     width: 100%;
-    margin-bottom: $a55;
+    margin-bottom: vwD(55);
     .item {
       display: flex;
       align-items: center;
@@ -231,16 +231,16 @@ export default {
         cursor: auto;
       }
       .num {
-        padding-left: $a25;
-        padding-right: $a10;
-        width: $a100;
+        padding-left: vwD(25);
+        padding-right: vwD(10);
+        width: vwD(100);
         .arrow {
           display: flex;
           flex-direction: column;
           margin-left: auto;
           img {
-            width: $a15;
-            margin: $a4;
+            width: vwD(15);
+            margin: vwD(4);
             cursor: pointer;
           }
           .upp {
@@ -250,29 +250,29 @@ export default {
       }
       h3 {
         width: auto;
-        margin-right: $a30;
+        margin-right: vwD(30);
       }
     }
   }
   .addons-holder {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: $a45;
-    grid-row-gap: $a15;
+    grid-column-gap: vwD(45);
+    grid-row-gap: vwD(15);
     width: 100%;
-    margin-bottom: $a55;
+    margin-bottom: vwD(55);
     &.col-4 {
       grid-template-columns: repeat(4, 1fr);
     }
     input {
-      padding: 0 $a25 !important;
+      padding: 0 vwD(25) !important;
     }
   }
   .item {
-    padding: 0 $a18 0 $a10;
+    padding: 0 vwD(18) 0 vwD(10);
     justify-content: flex-start;
     &.other {
-      padding-left: $a25;
+      padding-left: vwD(25);
 
     }
     &.frequent {
@@ -283,12 +283,12 @@ export default {
       }
       .sale {
         position: absolute;
-        top: calc(100% + #{$a10});
+        top: calc(100% + #{vwD(10)});
         left: 0;
         right: 0;
         margin: auto;
         text-align: center;
-        font-size: $a13;
+        font-size: vwD(13);
         font-weight: 600;
         opacity: .7;
         color: $color;
@@ -307,11 +307,11 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: $a40;
-      height: $a40;
+      width: vwD(40);
+      height: vwD(40);
       background: $primary;
-      border-radius: $a10;
-      margin-right: $a20;
+      border-radius: vwD(10);
+      margin-right: vwD(20);
       img {
         width: 50%;
       }
@@ -343,20 +343,20 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    margin: $a35 0;
+    margin: vwD(35) 0;
     .item {
       &.v-select {
         margin-bottom: 0;
       }
     }
     .detail {
-      margin-left: $a40;
+      margin-left: vwD(40);
     }
   }
   textarea.button {
-    padding: $a20 $a25;
+    padding: vwD(20) vwD(25);
     width: 100%;
-    height: $a100;
+    height: vwD(100);
     cursor: auto;
     resize: none;
     &:hover {
@@ -367,50 +367,50 @@ export default {
 
 @media screen and (max-width: $mobileOn) {
   #extra {
-    padding-top: $m10;
+    padding-top: vwM(10);
     .deep {
       width: 100%;
-      margin-bottom: $m30;
+      margin-bottom: vwM(30);
       img {
         width: 100%;
-        height: $m80;
-        border-radius: $m16;
+        height: vwM(80);
+        border-radius: vwM(16);
       }
       .text {
-        font-size: $m17;
+        font-size: vwM(17);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 $m25;
+        padding: 0 vwM(25);
         left: 0;
         width: 100%;
         span {
-          font-size: $m17;
+          font-size: vwM(17);
         }
       }
     }
     h2 {
-      margin-bottom: $m20;
+      margin-bottom: vwM(20);
     }
     .holder {
       grid-template-columns: 1fr !important;
-      padding-top: $m20;
+      padding-top: vwM(20);
       .item {
         h3 {
-          margin-right: $m10;
+          margin-right: vwM(10);
           min-width: 35%;
         }
         .num {
-          width: $m80;
-          padding-right: $m15;
-          padding-left: $m25;
+          width: vwM(80);
+          padding-right: vwM(15);
+          padding-left: vwM(25);
           margin-left: auto;
           margin-bottom: 0;
           .arrow {
-            margin-left: $m15;
+            margin-left: vwM(15);
             img {
-              width: $m12;
-              margin: $m5 0;
+              width: vwM(12);
+              margin: vwM(5) 0;
             }
           }
         }
@@ -421,10 +421,10 @@ export default {
       &.fr {
         .item {
           &:nth-child(-n + 2) {
-            padding: 0 $m20;
+            padding: 0 vwM(20);
           }
           p {
-            font-size: $m12 !important;
+            font-size: vwM(12) !important;
           }
         }
       }
@@ -437,80 +437,80 @@ export default {
       .item {
         border-radius: 0;
         width: calc(100%/3);
-        height: $m56;
-        padding: 0 $m5;
+        height: vwM(56);
+        padding: 0 vwM(5);
         margin-bottom: 0;
         p {
           white-space: normal;
-          font-size: $m16;
+          font-size: vwM(16);
           text-align: center;
           width: 100%;
           line-height: initial;
         }
         &:first-child {
-          border-radius: $m16 0 0 $m16;
+          border-radius: vwM(16) 0 0 vwM(16);
         }
         &:last-child {
-          border-radius: 0 $m16 $m16 0;
+          border-radius: 0 vwM(16) vwM(16) 0;
         }
       }
       input {
-        padding-left: $m25 !important;
+        padding-left: vwM(25) !important;
       }
     }
     .addons-holder.col-4 {
       .item {
         width: 50%;
         &:nth-child(1) {
-          border-radius: $m16 0 0 0;
+          border-radius: vwM(16) 0 0 0;
         }
         &:nth-child(2) {
-          border-radius: 0 $m16 0 0;
+          border-radius: 0 vwM(16) 0 0;
         }
         &:nth-child(4) {
-          border-radius: 0 0 $m16 0;
+          border-radius: 0 0 vwM(16) 0;
         }
         &:nth-child(3) {
-          border-radius: 0 0 0 $m16;
+          border-radius: 0 0 0 vwM(16);
         }
       }
     }
     .item {
       width: 100%;
-      margin-bottom: $m10;
-      padding: 0 $m20 0 $m10;
+      margin-bottom: vwM(10);
+      padding: 0 vwM(20) 0 vwM(10);
       &.frequent {
         justify-content: flex-start;
-        padding-left: $m25;
+        padding-left: vwM(25);
       }
       .icon {
-        width: $m40;
-        height: $m40;
-        border-radius: $m10;
-        margin-right: $m15;
+        width: vwM(40);
+        height: vwM(40);
+        border-radius: vwM(10);
+        margin-right: vwM(15);
       }
       .name {
-        font-size: $m18;
+        font-size: vwM(18);
         white-space: nowrap;
         width: 60%;
         overflow: hidden;
         text-overflow: ellipsis;
       }
       .price {
-        font-size: $m16;
+        font-size: vwM(16);
       }
     }
     .petsHolder {
-      margin-top: $m10;
+      margin-top: vwM(10);
       .detail {
         display: none;
       }
     }
     textarea.button {
-      border-radius: $m16;
-      height: $m130;
-      padding: $m20 $m25;
-      margin-top: $m16;
+      border-radius: vwM(16);
+      height: vwM(130);
+      padding: vwM(20) vwM(25);
+      margin-top: vwM(16);
     }
   }
 }

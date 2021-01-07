@@ -115,26 +115,26 @@ export default {
 <style lang="scss">
   #booking-2 {
     h4 {
-      margin-top: $a20;
-      margin-bottom: $a40;
+      margin-top: vwD(20);
+      margin-bottom: vwD(40);
     }
     h5 {
       width: 100%;
     }
     .item {
-      padding: 0 $a25;
+      padding: 0 vwD(25);
       position: relative;
     }
     .frequent {
-      width: $a275;
+      width: vwD(275);
       .sale {
         position: absolute;
-        top: calc(100% + #{$a10});
+        top: calc(100% + #{vwD(10)});
         left: 0;
         right: 0;
         margin: auto;
         text-align: center;
-        font-size: $a13;
+        font-size: vwD(13);
         font-weight: 600;
         opacity: .7;
         color: $color;
@@ -150,7 +150,7 @@ export default {
       }
     }
     .address {
-      width: calc(50% - #{$a20 * 2 / 3});
+      width: calc(50% - (#{vwD(20)} * 2 / 3));
       &.success {
         border-color: #00ff00;
       }
@@ -159,28 +159,28 @@ export default {
       }
     }
     .apt, .zip {
-      width: calc(25% - #{$a20 * 2 / 3});
+      width: calc(25% - (#{vwD(20)} * 2 / 3));
     }
     .entrancesHolder {
-      margin: $a40 0 $a45 0;
-      width: $a410;
+      margin: vwD(40) 0 vwD(45) 0;
+      width: vwD(410);
     }
     &>.title {
-      margin-top: $a40;
-      margin-bottom: $a15;
+      margin-top: vwD(40);
+      margin-bottom: vwD(15);
     }
   }
   @media screen and (max-width: $mobileOn) {
     #booking-2 {
       h4 {
-        margin-bottom: $m15;
+        margin-bottom: vwM(15);
       }
       h5.title {
-        margin-bottom: $m12;
+        margin-bottom: vwM(12);
       }
       .item {
-        padding: 0 $m25;
-        margin-bottom: $m10;
+        padding: 0 vwM(25);
+        margin-bottom: vwM(10);
       }
       .address, .apt, .zip, .entrancesHolder {
         width: 100%;
@@ -190,7 +190,7 @@ export default {
         justify-content: space-between;
         .sale {
           position: static;
-          font-size: $m14;
+          font-size: vwM(14);
           margin-right: 0;
           color: currentColor;
         }
